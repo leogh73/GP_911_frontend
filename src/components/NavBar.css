@@ -9,7 +9,7 @@ nav {
 	justify-content: space-around;
 	align-items: center;
 	height: 60px;
-	background-color: #4276bc;
+	background-color: var(--nav-color);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 }
 
@@ -18,7 +18,7 @@ h4 {
 }
 
 .logo {
-	color: rgb(226, 226, 226);
+	color: var(--nav-secondary-color);
 	text-transform: uppercase;
 	letter-spacing: 5px;
 	font-size: 20px;
@@ -28,13 +28,28 @@ h4 {
 	display: flex;
 	margin: 0px;
 	list-style: none;
-	color: rgb(226, 226, 226);
+	color: var(--nav-secondary-color);
 	justify-content: space-around;
 	width: 50%;
 }
 
+.nav-bar .darkLight-searchBox {
+	display: flex;
+	align-items: center;
+}
+
+.darkLight-userBox .dark-light,
+.darkLight-userBox .searchToggle {
+	height: 40px;
+	width: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 0 5px;
+}
+
 .nav-links a {
-	color: rgb(226, 226, 226);
+	color: var(--nav-secondary-color);
 	text-decoration: none;
 	padding-bottom: 5px;
 	letter-spacing: 1px;
@@ -49,7 +64,7 @@ h4 {
 	display: block;
 	width: 0;
 	height: 2px;
-	background: rgb(226, 226, 226);
+	background: var(--nav-secondary-color);
 	bottom: -1px;
 	left: 50%;
 	transition: all 0.3s;
@@ -70,7 +85,7 @@ h4 {
 	width: 22px;
 	height: 3px;
 	margin: 2px;
-	background-color: rgb(226, 226, 226);
+	background-color: var(--nav-secondary-color);
 	transition: all 0.3s ease;
 }
 
@@ -80,7 +95,27 @@ h4 {
 	margin: 0px;
 	width: 21px;
 	height: 21px;
-	color: rgb(226, 226, 226);
+	color: var(--nav-secondary-color);
+}
+
+.dark-light-icon {
+	color: var(--nav-secondary-color);
+}
+
+.user-icon {
+	color: var(--nav-secondary-color);
+}
+
+.user-icon :hover {
+	content: '';
+	position: absolute;
+	right: 14px;
+	top: -4px;
+	height: 12px;
+	width: 12px;
+	background-color: var(--nav-color);
+	transform: rotate(-45deg);
+	z-index: -1;
 }
 
 @media screen and (max-width: 1000px) {
@@ -98,11 +133,11 @@ h4 {
 		position: absolute;
 		z-index: 5;
 		list-style: none;
-		color: rgb(226, 226, 226);
+		color: var(--nav-secondary-color);
 		right: 0px;
 		top: 59px;
 		height: calc(100vh - 117px);
-		background-color: #4276bc;
+		background-color: var(--nav-color);
 		display: flex;
 		flex-direction: column;
 		align-items: center;
