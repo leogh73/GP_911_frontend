@@ -38,14 +38,14 @@ const ChangeLoad = ({ resultSendChange }) => {
 		}
 
 		return (
-			<div className="bg-light mb-3 section-cambio">
+			<div className="bg-light mb-3 section-change">
 				<div className="col mt-3">
 					{header ? (
 						<div>
 							<strong>
 								<div className="col text-center">{header}</div>
 							</strong>
-							<hr className="my-3 titulo-section-cambio" />
+							<hr className="my-3 titulo-section-change" />
 						</div>
 					) : (
 						''
@@ -71,7 +71,7 @@ const ChangeLoad = ({ resultSendChange }) => {
 		<IconContext.Provider
 			value={{ style: { color: 'slategray', minWidth: '40px', minHeight: '50px' } }}
 		>
-			<div className="nuevo-cambio">
+			<div className="nuevo-change">
 				<LoadingOverlay
 					active={loadingSendChange}
 					styles={{
@@ -87,7 +87,7 @@ const ChangeLoad = ({ resultSendChange }) => {
 							<div>
 								<Title texto={'Nuevo cambio'} icono={<FaExchangeAlt />} />
 							</div>
-							<div className="section-cambio row bg-light mb-3">
+							<div className="section-change row bg-light mb-3">
 								<LoadingOverlay
 									active={loadingReturn}
 									styles={{
@@ -122,14 +122,20 @@ const ChangeLoad = ({ resultSendChange }) => {
 											</div>
 											<div className="text-center">
 												<select
-													className="lista-personal text-center"
+													className="lista-personal"
 													value={state.consultReturn.selection.shift}
 													onChange={(event) => filterUserGuards(event.target.value)}
 												>
-													<option value="Seleccionar">Seleccionar</option>
+													<option value="Seleccionar" className=" text-center">
+														Seleccionar
+													</option>
 													{state.consultReturn.schedule.map((shift) => {
 														return (
-															<option value={shift} key={Math.random() * 1000}>
+															<option
+																className=" text-center"
+																value={shift}
+																key={Math.random() * 1000}
+															>
 																{shift}
 															</option>
 														);
@@ -153,7 +159,7 @@ const ChangeLoad = ({ resultSendChange }) => {
 												{' '}
 												<div className="row justify-content-center">
 													<select
-														className="lista-personal"
+														className="lista-personal text-center"
 														value={state.changeData.cover.employeeName}
 														onChange={(event) => loadCoverStaff(event.target.value)}
 													>
@@ -174,7 +180,7 @@ const ChangeLoad = ({ resultSendChange }) => {
 									</div>
 								</LoadingOverlay>
 							</div>
-							<div className="section-cambio row bg-light mb-3">
+							<div className="section-change row bg-light mb-3">
 								<div className="row bg-light mb-3">
 									<div className="col mt-2">
 										<div className="mb-1 selector-cubrir text-secondary">Guardia a cubrir</div>

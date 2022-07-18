@@ -56,7 +56,7 @@ body.dark footer {
 	padding-left: 25px;
 }
 
-.boton-cambio {
+.boton-change {
 	background-color: #f3f3f3;
 	/* background-color: #e7f2ff; */
 
@@ -183,7 +183,7 @@ span[name='repetirContraseña'] {
 	padding-bottom: 10px;
 }
 
-.lista-cambios {
+.lista-changes {
 	/* position: relative;
 	display: -ms-flexbox;
 	-ms-flex-direction: row;
@@ -216,12 +216,12 @@ span[name='repetirContraseña'] {
 	border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.seccion-cambio {
+.section-change {
 	border: 1px solid rgba(0, 0, 0, 0.08);
 	border-radius: 0.5rem;
 }
 
-.titulo-seccion-cambio {
+.titulo-section-change {
 	color: rgba(0, 0, 0, 0.3);
 }
 
@@ -244,13 +244,14 @@ span[name='repetirContraseña'] {
 .lista-personal {
 	border: 1px solid rgba(0, 0, 0, 0.3);
 	border-radius: 0.2rem;
-	text-align: left;
-	/* padding-right: 10px; */
-	width: 20vh;
+	/* text-align: center; */
+	/* padding-right: 25px; */
+	max-width: 27vh;
+	min-width: 18vh;
 	height: 30px;
 }
 
-.nuevo-cambio {
+.nuevo-change {
 	/* position: relative;
 	display: -ms-flexbox;
 	-ms-flex-direction: row;

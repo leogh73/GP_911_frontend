@@ -42,6 +42,7 @@ const NavBar = () => {
 				if (link.style.animation === '') {
 					link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.4}s`;
 				} else link.style.animation = '';
+				link.addEventListener('click', () => (sideBarActive.current ? toggleNavBar() : null));
 			});
 			burger.classList.toggle('toggle');
 			center.classList.toggle('body-overlay');
@@ -49,10 +50,12 @@ const NavBar = () => {
 
 		if (context.token) {
 			burger.addEventListener('click', () => toggleNavBar());
-
-			center.addEventListener('click', () => {
-				if (nav.classList.value === 'nav-links nav-active') toggleNavBar();
-			});
+			if (nav.classList.value === 'nav-links nav-active') {
+				center.addEventListener('click', () => {
+					toggleNavBar();
+				});
+				navLinks.forEach((link) => link.addEventListener('click', () => toggleNavBar()));
+			}
 		}
 
 		const body = document.querySelector('body');
@@ -78,6 +81,9 @@ const NavBar = () => {
 					if (nav.classList.value === 'nav-links nav-active') toggleNavBar();
 				});
 				modeToggle.removeEventListener('click', () => {});
+				navLinks.forEach((link) =>
+					link.removeEventListener('click', () => (sideBarActive.current ? toggleNavBar() : null)),
+				);
 			}
 		};
 	}, [context.token]);
@@ -108,23 +114,32 @@ const NavBar = () => {
 					<>
 						<ul className="nav-links">
 							<li>
-								<a href="#">
+								<Link to="/schedule">
 									<FaRegCalendarAlt />
 									Cronograma
-								</a>
+								</Link>
 							</li>
 							<li>
-								<a href="#">
+								<Link to="/changes">
 									<FaList />
 									Cambios
-								</a>
+								</Link>
 							</li>
-							<li>
-								<a href="#">
-									<FaExchangeAlt />
-									Nuevo cambio
-								</a>
-							</li>
+							{context.superior ? (
+								<li>
+									<Link to="/register">
+										<FaUserPlus />
+										Nuevo cambio
+									</Link>
+								</li>
+							) : (
+								<li>
+									<Link to="/new">
+										<FaExchangeAlt />
+										Nuevo cambio
+									</Link>
+								</li>
+							)}
 						</ul>
 						{modeButton()}
 						<FaUserAlt className="user-icon" size={20} />

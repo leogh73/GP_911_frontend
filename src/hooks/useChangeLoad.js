@@ -37,7 +37,9 @@ const useChangeLoad = (resultData) => {
 		},
 		consultCover: context.userGuards,
 		changeData: {
-			startDate: today.toLocaleString('es-AR').split(' ')[0],
+			startDate: `${today.getDate()}/${(today.getMonth() + 1)
+				.toString()
+				.padStart(2, 0)}/${today.getFullYear()}`,
 			startDay: loadDay(),
 			return: {
 				date: '-',
@@ -97,7 +99,6 @@ const useChangeLoad = (resultData) => {
 					},
 				};
 			case 'filter guard shift':
-				console.log(action.payload.guard);
 				return {
 					...state,
 					consultReturn: {
@@ -226,18 +227,21 @@ const useChangeLoad = (resultData) => {
 
 	const loadDateGuards = useCallback(
 		async (date) => {
+			let selectedDate = new Date(date);
+			let formattedDate = `${selectedDate.getDate()}/${(selectedDate.getMonth() + 1)
+				.toString()
+				.padStart(2, 0)}/${selectedDate.getFullYear()}`;
 			setSelectedDate(date);
-			let consultDate = new Date(date).toLocaleString().split(' ')[0];
 			dispatch({
 				type: 'consult date',
-				payload: { date: consultDate },
+				payload: { date: formattedDate },
 			});
 			try {
 				setLoadingReturn(true);
 				let consult = await httpRequestHandler(
 					'http://localhost:5000/api/guards/day',
 					'POST',
-					JSON.stringify({ date: consultDate }),
+					JSON.stringify({ date: formattedDate }),
 					{
 						authorization: `Bearer ${context.token}`,
 						'Content-type': 'application/json',
