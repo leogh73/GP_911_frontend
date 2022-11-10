@@ -1,0 +1,270 @@
+.changes-filters {
+	margin: 10px;
+	/* height: 50px; */
+	flex-wrap: wrap;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.changes-filter {
+	/* padding: 5px; */
+	width: 80px;
+	margin: 15px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	cursor: default;
+}
+
+.radio-buttons {
+	width: 30%;
+	padding: 0 10px 0 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+.changes-radio-icon {
+	margin-right: 15px;
+}
+
+.changes-search-box {
+	border: 2px solid rgba(0, 0, 0, 0.2);
+	/* min-width: 2em; */
+	max-width: 25em;
+	width: 35%;
+	display: flex;
+	padding-left: 10px;
+	padding-right: 10px;
+	flex-direction: row;
+	align-items: center;
+	border-radius: 5px;
+}
+
+.changes-search-icon {
+	width: 25px;
+}
+
+.changes-search {
+	/* margin-left: 10px; */
+	height: 40px;
+	width: 90%;
+	background-color: var(--text-color);
+	outline: none;
+	border: none;
+	font-size: 18px;
+	display: flex;
+	flex-direction: row;
+}
+
+.changes {
+	display: none;
+	opacity: 0;
+}
+
+.changes.show {
+	display: flex;
+	flex-direction: column;
+	opacity: 1;
+}
+
+@media only screen and (max-width: 667px) {
+	.changes-filters {
+		flex-direction: column;
+		margin: 10px;
+	}
+
+	.changes-search-box {
+		width: 70%;
+		margin: 10px;
+	}
+}
+
+@keyframes sliderRight {
+	from {
+		/* opacity: 0; */
+		transform: scaleX(1);
+	}
+	to {
+		/* opacity: 1; */
+		transform: scaleX(0);
+	}
+}
+@keyframes sliderLeft {
+	from {
+		/* opacity: 0; */
+		transform: translateX(0);
+	}
+	to {
+		/* opacity: 1; */
+		transform: translateX(1);
+	}
+}
+
+h2 {
+	display: flex;
+	flex-direction: row;
+	align-self: center;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	text-align: center;
+	z-index: 0;
+	/* opacity: 0; */
+	/* margin-left: 5px auto; */
+}
+
+/* Zebra striping */
+tr:nth-of-type(odd) {
+	background: rgb(243, 243, 243);
+}
+
+/* tr:hover {
+	background-color: #39a7e7;
+} */
+
+body.dark tr:nth-of-type(even) {
+	background: rgba(233, 230, 230, 0.774);
+}
+
+body.dark tr:nth-of-type(even):hover {
+	background-color: #b1dffa;
+}
+
+th {
+	background: var(--nav-color);
+	opacity: 0.96;
+	color: white;
+	font-weight: bold;
+}
+
+.table-header {
+	padding-left: 5px;
+	padding-right: 5px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	min-width: 2.7rem;
+}
+
+.arrow-down {
+	/* z-index: -5; */
+	/* display: inline-block; */
+	/* padding: 1em; */
+	/* margin: 0; */
+	/* text-decoration: none; */
+	/* padding: 6px 8px; */
+	/* pointer-events: auto; */
+
+	display: flex;
+	align-items: flex-end;
+	pointer-events: none;
+	border: none;
+	background-color: var(--nav-color);
+	color: var(--nav-secondary-color);
+	opacity: 0;
+}
+
+.arrow-down.arrow-active {
+	opacity: 1;
+}
+
+.arrow-down.arrow-active.click {
+	transform: rotateZ(180deg);
+}
+
+/* th .arrow-down:hover {
+	cursor: default;
+} */
+
+th .arrow:focus {
+	outline: 1px dotted white;
+}
+
+td,
+th {
+	padding: 8px;
+	border: 1px solid var(--search-text);
+	text-align: left;
+	font-size: 18px;
+}
+
+tr:hover {
+	background-color: #b1dffa;
+}
+
+.change-detail ul {
+	list-style: none;
+	margin: 0;
+	padding: 0px;
+}
+
+/* 
+Max width before this PARTICULAR table gets nasty
+This query will take effect for any screen smaller than 760px
+and also iPads specifically.
+*/
+@media only screen and (max-width: 930px),
+	(min-device-width: 768px) and (max-device-width: 1024px) {
+	table {
+		width: 100%;
+	}
+
+	/* Force table to not be like tables anymore */
+	table,
+	thead,
+	tbody,
+	th,
+	td,
+	tr {
+		display: block;
+		/* z-index: 0; */
+	}
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+
+	/* thead tr {
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	} */
+
+	tr {
+		border: 1px solid #ccc;
+	}
+
+	td {
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee;
+		position: relative;
+		padding-left: 35%;
+		min-height: 45px;
+	}
+
+	td div.options {
+		padding: 5px;
+	}
+
+	td:before {
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 10px;
+		left: 20px;
+		max-width: 25%;
+		/* padding-right: 65%; */
+		/* white-space: normal; */
+		/* Label the data */
+		content: attr(data-column);
+		color: #000;
+		font-weight: bold;
+	}
+}

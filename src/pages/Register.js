@@ -27,7 +27,7 @@ const Register = () => {
 		/>
 	) : success ? (
 		<Message
-			titulo="Registro exitoso"
+			title="Registro exitoso"
 			icon={<FaUserCheck />}
 			body="Nuevo usuario registrado exitosamente."
 			buttonText="VOLVER"
@@ -36,13 +36,13 @@ const Register = () => {
 	) : (
 		<Form
 			sendUserForm={registerResult}
-			title="Registro de usuario"
+			formTitle="Registro de usuario"
 			icon={<FaUserCircle />}
 			rememberMe=""
 			buttonText="REGISTRARME"
 			pageName="register"
 			footer={
-				<div>
+				<div className="form-footer">
 					<hr className="my-4" />
 					<p className="text-center">
 						¿Ya es usuario? <Link to="/iniciarsesion">Iniciar sesión</Link>

@@ -3,9 +3,9 @@ import { FaUsers, FaUser, FaIdCard, FaBuilding, FaEnvelope, FaKey } from 'react-
 const registerInputs = [
 	{
 		key: 0,
-		name: 'userName',
+		name: 'name',
 		password: false,
-		section: false,
+		optionsList: [],
 		icon: <FaUser />,
 		errorMessage: '',
 		value: '',
@@ -15,7 +15,7 @@ const registerInputs = [
 		key: 1,
 		name: 'lastName',
 		password: false,
-		section: false,
+		optionsList: [],
 		icon: <FaUser />,
 		errorMessage: '',
 		value: '',
@@ -24,7 +24,7 @@ const registerInputs = [
 	{
 		key: 2,
 		name: 'firstName',
-		section: false,
+		optionsList: [],
 		password: false,
 		errorMessage: '',
 		icon: <FaUser />,
@@ -34,7 +34,7 @@ const registerInputs = [
 	{
 		key: 3,
 		name: 'ni',
-		section: false,
+		optionsList: [],
 		password: false,
 		icon: <FaIdCard />,
 		errorMessage: '',
@@ -44,7 +44,7 @@ const registerInputs = [
 	{
 		key: 4,
 		name: 'section',
-		section: true,
+		optionsList: ['Teléfono', 'Monitoreo'],
 		password: false,
 		icon: <FaBuilding />,
 		errorMessage: '',
@@ -54,7 +54,7 @@ const registerInputs = [
 	{
 		key: 5,
 		name: 'guard',
-		section: false,
+		optionsList: [],
 		password: false,
 		icon: <FaUsers />,
 		errorMessage: '',
@@ -64,7 +64,7 @@ const registerInputs = [
 	{
 		key: 6,
 		name: 'email',
-		section: false,
+		optionsList: [],
 		password: false,
 		icon: <FaEnvelope />,
 		errorMessage: '',
@@ -74,7 +74,7 @@ const registerInputs = [
 	{
 		key: 7,
 		name: 'password',
-		section: false,
+		optionsList: [],
 		password: true,
 		icon: <FaKey />,
 		errorMessage: '',
@@ -84,12 +84,12 @@ const registerInputs = [
 	{
 		key: 8,
 		name: 'repeatPassword',
-		section: false,
+		optionsList: [],
 		password: true,
 		icon: <FaKey />,
 		errorMessage: '',
 		value: '',
-		placeHolder: 'Repetir password',
+		placeHolder: 'Repetir contraseña',
 	},
 ];
 

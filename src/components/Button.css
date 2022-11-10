@@ -1,0 +1,42 @@
+.btn-container {
+	padding: 5px 0px 5px 0px;
+}
+
+.button {
+	height: 42px;
+	color: white;
+	border-radius: 20px;
+	border: 1px solid;
+	cursor: default;
+	/* z-index: 2; */
+	background-color: var(--button-color);
+}
+
+.bt-content {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+}
+
+.bt-text {
+	font-weight: 500;
+	margin-bottom: 1.2px;
+	font-size: 17px;
+	letter-spacing: 1px;
+}
+
+.button.disabled {
+	background-color: var(--disabled-button);
+}
+
+.button:hover {
+	background-color: var(--hover-button);
+	color: white;
+	cursor: pointer;
+}
+
+.button.disabled:hover {
+	pointer-events: none;
+	background-color: var(--disabled-button);
+}

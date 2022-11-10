@@ -1,0 +1,22 @@
+.footer {
+	height: 66px;
+	/* width: 100%; */
+	color: white;
+	/* background-color: #e8f0fe; */
+	background-color: var(--nav-color);
+	display: flex;
+	/* flex-direction: row; */
+	justify-content: space-around;
+	border-top: 1px solid var(--border);
+}
+
+.ft-text,
+.ft-logo {
+	justify-content: center;
+	align-self: center;
+}
+
+.ft-logo {
+	height: 58px;
+	display: flex;
+}

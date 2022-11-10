@@ -2,7 +2,7 @@ import { createContext } from 'react';
 
 const UserContext = createContext({
 	token: null,
-	name: null,
+	fullName: null,
 	guardId: null,
 	superior: null,
 	userGuards: null,

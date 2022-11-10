@@ -1,14 +1,12 @@
+import './Footer.css';
+
 const Footer = () => {
 	return (
 		<footer className="footer">
-			<div className="text-center">
-				<div className="">
-					© 2022
-					{/* <a className="p-2" href="/acercade">
-						Acerca de éste sitio
-					</a> */}
-				</div>
+			<div className="ft-logo">
+				<img alt="" src={'./logo-911.png'}></img>
 			</div>
+			<div className="ft-text">© 2022</div>
 		</footer>
 	);
 };

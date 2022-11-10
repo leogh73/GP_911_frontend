@@ -4,17 +4,18 @@ import loginInputs from '../inputFields/LoginInputs';
 import registerSchema from '../schemas/RegisterForm';
 import loginSchema from '../schemas/LoginForm';
 import useHttpConnection from './useHttpConnection';
+
 import useRememberMe from './useRememberMe';
 
-const useFormularios = (pageName, sendUserForm) => {
+const useForm = (pageName, sendUserForm) => {
 	const { loadUser } = useRememberMe();
-	const [inputs, setInputs] = useState([]);
 	const [formIsValid, setFormIsValid] = useState(false);
+	const [loginError, setLoginError] = useState(false);
 	const { loading, httpRequestHandler } = useHttpConnection();
 
 	let schema;
+	let loadedInputs = [];
 	const loadStartInputs = () => {
-		let loadedInputs;
 		let storedUser = loadUser();
 		if (pageName === 'register') {
 			loadedInputs = registerInputs;
@@ -25,8 +26,10 @@ const useFormularios = (pageName, sendUserForm) => {
 			schema = loginSchema;
 			if (storedUser) loadedInputs[0].value = storedUser;
 		}
-		setInputs(loadedInputs);
+		return loadedInputs;
 	};
+
+	const [inputs, setInputs] = useState(loadStartInputs());
 
 	function registeredData(inputs) {
 		let registeredData = {};
@@ -37,7 +40,7 @@ const useFormularios = (pageName, sendUserForm) => {
 				firstName: inputs[2].value,
 				ni: inputs[3].value,
 				section: inputs[4].value,
-				guard: inputs[5].value,
+				guardId: inputs[5].value,
 				email: inputs[6].value,
 				password: inputs[7].value,
 				repeatPassword: inputs[8].value,
@@ -58,12 +61,11 @@ const useFormularios = (pageName, sendUserForm) => {
 			JSON.stringify(data),
 			{ 'Content-type': 'application/json' },
 		);
-		console.log(resultData);
 		let validInputs = verifyField(resultData);
 		return { resultData, validInputs };
 	};
 
-	const clearInputInputs = () => {
+	const clearInputTexts = () => {
 		inputs.forEach((i) => (i.value = ''));
 	};
 
@@ -108,35 +110,35 @@ const useFormularios = (pageName, sendUserForm) => {
 		let newInputs = [...inputs];
 		let verification = true;
 		if (pageName === 'register') {
-			if (validateInputs.user === true) {
+			if (validateInputs.username) {
 				newInputs[0].errorMessage = 'El nombre de usuario ya está registrado.';
 				verification = false;
 			}
-			if (validateInputs.correoElectronico === true) {
+			if (validateInputs.email) {
 				newInputs[6].errorMessage = 'El correo electrónico ya está registrado.';
 				verification = false;
 			}
 		}
 		if (pageName === 'login') {
-			if (validateInputs.usernameOrEmail === false) {
-				newInputs[0].errorMessage = validateInputs.message;
-				verification = false;
-			}
-			if (validateInputs.password === false && newInputs[0].errorMessage === '') {
-				newInputs[1].errorMessage = 'La contraseña ingresada es incorrecta.';
-				verification = false;
-			}
+			if (validateInputs.usernameOrEmail || validateInputs.password) verification = false;
+			setLoginError(true);
 		}
-		setInputs(newInputs);
+
 		setFormIsValid(verification);
+		setInputs(newInputs);
 		return verification;
 	};
 
 	const changeHandler = async (event) => {
-		let inputIndex = inputs.findIndex((f) => f.name === event.target.name);
+		let inputIndex =
+			event.target.getAttribute('name') === 'section'
+				? inputs.findIndex((f) => f.name === event.target.getAttribute('name'))
+				: inputs.findIndex((f) => f.name === event.target.name);
 		let newInputs = [...inputs];
 		newInputs[inputIndex].errorMessage = '';
-		newInputs[inputIndex].value = event.target.value;
+		event.target.getAttribute('name') === 'section'
+			? (newInputs[inputIndex].value = event.target.getAttribute('value'))
+			: (newInputs[inputIndex].value = event.target.value);
 		validateData('input', inputIndex, newInputs, event);
 	};
 
@@ -148,7 +150,7 @@ const useFormularios = (pageName, sendUserForm) => {
 			let databaseResult = await sendFormData(registeredData(newInputs));
 			if (databaseResult.validInputs) {
 				sendUserForm(databaseResult.resultData, newInputs[0].value);
-				clearInputInputs();
+				clearInputTexts();
 			}
 		}
 	};
@@ -160,7 +162,9 @@ const useFormularios = (pageName, sendUserForm) => {
 		validateForm,
 		formIsValid,
 		loading,
+		loginError,
+		setLoginError,
 	};
 };
 
-export default useFormularios;
+export default useForm;

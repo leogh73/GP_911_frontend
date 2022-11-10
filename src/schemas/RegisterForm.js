@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-const schemaRegistro = Joi.object({
+const schemaRegister = Joi.object({
 	username: Joi.string().min(4).max(15).required().messages({
 		'string.min': 'El nombre de usuario debe ser de al menos 4 caracteres.',
 		'string.max': 'El nombre de usuario puede tener como máximo de 15 caracteres.',
@@ -26,7 +26,7 @@ const schemaRegistro = Joi.object({
 		'any.only': 'Seleccione una sección.',
 		'string.empty': 'Seleccione una sección.',
 	}),
-	guard: Joi.string().max(1).required().messages({
+	guardId: Joi.string().max(1).required().messages({
 		'string.max': 'La guardia puede ser como máximo una letra.',
 		'string.empty': 'Ingrese su guardia.',
 	}),
@@ -46,4 +46,4 @@ const schemaRegistro = Joi.object({
 	}),
 });
 
-export default schemaRegistro;
+export default schemaRegister;

@@ -1,57 +1,50 @@
-import { useEffect } from 'react';
 import InputField from './InputField';
-import LoadingOverlay from 'react-loading-overlay';
 import Button from './Button';
 import Title from './Title';
 import useForm from '../hooks/useForm';
-import { IconContext } from 'react-icons';
+import './Form.css';
+import Modal from './Modal';
 
-const Form = ({ sendUserForm, title, icon, rememberMe, pageName, buttonText, footer }) => {
-	const { inputs, loadStartInputs, changeHandler, validateForm, formIsValid, loading } = useForm(
-		pageName,
-		sendUserForm,
-	);
+const Form = ({
+	sendUserForm,
+	formTitle,
+	inputTitle,
+	icon,
+	rememberMe,
+	pageName,
+	buttonText,
+	footer,
+}) => {
+	const { inputs, changeHandler, validateForm, formIsValid, loginError, setLoginError, loading } =
+		useForm(pageName, sendUserForm);
 
-	useEffect(() => {
-		loadStartInputs();
-		return () => {
-			loadStartInputs();
-		};
-	}, [loadStartInputs]);
+	// const spinnerBackground =
+	// 	localStorage.getItem('mode') === 'light-mode'
+	// 		? 'rgba(255, 255, 255, 0.4)'
+	// 		: 'rgba(204, 205, 206, 0.4)';
 
 	return (
-		<IconContext.Provider
-			value={{ style: { color: 'slategray', minWidth: '50px', minHeight: '50px' } }}
-		>
-			<div className="myform">
-				<LoadingOverlay
+		<div className="content">
+			<div className="form">
+				{/* <LoadingOverlay
 					active={loading}
 					styles={{
 						overlay: (base) => ({
 							...base,
-							background: 'rgba(255, 255, 255, 0.4)',
+							background: spinnerBackground,
 						}),
 					}}
-					spinner={
-						<div
-							className="spinner-border"
-							style={{ width: '3rem', height: '3rem', color: '#1a73e8' }}
-							role="status"
-						>
-							<span className="visually-hidden">Loading...</span>
-						</div>
-						// <Cargando />
-					}
-				>
-					<div>
-						<Title text={title} icon={icon} />
-					</div>
-					<form action="" method="" name="register" onSubmit={validateForm}>
+					spinner={<Loading />}
+				> */}
+				<Title text={formTitle} icon={icon} />
+				<form action="" method="" name="register" onSubmit={validateForm}>
+					<div className="inputs-group">
 						{inputs.map((f) => (
 							<InputField
 								key={f.key}
+								showTitle={inputTitle}
 								name={f.name}
-								section={f.section}
+								optionsList={f.optionsList}
 								password={f.password}
 								icon={f.icon}
 								errorMessage={f.errorMessage}
@@ -60,15 +53,32 @@ const Form = ({ sendUserForm, title, icon, rememberMe, pageName, buttonText, foo
 								placeHolder={f.placeHolder}
 							/>
 						))}
-						{rememberMe}
-						<div className="pt-2 text-center">
-							<Button text={buttonText} width={250} disabled={!formIsValid} />
-						</div>
-						{footer}
-					</form>
-				</LoadingOverlay>
+					</div>
+					{rememberMe}
+					<div style={{ padding: '7px' }}>
+						<Button
+							className="button"
+							text={buttonText}
+							width={220}
+							disabled={!formIsValid}
+							loading={loading}
+						/>
+					</div>
+					{footer}
+				</form>
+				{/* </LoadingOverlay> */}
 			</div>
-		</IconContext.Provider>
+			{loginError && (
+				<Modal
+					id="login-error"
+					title={'Error'}
+					body={'Usuario y/o contraseña incorrectos.'}
+					closeText={'Cerrar'}
+					closeFunction={() => setLoginError(false)}
+					loginError={loginError}
+				/>
+			)}
+		</div>
 	);
 };
 

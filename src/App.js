@@ -1,17 +1,19 @@
 import { ToastContainer } from 'react-toastify';
+import { IconContext } from 'react-icons';
 import './App.css';
 
 import NavBar from './components/NavBar';
 import Footer from './components/Footer';
 import IdleTimer from './components/IdleTimer';
 
-import UserContext from './context/UserContext';
 import useUser from './hooks/useUser';
 import useRoutes from './hooks/useRoutes';
 
+import UserContext from './context/UserContext';
+
 const App = () => {
-	const { token, fullName, guardId, superior, userGuards, login, logout } = useUser();
-	const { routes, loadAction, activateActionRoute } = useRoutes(token, superior);
+	const { token, fullName, guardId, superior, login, logout } = useUser();
+	const { routes } = useRoutes(token, superior);
 
 	return (
 		<UserContext.Provider
@@ -20,18 +22,16 @@ const App = () => {
 				fullName,
 				guardId,
 				superior,
-				userGuards,
-				loadAction,
-				activateActionRoute,
 				login,
 				logout,
 			}}
 		>
 			<NavBar />
-			<div className="center">{routes}</div>
+			<IconContext.Provider value={{ style: { color: 'slategray', backgroundColor: 'none' } }}>
+				<div className="layout">{routes}</div>
+			</IconContext.Provider>
 			<ToastContainer />
-			<IdleTimer token={token} />
-
+			{/* <IdleTimer token={token} /> */}
 			<Footer />
 		</UserContext.Provider>
 	);

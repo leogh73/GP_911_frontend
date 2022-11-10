@@ -1,0 +1,156 @@
+.calendar-wrapper {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	/* padding: 0px 10px; */
+	margin: 18px 0 18px 0;
+	/* margin-bottom: 18px; */
+	/* height: 82px; */
+	/* height: -10px; */
+	/* min-width: 250px; */
+	position: relative;
+	/* cursor: context-menu; */
+	/* height: 35px; */
+	/* border: 1px solid rgba(0, 0, 0, 0.2); */
+	border-radius: 5px;
+}
+
+.calendar-icon {
+	width: 18%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	padding-left: 8px;
+	/* justify-self: cente; */
+	/* align-content: center; */
+}
+
+.calendar-title {
+	width: 64%;
+	display: flex;
+	flex-direction: column;
+	font-size: 18px;
+}
+
+.section-title {
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.calendar-dropdown-button {
+	/* cursor: pointer; */
+	/* height: 44px; */
+	/* width: 77%; */
+	display: flex;
+	flex-direction: row;
+	/* height: 100%; */
+	padding-right: 10px;
+	width: 100%;
+	align-items: center;
+	justify-content: space-between;
+	outline: none;
+	border: none;
+	font-size: 16px;
+	font-weight: 400;
+	color: rgba(0, 0, 0, 0.65);
+	/* border: 2px solid rgba(0, 0, 0, 0.2); */
+	transition: all 0.3s ease;
+}
+
+.calendar-dropdown-button.selected {
+	color: rgba(0, 0, 0, 1);
+	/* background-color: #fff; */
+	/* width: 99%; */
+}
+
+.calendar-component {
+	/* position: absolute; */
+	z-index: 2;
+	position: absolute;
+	/* flex-direction: column; */
+	/* bottom: -127px; */
+	/* height: 100%; */
+	/* padding-top: 18px; */
+
+	bottom: -263px;
+	/* right: -50px; */
+	/* height: 240px; */
+	width: 14.6em;
+	/* max-height: 264px; */
+	/* padding-left: 20px; */
+	/* display: flex; */
+	/* align-items: ; */
+	/* padding: 15px; */
+	/* border-radius: 10px; */
+	/* border: 1px solid rgba(0, 0, 0, 0.2); */
+	/* border-top: none; */
+	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
+	opacity: 0;
+	justify-content: space-around;
+	pointer-events: none;
+	transform-origin: top center;
+	animation: shrinkUp 0.3s ease-out forwards;
+}
+
+.react-calendar {
+	font-size: 18px;
+	background-color: var(--text-color);
+	border-radius: 10px;
+}
+
+.calendar-component.active {
+	opacity: 1;
+	pointer-events: all;
+	z-index: 2;
+	animation: growDown 0.3s ease-in forwards;
+}
+
+@keyframes growDown {
+	0% {
+		transform: scaleY(0);
+	}
+	100% {
+		transform: scaleY(1);
+	}
+}
+
+@keyframes shrinkUp {
+	0% {
+		transform: scaleY(1);
+	}
+	100% {
+		transform: scaleY(0);
+	}
+}
+
+.dropdown-arrow.active {
+	transform: rotateZ(-180deg);
+}
+
+.dropdown-content.active .dropdown-option:hover {
+	background-color: rgb(243, 243, 243);
+	border-radius: 10px;
+}
+
+/* .menu-content {
+	height: 100%;
+	width: 100%;
+} */
+
+/* @keyframes menuFadeIn {
+	from {
+		transform: translateY(100%);
+	}
+	to {
+		transform: translateY(0%);
+	}
+}
+
+@keyframes menuFadeOut {
+	from {
+		transform: translateY(0%);
+	}
+	to {
+		transform: translateY(100%);
+	}
+} */

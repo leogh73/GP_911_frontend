@@ -7,11 +7,10 @@ const Loading = () => {
 		display: center;
 	`;
 
-	return (
-		<div className="sweet-loading">
-			<FadeLoader color="#1a73e8" loading={true} css={override} size={70} />
-		</div>
-	);
+	const spinnerColor =
+		localStorage.getItem('mode') === 'light-mode' ? '#3d7ccf' : 'rgb(226, 226, 226)';
+
+	return <FadeLoader color={spinnerColor} css={override} />;
 };
 
 export default Loading;

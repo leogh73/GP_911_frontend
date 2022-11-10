@@ -1,201 +1,150 @@
-import { useState, useEffect, useRef, useContext, useCallback, useReducer } from 'react';
+import { useState, useEffect, useContext, useReducer, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useChangeLoad = (resultData) => {
-	const [selectedDate, setSelectedDate] = useState();
-	const [loadingReturn, setLoadingReturn] = useState();
-	// const [cargandoCubrir, setCargandoCubrir] = useState();
+	const [loadingUsers, setLoadingUsers] = useState(false);
 	const [loadingSendChange, setLoadingSendChange] = useState(false);
 	const [dataIsValid, setDataIsValid] = useState(false);
-
-	const firstLoad = useRef(true);
-
 	const context = useContext(UserContext);
-
 	const { httpRequestHandler } = useHttpConnection();
 
-	const today = new Date(Date.now());
-	const loadDay = () => {
-		let dayToday = today.getDay();
-		let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'];
-		return days[dayToday];
-	};
-
 	const initialState = {
-		consultReturn: {
-			date: '',
-			day: '-',
-			dayTotal: '',
-			schedule: [],
-			selection: {
-				guardId: '-',
-				shift: '-',
-				staff: [],
-			},
+		fetchedData: {
+			totalUsers: [],
+			coverDay: [],
+			returnDay: [],
 		},
-		consultCover: context.userGuards,
-		changeData: {
-			startDate: `${today.getDate()}/${(today.getMonth() + 1)
-				.toString()
-				.padStart(2, 0)}/${today.getFullYear()}`,
-			startDay: loadDay(),
-			return: {
-				date: '-',
-				day: '-',
-				shift: '-',
-				guardId: '-',
-				employeeName: context.fullName,
-			},
-			cover: {
-				date: '-',
-				day: '-',
-				shift: '-',
-				guardId: context.guardId,
-				employeeName: '-',
-				resume: '-',
-			},
+		filteredData: {
+			coverUsers: [],
+			returnUsers: [],
+		},
+		coverData: {
+			name: context.fullName,
+			date: '-',
+			shift: '-',
+			day: '-',
+			guardId: '-',
+		},
+		returnData: {
+			name: '-',
+			date: '-',
+			shift: '-',
+			day: '-',
+			guardId: '-',
 		},
 	};
 
 	function reducer(state, action) {
 		switch (action.type) {
-			case 'consult date':
+			case 'load users':
 				return {
 					...state,
-					consultReturn: {
-						...state.consultReturn,
-						date: action.payload.date,
-						selection: {
-							guardId: '-',
-							shift: '-',
-							staff: [],
-						},
-					},
-					changeData: {
-						...state.changeData,
-						return: { ...state.changeData.return, date: action.payload.date },
-						cover: { ...state.changeData.cover, staff: '-' },
+					fetchedData: {
+						...state.fetchedData,
+						totalUsers: action.payload.users,
 					},
 				};
-			case 'load return guards':
+			case 'filter cover users':
 				return {
 					...state,
-					consultReturn: {
-						...state.consultReturn,
-						dayTotal: action.payload.guards[1],
-						schedule: ['6 a 14 hs.', '14 a 22 hs.', '22 a 6 hs.'],
-					},
-					changeData: {
-						...state.changeData,
-						return: {
-							...state.changeData.return,
-							day: action.payload.guards[0][0].day,
-							shift: '-',
-							guardId: '-',
-							staff: context.fullName,
-						},
+					filteredData: {
+						...state.filteredData,
+						coverUsers: action.payload.users,
 					},
 				};
-			case 'filter guard shift':
+			case 'filter return users':
 				return {
 					...state,
-					consultReturn: {
-						...state.consultReturn,
-						selection: {
-							guardId: action.payload.guardId.guardId,
-							shift: action.payload.guardId.shift,
-							staff: action.payload.guardId.staff,
-						},
-					},
-					changeData: {
-						...state.changeData,
-						return: {
-							...state.changeData.return,
-							shift: action.payload.guardId.shift,
-							guardId: action.payload.guardId.guardId,
-						},
-						cover: {
-							...state.changeData.cover,
-							staff: '-',
-						},
+					filteredData: {
+						...state.filteredData,
+						returnUsers: action.payload.users,
 					},
 				};
-			case 'load cover employee':
+			case 'load cover user':
 				return {
 					...state,
-					changeData: {
-						...state.changeData,
-						cover: {
-							...state.changeData.cover,
-							employeeName: action.payload.employeeName,
-						},
+					coverData: {
+						...state.coverData,
+						name: action.payload.user,
 					},
 				};
-			case 'load cover guard data':
+			case 'load return user':
 				return {
 					...state,
-					changeData: {
-						...state.changeData,
-						cover: {
-							...state.changeData.cover,
-							date: action.payload.guardId.date,
-							day: action.payload.guardId.day,
-							shift: action.payload.guardId.shift,
-							resume: action.payload.guardId.resume,
-						},
+					returnData: {
+						...state.returnData,
+						name: action.payload.user,
 					},
 				};
-			case 'clean cover guard':
+			case 'selected cover date':
 				return {
 					...state,
-					changeData: {
-						...state.changeData,
-						cover: {
-							...state.changeData.cover,
-							date: '-',
-							day: '-',
-							shift: '-',
-							resume: '-',
-						},
+					coverData: {
+						...state.coverData,
+						date: action.payload.date.formattedDate,
+						day: action.payload.date.selectedDay,
 					},
 				};
-			case 'clean return shift':
+			case 'selected return date':
 				return {
 					...state,
-					consultReturn: {
-						...state.consultReturn,
-						selection: {
-							guardId: '-',
-							shift: '-',
-							staff: [],
-						},
-					},
-					changeData: {
-						...state.changeData,
-						cover: {
-							...state.changeData.cover,
-							employeeName: '-',
-						},
-						return: {
-							...state.changeData.return,
-							shift: '-',
-							guardId: '-',
-						},
+					returnData: {
+						...state.returnData,
+						date: action.payload.date.formattedDate,
+						day: action.payload.date.selectedDay,
 					},
 				};
-			case 'clean cover staff':
+			case 'cover date guards':
 				return {
 					...state,
-					changeData: {
-						...state.changeData,
-						cover: {
-							...state.changeData.cover,
-							employeeName: '-',
-						},
+					fetchedData: {
+						...state.fetchedData,
+						coverDay: action.payload.data,
 					},
 				};
+			case 'return date guards':
+				return {
+					...state,
+					fetchedData: {
+						...state.fetchedData,
+						returnDay: action.payload.data,
+					},
+				};
+			case 'cover shift guard':
+				return {
+					...state,
+					coverData: {
+						...state.coverData,
+						guardId: action.payload.data.guardId,
+					},
+				};
+			case 'return shift guard':
+				return {
+					...state,
+					returnData: {
+						...state.returnData,
+						guardId: action.payload.data.guardId,
+					},
+				};
+			case 'cover shift time':
+				return {
+					...state,
+					coverData: {
+						...state.coverData,
+						shift: action.payload.data,
+					},
+				};
+			case 'return shift time':
+				return {
+					...state,
+					returnData: {
+						...state.returnData,
+						shift: action.payload.data,
+					},
+				};
+
 			case 'change valid status':
 				return { ...state, dataIsValid: action.payload.isValid };
 			default:
@@ -203,137 +152,183 @@ const useChangeLoad = (resultData) => {
 		}
 	}
 
-	// const cargarGuardiasCubrir = useCallback(async () => {
-	// 	try {
-	// 		setCargandoCubrir(true);
-	// 		let consult = await httpRequestHandler(
-	// 			'http://localhost:5000/api/guardias/mespropias',
-	// 			'POST',
-	// 			{},
-	// 			{
-	// 				authorization: `Bearer ${context.token}`,
-	// 			},
-	// 		);
-	// 		dispatch({
-	// 			type: 'cargar guardias cover',
-	// 			payload: { guardias: consult },
-	// 		});
-	// 		setCargandoCubrir(false);
-	// 	} catch (error) {
-	// 		toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
-	// 		console.log(error);
-	// 	}
-	// }, [httpRequestHandler, context]);
-
-	const loadDateGuards = useCallback(
-		async (date) => {
-			let selectedDate = new Date(date);
-			let formattedDate = `${selectedDate.getDate()}/${(selectedDate.getMonth() + 1)
-				.toString()
-				.padStart(2, 0)}/${selectedDate.getFullYear()}`;
-			setSelectedDate(date);
-			dispatch({
-				type: 'consult date',
-				payload: { date: formattedDate },
-			});
-			try {
-				setLoadingReturn(true);
-				let consult = await httpRequestHandler(
-					'http://localhost:5000/api/guards/day',
-					'POST',
-					JSON.stringify({ date: formattedDate }),
-					{
-						authorization: `Bearer ${context.token}`,
-						'Content-type': 'application/json',
-					},
-				);
-				dispatch({
-					type: 'load return guards',
-					payload: { guards: consult },
-				});
-				setLoadingReturn(false);
-			} catch (error) {
-				toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
-				console.log(error);
-			}
-		},
-		[context.token, httpRequestHandler],
-	);
-
 	const [state, dispatch] = useReducer(reducer, initialState);
+
+	const loadUsers = useCallback(async () => {
+		try {
+			setLoadingUsers(true);
+			let consult = await httpRequestHandler(
+				'http://localhost:5000/api/spreadsheet/users',
+				'GET',
+				null,
+				{
+					authorization: `Bearer ${context.token}`,
+				},
+			);
+			dispatch({
+				type: 'load users',
+				payload: { users: consult },
+			});
+			let index = consult.findIndex((user) => user === `${context.fullName}`);
+			consult.splice(index, 1);
+			dispatch({
+				type: 'filter cover users',
+				payload: { users: consult },
+			});
+			dispatch({
+				type: 'filter return users',
+				payload: { users: consult },
+			});
+		} catch (error) {
+			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
+			console.log(error);
+		} finally {
+			setLoadingUsers(false);
+		}
+	}, [httpRequestHandler, context.fullName, context.token]);
+
+	const loadGuardId = (section, shift) => {
+		let dayGuards = section === 'cover' ? state.fetchedData.coverDay : state.fetchedData.returnDay;
+		if (dayGuards.length) {
+			let index = dayGuards.findIndex((s) => s.shift === shift);
+			section === 'cover'
+				? dispatch({
+						type: 'cover shift guard',
+						payload: { data: dayGuards[index] },
+				  })
+				: dispatch({
+						type: 'return shift guard',
+						payload: { data: dayGuards[index] },
+				  });
+		}
+	};
+
+	const loadShift = (section, value) => {
+		section === 'cover'
+			? dispatch({
+					type: 'cover shift time',
+					payload: { data: value },
+			  })
+			: dispatch({
+					type: 'return shift time',
+					payload: { data: value },
+			  });
+		loadGuardId(section, value);
+	};
+
+	const dateHandler = (date) => {
+		let selectedDate = new Date(date);
+		let formattedDate = `${selectedDate.getDate()}/${(selectedDate.getMonth() + 1)
+			.toString()
+			.padStart(2, 0)}/${selectedDate.getFullYear()}`;
+		let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'];
+		let selectedDay = days[selectedDate.getDay()];
+		return { formattedDate, selectedDay };
+	};
+
+	const loadDateGuards = async (date, section) => {
+		let dateData = dateHandler(date);
+		section === 'cover'
+			? dispatch({
+					type: 'selected cover date',
+					payload: { date: dateData },
+			  })
+			: dispatch({
+					type: 'selected return date',
+					payload: { date: dateData },
+			  });
+		try {
+			let consult = await httpRequestHandler(
+				'http://localhost:5000/api/spreadsheet/day',
+				'POST',
+				JSON.stringify({ date: dateData.formattedDate }),
+				{
+					authorization: `Bearer ${context.token}`,
+					'Content-type': 'application/json',
+				},
+			);
+
+			if (section === 'cover') {
+				dispatch({
+					type: 'cover date guards',
+					payload: { data: consult },
+				});
+			} else {
+				dispatch({
+					type: 'return date guards',
+					payload: { data: consult },
+				});
+			}
+			let selectedShift = section === 'cover' ? state.coverData.shift : state.returnData.shift;
+			if (selectedShift !== '-') {
+				let index = consult.findIndex((s) => s.shift === selectedShift);
+				section === 'cover'
+					? dispatch({
+							type: 'cover shift guard',
+							payload: { data: consult[index] },
+					  })
+					: dispatch({
+							type: 'return shift guard',
+							payload: { data: consult[index] },
+					  });
+			}
+		} catch (error) {
+			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
+			console.log(error);
+		}
+	};
 
 	useEffect(() => {
 		async function loadData() {
-			if (firstLoad.current) {
-				// 	await cargarGuardiasCubrir();
-				firstLoad.current = false;
-				return;
-			}
+			await loadUsers();
 		}
 		loadData();
-	}, []);
+	}, [loadUsers]);
+
+	const filterUsers = (section, value) => {
+		let result = state.fetchedData.totalUsers.filter((user) => {
+			let formattedUser = user.split(' ').map((w) => w.toLowerCase());
+			let containsValue = false;
+			formattedUser.forEach((name) => {
+				if (name.startsWith(value.toLowerCase())) containsValue = true;
+			});
+			return containsValue ? user : null;
+		});
+		if (!result.length) result = ['No se encontraron usuarios.'];
+		section === 'cover'
+			? dispatch({
+					type: 'filter cover users',
+					payload: { users: result },
+			  })
+			: dispatch({
+					type: 'filter return users',
+					payload: { users: result },
+			  });
+	};
+
+	const loadUser = (section, value) => {
+		section === 'cover'
+			? dispatch({
+					type: 'load cover user',
+					payload: { user: value },
+			  })
+			: dispatch({
+					type: 'load return user',
+					payload: { user: value },
+			  });
+	};
 
 	useEffect(() => {
-		function verifyChangeData() {
-			if (firstLoad.current) {
-				firstLoad.current = false;
-				return;
-			}
-			let datos = [
-				state.changeData.return.shift,
-				state.changeData.cover.date,
-				state.changeData.cover.employeeName,
-			];
-
-			let isValid = true;
-			for (let i = 0; i < datos.length; i++) {
-				if (datos[i] === '-') isValid = false;
-			}
-			setDataIsValid(isValid);
-		}
-		verifyChangeData();
-	}, [
-		state.changeData.return.shift,
-		state.changeData.cover.date,
-		state.changeData.cover.employeeName,
-	]);
-
-	const filterUserGuards = (shift) => {
-		if (shift === 'Seleccionar') dispatch({ type: 'clean return shift' });
-		if (shift !== 'Seleccionar') {
-			let shiftIndex = state.consultReturn.dayTotal.findIndex((guard) => guard.shift === shift);
-			dispatch({
-				type: 'filter guard shift',
-				payload: { guardId: state.consultReturn.dayTotal[shiftIndex] },
-			});
-		}
-	};
-
-	const loadCoverStaff = (employeeName) => {
-		if (employeeName === 'Seleccionar') dispatch({ type: 'clean cover staff' });
-		if (employeeName !== 'Seleccionar') {
-			dispatch({
-				type: 'load cover employee',
-				payload: { employeeName: employeeName },
-			});
-		}
-	};
-
-	const loadCoverGuardData = (guardResume) => {
-		if (guardResume === 'Seleccionar')
-			dispatch({
-				type: 'clean cover guard',
-			});
-		if (guardResume !== 'Seleccionar') {
-			let guardIndex = state.consultCover.guardsList.findIndex(
-				(guard) => guard.resume === guardResume,
-			);
-			dispatch({
-				type: 'load cover guard data',
-				payload: { guardId: state.consultCover.guardsList[guardIndex] },
-			});
-		}
-	};
+		let formData = [
+			Object.entries(state.coverData).map((data) => data[1]),
+			Object.entries(state.returnData).map((data) => data[1]),
+		].flat(1);
+		let formCheck = formData
+			.map((data) => (data !== '-' ? true : false))
+			.filter((result) => !!result).length;
+		let isValid = formCheck === 10 ? true : false;
+		setDataIsValid(isValid);
+	}, [state.coverData, state.returnData]);
 
 	const sendNewChange = async () => {
 		try {
@@ -342,22 +337,8 @@ const useChangeLoad = (resultData) => {
 				'http://localhost:5000/api/changes/new',
 				'POST',
 				JSON.stringify({
-					startDate: state.changeData.startDate,
-					startDay: state.changeData.startDay,
-					returnName: state.changeData.return.employeeName,
-					coverName: state.changeData.cover.employeeName,
-					returnResult: {
-						date: state.changeData.return.date,
-						day: state.changeData.return.day,
-						shift: state.changeData.return.shift,
-						guardId: state.changeData.return.guardId,
-					},
-					coverResult: {
-						date: state.changeData.cover.date,
-						day: state.changeData.cover.day,
-						shift: state.changeData.cover.shift,
-						guardId: state.changeData.cover.guardId,
-					},
+					coverData: state.coverData,
+					returnData: state.returnData,
 				}),
 				{
 					authorization: `Bearer ${context.token}`,
@@ -374,14 +355,13 @@ const useChangeLoad = (resultData) => {
 
 	return {
 		state,
-		selectedDate,
-		loadingReturn,
-		loadingSendChange,
+		loadingUsers,
 		loadDateGuards,
-		filterUserGuards,
-		loadCoverStaff,
-		loadCoverGuardData,
+		loadShift,
+		loadUser,
+		filterUsers,
 		dataIsValid,
+		loadingSendChange,
 		sendNewChange,
 	};
 };
