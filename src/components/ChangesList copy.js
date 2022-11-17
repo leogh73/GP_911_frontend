@@ -65,6 +65,7 @@ const ChangesList = ({ changes }) => {
 						{ key: 2, title: 'Pedido' },
 						{ key: 3, title: 'Ofrecido' },
 					]}
+					rowType={'request'}
 					dataList={[
 						{
 							priorityId: '001',
@@ -115,8 +116,7 @@ const ChangesList = ({ changes }) => {
 							},
 						},
 					]}
-					rowType={'request'}
-					newLink={'/newrequest'}
+					newLink={'/newchange'}
 				/>
 			</div>
 		</div>

@@ -82,29 +82,32 @@ const useChangeLoad = (resultData) => {
 				return {
 					...state,
 					coverData: {
-						...state.coverData,
-						date: action.payload.date,
-						day: action.payload.day,
-						shift: action.payload.shift,
-						guardId: action.payload.guardId,
+						...state,
+						coverData,
+						date: action.payload.data.date,
+						shift: action.payload.data.shift,
+						day: action.payload.data.day,
+						guardId: action.payload.data.guardId,
 					},
 				};
-			case 'load return data':
+			case 'load return data': {
 				return {
 					...state,
 					returnData: {
-						...state.returnData,
-						date: action.payload.date,
-						day: action.payload.day,
-						shift: action.payload.shift,
-						guardId: action.payload.guardId,
+						...state,
+						coverData,
+						date: action.payload.data.date,
+						shift: action.payload.data.shift,
+						day: action.payload.data.day,
+						guardId: action.payload.data.guardId,
 					},
 				};
+			}
 
 			case 'change valid status':
 				return { ...state, dataIsValid: action.payload.isValid };
 			default:
-				break;
+				return state;
 		}
 	}
 
@@ -154,6 +157,97 @@ const useChangeLoad = (resultData) => {
 			setLoadingUsers(false);
 		}
 	}, [httpRequestHandler, context.fullName, context.token]);
+
+	const loadGuardId = (section, shift) => {
+		let dayGuards = section === 'cover' ? state.fetchedData.coverDay : state.fetchedData.returnDay;
+		if (dayGuards.length) {
+			let index = dayGuards.findIndex((s) => s.shift === shift);
+			section === 'cover'
+				? dispatch({
+						type: 'cover shift guard',
+						payload: { data: dayGuards[index] },
+				  })
+				: dispatch({
+						type: 'return shift guard',
+						payload: { data: dayGuards[index] },
+				  });
+		}
+	};
+
+	const loadShift = (section, value) => {
+		section === 'cover'
+			? dispatch({
+					type: 'cover shift time',
+					payload: { data: value },
+			  })
+			: dispatch({
+					type: 'return shift time',
+					payload: { data: value },
+			  });
+		loadGuardId(section, value);
+	};
+
+	const dateHandler = (date) => {
+		let selectedDate = new Date(date);
+		let formattedDate = `${selectedDate.getDate()}/${(selectedDate.getMonth() + 1)
+			.toString()
+			.padStart(2, 0)}/${selectedDate.getFullYear()}`;
+		let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'];
+		let selectedDay = days[selectedDate.getDay()];
+		return { formattedDate, selectedDay };
+	};
+
+	const loadDateGuards = async (date, section) => {
+		let dateData = dateHandler(date);
+		section === 'cover'
+			? dispatch({
+					type: 'selected cover date',
+					payload: { date: dateData },
+			  })
+			: dispatch({
+					type: 'selected return date',
+					payload: { date: dateData },
+			  });
+		try {
+			let consult = await httpRequestHandler(
+				'http://localhost:5000/api/spreadsheet/day',
+				'POST',
+				JSON.stringify({ date: dateData.formattedDate }),
+				{
+					authorization: `Bearer ${context.token}`,
+					'Content-type': 'application/json',
+				},
+			);
+
+			if (section === 'cover') {
+				dispatch({
+					type: 'cover date guards',
+					payload: { data: consult },
+				});
+			} else {
+				dispatch({
+					type: 'return date guards',
+					payload: { data: consult },
+				});
+			}
+			let selectedShift = section === 'cover' ? state.coverData.shift : state.returnData.shift;
+			if (selectedShift !== '-') {
+				let index = consult.findIndex((s) => s.shift === selectedShift);
+				section === 'cover'
+					? dispatch({
+							type: 'cover shift guard',
+							payload: { data: consult[index] },
+					  })
+					: dispatch({
+							type: 'return shift guard',
+							payload: { data: consult[index] },
+					  });
+			}
+		} catch (error) {
+			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
+			console.log(error);
+		}
+	};
 
 	useEffect(() => {
 		async function loadData() {
@@ -205,7 +299,7 @@ const useChangeLoad = (resultData) => {
 			.filter((result) => !!result).length;
 		let isValid = formCheck === 10 ? true : false;
 		setDataIsValid(isValid);
-	}, [state]);
+	}, [state.coverData, state.returnData]);
 
 	const sendNewChange = async () => {
 		try {
@@ -232,6 +326,8 @@ const useChangeLoad = (resultData) => {
 
 	return {
 		state,
+		// loadDateGuards,
+		// loadShift,
 		loadDateData,
 		loadingUsers,
 		loadUser,

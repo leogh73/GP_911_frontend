@@ -1,3 +1,25 @@
+.new-form {
+	/* z-index: 1; */
+	/* position: relative;
+	display: -ms-flexbox;
+	-ms-flex-direction: row;
+	flex-direction: row; */
+	padding: 20px;
+	/* width: 100%; */
+	/* pointer-events: auto; */
+	background-color: var(--text-color);
+	background-clip: padding-box;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	border-radius: 1rem;
+	outline: 0;
+	/* min-width: 95vmin; */
+	/* max-height: 60em; */
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+}
+
 form {
 	display: flex;
 	flex-direction: column;
@@ -5,23 +27,42 @@ form {
 	justify-content: center;
 }
 
-.my-4 {
-	width: 100%;
+.form.login,
+.form.register {
+	padding: 25px;
+}
+
+.form.register {
+	width: 800px;
+}
+
+.form.login {
+	width: 450px;
+}
+
+.inputs-container.register {
+	/* width: 800px; */
+	display: flex;
+	flex-direction: row;
+	align-content: center;
+	justify-content: center;
+}
+
+@media only screen and (max-width: 730px) {
+	.inputs-container.register {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.form.register {
+		width: 430px;
+	}
 }
 
 .inputs-group {
-	display: flex;
-	flex-direction: column;
-	min-width: 100%;
+	width: 360px;
 	padding-left: 10px;
 	padding-right: 10px;
-}
-
-.form {
-	/* max-width: 80vw; */
-	width: 420px;
-	/* min-height: 430px; */
-	padding: 25px;
 }
 
 .form-footer,

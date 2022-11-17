@@ -43,7 +43,7 @@ const Register = () => {
 			pageName="register"
 			footer={
 				<div className="form-footer">
-					<hr className="my-4" />
+					<div className="separator" />
 					<p className="text-center">
 						¿Ya es usuario? <Link to="/iniciarsesion">Iniciar sesión</Link>
 					</p>

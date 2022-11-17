@@ -21,7 +21,6 @@ h4 {
 .nav-links,
 .user-menu {
 	display: flex;
-	/* margin: 0px; */
 	height: 25px;
 	/* padding: 0px; */
 	list-style: none;
@@ -110,7 +109,7 @@ h4 {
 	.nav-links {
 		/* overflow-x: show; */
 		position: absolute;
-		z-index: 3;
+		z-index: 2;
 		list-style: none;
 		color: var(--nav-secondary-color);
 		right: 0px;
@@ -207,6 +206,7 @@ h4 {
 .dark-light div,
 .user-toggle div {
 	position: absolute;
+	padding: 5px;
 	color: var(--nav-secondary-color);
 	font-size: 22px;
 	cursor: pointer;
@@ -236,6 +236,7 @@ h4 {
 }
 
 .user-toggle {
+	/* z-index: 3; */
 	position: relative;
 }
 
@@ -252,10 +253,11 @@ h3 svg {
 
 .user-toggle .user-menu {
 	/* position: absolute; */
-	z-index: 3;
-	position: column;
+	/* position: column; */
+	position: absolute;
 	flex-direction: column;
 	bottom: -265px;
+	z-index: 2;
 	/* bottom: -320px; */
 	right: -2px;
 	height: 240px;
@@ -316,7 +318,6 @@ h3 svg {
 	/* bottom: -265px; */
 	opacity: 1;
 	animation: userMenuFadeIn 0.3s ease;
-	/* z-index: 5; */
 	pointer-events: all;
 }
 

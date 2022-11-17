@@ -51,7 +51,7 @@ const Login = () => {
 				}
 				footer={
 					<div className="form-footer">
-						<hr className="my-4" />
+						<div className="separator" />
 						{/* <div className="form-group text-center"> */}
 						<Link className="text-center" to="forgot-password.html">
 							¿Olvidó su contraseña?

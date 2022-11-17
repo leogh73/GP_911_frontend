@@ -159,6 +159,21 @@ const Row = ({ type, data, modifyCallback }) => {
 					</>
 				);
 			}
+			case 'affected': {
+				return (
+					<>
+						<td data-column="#">{data.priorityId}</td>
+						<td data-column="Personal">{data.name}</td>
+						<td data-column="Afectado" className="change-detail">
+							{changeText(data.affectedData)}
+						</td>
+						<td data-column="Desafectado" className="change-detail">
+							{changeText(data.disaffectedData)}
+						</td>
+						<td data-column="Opciones">{'Opciones'}</td>
+					</>
+				);
+			}
 
 			default:
 				break;

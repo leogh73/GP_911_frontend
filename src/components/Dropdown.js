@@ -68,22 +68,24 @@ const DropdownMenu = ({
 						/>
 					</div>
 				)}
-				{optionsList.map((option, i) => (
-					<div
-						key={i}
-						name={name}
-						style={{ fontSize: `${style.fontSize}` }}
-						className="dropdown-option"
-						value={option}
-						onClick={(e) => {
-							toggleMenu();
-							selectedOption();
-							onChange(e);
-						}}
-					>
-						{option}
-					</div>
-				))}
+				{optionsList.map((option, i) => {
+					return (
+						<div
+							key={i}
+							name={name}
+							style={{ fontSize: `${style.fontSize}` }}
+							className="dropdown-option"
+							value={option}
+							onClick={(e) => {
+								toggleMenu();
+								selectedOption();
+								onChange(e);
+							}}
+						>
+							{option}
+						</div>
+					);
+				})}
 			</div>
 		</div>
 	);

@@ -44,7 +44,7 @@ const registerInputs = [
 	{
 		key: 4,
 		name: 'section',
-		optionsList: ['Teléfono', 'Monitoreo'],
+		optionsList: ['Teléfonía', 'Monitoreo'],
 		password: false,
 		icon: <FaBuilding />,
 		errorMessage: '',

@@ -56,6 +56,7 @@ const NavBar = () => {
 			userMenu.addEventListener('click', () => {
 				userMenu.classList.toggle('active');
 				if (nav.classList.contains('nav-active')) toggleNavBar();
+				layout.classList.add('background');
 			});
 			layout.addEventListener('click', () => {
 				if (nav.classList.contains('nav-active')) toggleNavBar();
@@ -136,23 +137,16 @@ const NavBar = () => {
 								</Link>
 							</li>{' '}
 							<li>
-								<Link to="/changes">
+								<Link to="/affected">
 									<FaUserClock />
 									AFECTADOS/DESAFECTADOS
 								</Link>
 							</li>
-							{context.superior ? (
+							{context.superior && (
 								<li>
 									<Link to="/register">
 										<FaUserPlus />
 										NUEVO USUARIO
-									</Link>
-								</li>
-							) : (
-								<li>
-									<Link to="/new">
-										<FaExchangeAlt />
-										NUEVO CAMBIO
 									</Link>
 								</li>
 							)}

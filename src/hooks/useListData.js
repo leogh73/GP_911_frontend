@@ -105,7 +105,47 @@ const useListData = (itemsList) => {
 					default:
 						return listData;
 				}
-
+			case 'affected':
+				switch (sortBy) {
+					case '#': {
+						return sortByPriority();
+					}
+					case 'Personal': {
+						return listData.sort((a, b) => a.name.localeCompare(b.name));
+					}
+					case 'Afectado': {
+						return listData.sort(
+							(a, b) =>
+								new Date(
+									a.affectedData.date.split('/')[2],
+									a.affectedData.date.split('/')[1],
+									a.affectedData.date.split('/')[0],
+								) -
+								new Date(
+									b.affectedData.date.split('/')[2],
+									b.affectedData.date.split('/')[1],
+									b.affectedData.date.split('/')[0],
+								),
+						);
+					}
+					case 'Desafectado': {
+						return listData.sort(
+							(a, b) =>
+								new Date(
+									a.disaffectedData.date.split('/')[2],
+									a.disaffectedData.date.split('/')[1],
+									a.disaffectedData.date.split('/')[0],
+								) -
+								new Date(
+									b.disaffectedData.date.split('/')[2],
+									b.disaffectedData.date.split('/')[1],
+									b.disaffectedData.date.split('/')[0],
+								),
+						);
+					}
+					default:
+						return listData;
+				}
 			default:
 				return listData;
 		}
@@ -115,11 +155,13 @@ const useListData = (itemsList) => {
 		const filterUserItemsList = () => {
 			switch (action.payload.list) {
 				case 'change':
-					return listData.fetched.filter((i) => i.coverData.name === context.fullName);
+					return listData.fetched.filter(
+						(i) => i.coverData.name === context.fullName || i.returnData.name === context.fullName,
+					);
 				case 'request':
 					return listData.fetched.filter((i) => i.name === context.fullName);
 				case 'affected':
-					return listData.fetched.filter((i) => i.coverData.name === context.fullName);
+					return listData.fetched.filter((i) => i.name === context.fullName);
 				default:
 					break;
 			}
@@ -127,7 +169,7 @@ const useListData = (itemsList) => {
 
 		const itemRowData = (item, type) => {
 			const changeItemFormat = (i) => [i.name, i.date, i.day, i.shift, i.guardId];
-			const requestItemFormat = (i) => [i.date, i.shift, i.day, i.guardId];
+			const requestAffectedItemFormat = (i) => [i.date, i.shift, i.day, i.guardId];
 			switch (type) {
 				case 'change': {
 					return [
@@ -139,12 +181,17 @@ const useListData = (itemsList) => {
 				case 'request': {
 					return [
 						item.name,
-						requestItemFormat(item.offerData),
-						requestItemFormat(item.requestData),
+						requestAffectedItemFormat(item.offerData),
+						requestAffectedItemFormat(item.requestData),
 					].flat(1);
 				}
-				case 'affected':
-					return listData.fetched.filter((i) => i.coverData.name === context.fullName);
+				case 'affected': {
+					return [
+						item.name,
+						requestAffectedItemFormat(item.affectedData),
+						requestAffectedItemFormat(item.disaffectedData),
+					].flat(1);
+				}
 				default:
 					break;
 			}

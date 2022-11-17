@@ -24,8 +24,8 @@ const Form = ({
 	// 		: 'rgba(204, 205, 206, 0.4)';
 
 	return (
-		<div className="content">
-			<div className="form">
+		<div className="new-form">
+			<div className={`form ${pageName}`}>
 				{/* <LoadingOverlay
 					active={loading}
 					styles={{
@@ -38,21 +38,45 @@ const Form = ({
 				> */}
 				<Title text={formTitle} icon={icon} />
 				<form action="" method="" name="register" onSubmit={validateForm}>
-					<div className="inputs-group">
-						{inputs.map((f) => (
-							<InputField
-								key={f.key}
-								showTitle={inputTitle}
-								name={f.name}
-								optionsList={f.optionsList}
-								password={f.password}
-								icon={f.icon}
-								errorMessage={f.errorMessage}
-								value={f.value}
-								onChange={changeHandler}
-								placeHolder={f.placeHolder}
-							/>
-						))}
+					<div className={`inputs-container ${pageName}`}>
+						<div className="inputs-group">
+							{inputs.map(
+								(f, i) =>
+									i <= 4 && (
+										<InputField
+											key={f.key}
+											showTitle={inputTitle}
+											name={f.name}
+											optionsList={f.optionsList}
+											password={f.password}
+											icon={f.icon}
+											errorMessage={f.errorMessage}
+											value={f.value}
+											onChange={changeHandler}
+											placeHolder={f.placeHolder}
+										/>
+									),
+							)}
+						</div>
+						<div className="inputs-group">
+							{inputs.map(
+								(f, i) =>
+									i >= 5 && (
+										<InputField
+											key={f.key}
+											showTitle={inputTitle}
+											name={f.name}
+											optionsList={f.optionsList}
+											password={f.password}
+											icon={f.icon}
+											errorMessage={f.errorMessage}
+											value={f.value}
+											onChange={changeHandler}
+											placeHolder={f.placeHolder}
+										/>
+									),
+							)}
+						</div>
 					</div>
 					{rememberMe}
 					<div style={{ padding: '7px' }}>
