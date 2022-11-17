@@ -43,7 +43,7 @@ const RequestLoad = ({ sendResult }) => {
 			/>
 			{showModal && (
 				<Modal
-					id="modalCambio"
+					id="change-modal"
 					title="Confirmar nuevo pedido"
 					body={`¿Enviar nuevo pedido para el ${state.requestData.date}?`}
 					closeText={'No'}

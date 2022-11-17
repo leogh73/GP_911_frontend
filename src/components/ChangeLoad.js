@@ -11,20 +11,13 @@ import Button from './Button';
 import SelectDate from './SelectDate';
 
 import useChangeLoad from '../hooks/useChangeLoad';
+import SelectUser from './SelectUser';
 
 const ChangeLoad = ({ sendResult }) => {
 	const context = useContext(UserContext);
 	const [showModal, setShowModal] = useState(false);
-	const {
-		state,
-		loadDateData,
-		loadingUsers,
-		loadUser,
-		filterUsers,
-		dataIsValid,
-		loadingSendChange,
-		sendNewChange,
-	} = useChangeLoad(sendResult);
+	const { state, loadDate, loadUser, dataIsValid, loadingSendChange, sendNewChange } =
+		useChangeLoad(sendResult);
 
 	const changeSection = (key, content, icon, title, data) => (
 		<div key={key} className="user-section">
@@ -53,28 +46,17 @@ const ChangeLoad = ({ sendResult }) => {
 					<SelectDate
 						name="cover"
 						items={['Fecha a cubrir', 'Horario a cubrir', 'Día a cubrir', 'Guardia a cubrir']}
-						sendSelectedData={loadDateData}
+						sendSelectedData={loadDate}
 					/>
 				</div>
 				<div className="user-change-section">
 					{changeSection(
 						'02',
-						<DropdownMenu
-							name="return-name"
+						<SelectUser
+							name="return"
 							icon={<FaUser size={20} />}
 							titleValue="Quien devuelve"
-							value={state.returnData.name !== '-' ? state.returnData.name : 'Seleccionar'}
-							optionsList={state.filteredData.returnUsers}
-							onChange={(e) => loadUser('return', e.target.getAttribute('value'))}
-							fetchingOptions={loadingUsers}
-							section="return"
-							style={{
-								top: '76px',
-								height: '250px',
-								overflowY: 'scroll',
-								padding: '0px',
-							}}
-							inputHandler={filterUsers}
+							sendSelectedUser={loadUser}
 						/>,
 					)}
 					<SelectDate
@@ -85,7 +67,7 @@ const ChangeLoad = ({ sendResult }) => {
 							'Día a devovler',
 							'Guardia a devolver',
 						]}
-						sendSelectedData={loadDateData}
+						sendSelectedData={loadDate}
 					/>
 				</div>
 			</div>

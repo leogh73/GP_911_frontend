@@ -1,25 +1,15 @@
-import { useState, useEffect, useContext, useReducer, useCallback } from 'react';
+import { useState, useEffect, useContext, useReducer } from 'react';
 import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useChangeLoad = (resultData) => {
-	const [loadingUsers, setLoadingUsers] = useState(false);
 	const [loadingSendChange, setLoadingSendChange] = useState(false);
 	const [dataIsValid, setDataIsValid] = useState(false);
 	const context = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
 
 	const initialState = {
-		fetchedData: {
-			totalUsers: [],
-			coverDay: [],
-			returnDay: [],
-		},
-		filteredData: {
-			coverUsers: [],
-			returnUsers: [],
-		},
 		coverData: {
 			name: context.fullName,
 			date: '-',
@@ -38,46 +28,6 @@ const useChangeLoad = (resultData) => {
 
 	function reducer(state, action) {
 		switch (action.type) {
-			case 'load users':
-				return {
-					...state,
-					fetchedData: {
-						...state.fetchedData,
-						totalUsers: action.payload.users,
-					},
-				};
-			case 'filter cover users':
-				return {
-					...state,
-					filteredData: {
-						...state.filteredData,
-						coverUsers: action.payload.users,
-					},
-				};
-			case 'filter return users':
-				return {
-					...state,
-					filteredData: {
-						...state.filteredData,
-						returnUsers: action.payload.users,
-					},
-				};
-			case 'load cover user':
-				return {
-					...state,
-					coverData: {
-						...state.coverData,
-						name: action.payload.user,
-					},
-				};
-			case 'load return user':
-				return {
-					...state,
-					returnData: {
-						...state.returnData,
-						name: action.payload.user,
-					},
-				};
 			case 'load cover data':
 				return {
 					...state,
@@ -100,9 +50,14 @@ const useChangeLoad = (resultData) => {
 						guardId: action.payload.guardId,
 					},
 				};
-
-			case 'change valid status':
-				return { ...state, dataIsValid: action.payload.isValid };
+			case 'load return user':
+				return {
+					...state,
+					returnData: {
+						...state.returnData,
+						name: action.payload.user,
+					},
+				};
 			default:
 				break;
 		}
@@ -110,7 +65,7 @@ const useChangeLoad = (resultData) => {
 
 	const [state, dispatch] = useReducer(reducer, initialState);
 
-	const loadDateData = (data, section) => {
+	const loadDate = (data, section) => {
 		section === 'cover'
 			? dispatch({
 					type: 'load cover data',
@@ -119,67 +74,6 @@ const useChangeLoad = (resultData) => {
 			: dispatch({
 					type: 'load return data',
 					payload: { data },
-			  });
-	};
-
-	const loadUsers = useCallback(async () => {
-		try {
-			setLoadingUsers(true);
-			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/spreadsheet/users',
-				'GET',
-				null,
-				{
-					authorization: `Bearer ${context.token}`,
-				},
-			);
-			dispatch({
-				type: 'load users',
-				payload: { users: consult },
-			});
-			let index = consult.findIndex((user) => user === `${context.fullName}`);
-			consult.splice(index, 1);
-			dispatch({
-				type: 'filter cover users',
-				payload: { users: consult },
-			});
-			dispatch({
-				type: 'filter return users',
-				payload: { users: consult },
-			});
-		} catch (error) {
-			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
-			console.log(error);
-		} finally {
-			setLoadingUsers(false);
-		}
-	}, [httpRequestHandler, context.fullName, context.token]);
-
-	useEffect(() => {
-		async function loadData() {
-			await loadUsers();
-		}
-		loadData();
-	}, [loadUsers]);
-
-	const filterUsers = (section, value) => {
-		let result = state.fetchedData.totalUsers.filter((user) => {
-			let formattedUser = user.split(' ').map((w) => w.toLowerCase());
-			let containsValue = false;
-			formattedUser.forEach((name) => {
-				if (name.startsWith(value.toLowerCase())) containsValue = true;
-			});
-			return containsValue ? user : null;
-		});
-		if (!result.length) result = ['No se encontraron usuarios.'];
-		section === 'cover'
-			? dispatch({
-					type: 'filter cover users',
-					payload: { users: result },
-			  })
-			: dispatch({
-					type: 'filter return users',
-					payload: { users: result },
 			  });
 	};
 
@@ -232,10 +126,8 @@ const useChangeLoad = (resultData) => {
 
 	return {
 		state,
-		loadDateData,
-		loadingUsers,
+		loadDate,
 		loadUser,
-		filterUsers,
 		dataIsValid,
 		loadingSendChange,
 		sendNewChange,

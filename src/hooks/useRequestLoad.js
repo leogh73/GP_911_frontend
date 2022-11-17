@@ -1,10 +1,9 @@
-import { useState, useEffect, useContext, useReducer, useCallback } from 'react';
+import { useState, useEffect, useContext, useReducer } from 'react';
 import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useRequestLoad = (sendResult) => {
-	const [loadingUsers, setLoadingUsers] = useState(false);
 	const [loadingSendChange, setLoadingSendChange] = useState(false);
 	const [dataIsValid, setDataIsValid] = useState(false);
 	const context = useContext(UserContext);

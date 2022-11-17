@@ -1,14 +1,3 @@
-import Change from './Row';
-import Title from './Title';
-import Button from './Button';
-
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { IconContext } from 'react-icons';
-import { BiDownArrow } from 'react-icons/bi';
-import { FaList } from 'react-icons/fa';
-import { GoSearch } from 'react-icons/go';
-
 import './ChangesList.css';
 import Table from './Table';
 

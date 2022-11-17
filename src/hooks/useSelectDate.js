@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
-const useSelectDate = (sendDateData, name) => {
+const useSelectDate = (sendDate, name) => {
 	const context = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
 	const initialState = {
@@ -32,20 +32,20 @@ const useSelectDate = (sendDateData, name) => {
 					...state,
 					fetched: action.payload.data,
 				};
-			case 'shift guard':
-				return {
-					...state,
-					data: {
-						...state.data,
-						guardId: action.payload.data.guardId,
-					},
-				};
 			case 'shift time':
 				return {
 					...state,
 					data: {
 						...state.data,
 						shift: action.payload.data,
+					},
+				};
+			case 'shift guard':
+				return {
+					...state,
+					data: {
+						...state.data,
+						guardId: action.payload.data.guardId,
 					},
 				};
 			default:
@@ -119,8 +119,8 @@ const useSelectDate = (sendDateData, name) => {
 	};
 
 	const sendDataCallback = useCallback(() => {
-		sendDateData(state.data, name);
-	}, [state.data, name]);
+		sendDate(state.data, name);
+	}, [sendDate, state.data, name]);
 
 	useEffect(() => {
 		let formData = Object.entries(state.data)

@@ -1,13 +1,14 @@
 import './Dropdown.css';
 import { MdArrowDropDown } from 'react-icons/md';
 import { GoSearch } from 'react-icons/go';
-import { useEffect } from 'react';
 import { css } from '@emotion/react';
 import { MoonLoader } from 'react-spinners';
 import './Button.css';
-import { IconContext } from 'react-icons';
+import useSelectUser from '../hooks/useSelectUser';
 
-const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, style }) => {
+const SelectUser = ({ name, icon, titleValue, sendSelectedUser }) => {
+	const { state, loadingUsers, loadUser, inputHandler } = useSelectUser(sendSelectedUser, name);
+
 	const toggleMenu = () => {
 		document.getElementById(name).querySelector('.dropdown-content').classList.toggle('active');
 		document.getElementById(name).querySelector('.dropdown-arrow').classList.toggle('active');
@@ -24,35 +25,47 @@ const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, st
 
 	return (
 		<div id={name} className="dropdown-wrapper" tabIndex={1}>
-			<div
-				className="dropdown-button"
-				// style={{ padding: `${style.padding}` }}
-				onClick={toggleMenu}
-			>
+			<div className="dropdown-button" onClick={toggleMenu}>
 				{icon && <div className="dropdown-icon">{icon}</div>}
 				<div className="dropdown-text">
-					<div className="dropdown-title" style={{ fontSize: `${style.fontSize}` }}>
+					<div className="dropdown-title">
 						{!!titleValue && <div className="section-title">{titleValue}</div>}
-						{value}
+						{state.selectedUser === '-' ? 'Seleccionar' : state.selectedUser}
 					</div>
-					<div className="dropdown-arrow">
-						<MdArrowDropDown size={22} />
-					</div>
+					{loadingUsers ? (
+						<MoonLoader color={'black'} css={override} size={18} />
+					) : (
+						<div className="dropdown-arrow">
+							<MdArrowDropDown size={22} />
+						</div>
+					)}
 				</div>
 			</div>
-			<div style={style && style} className="dropdown-content">
-				{optionsList.map((option, i) => {
+			<div
+				style={{ top: '76px', height: '250px', overflowY: 'scroll', padding: '0px' }}
+				className="dropdown-content"
+			>
+				<div className="dropdown-input-box">
+					<div className="dropdown-input-icon">
+						<GoSearch />
+					</div>
+					<input
+						className="dropdown-input"
+						placeholder="Buscar"
+						onChange={(e) => inputHandler(e.target.value)}
+					/>
+				</div>
+				{state.filterUsers.map((option, i) => {
 					return (
 						<div
 							key={i}
 							name={name}
-							style={{ fontSize: `${style.fontSize}` }}
 							className="dropdown-option"
 							value={option}
 							onClick={(e) => {
 								toggleMenu();
 								selectedOption();
-								onChange(e);
+								loadUser(e.target.getAttribute('value'));
 							}}
 						>
 							{option}
@@ -64,4 +77,4 @@ const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, st
 	);
 };
 
-export default DropdownMenu;
+export default SelectUser;
