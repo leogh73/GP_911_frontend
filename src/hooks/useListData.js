@@ -203,7 +203,6 @@ const useListData = (itemsList) => {
 			return searchList.filter((item) => {
 				let formattedRow = itemRowData(item, action.payload.list);
 				let rowValues = formattedRow.map((w) => w.toLowerCase());
-				console.log(rowValues);
 				let containsValue = false;
 				rowValues.forEach((rowValue) => {
 					if (rowValue.startsWith(value.toString().toLowerCase())) containsValue = true;

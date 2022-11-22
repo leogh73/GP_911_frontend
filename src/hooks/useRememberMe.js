@@ -4,11 +4,14 @@ const useRememberMe = () => {
 		return storedUser ? storedUser.usernameOrEmail : null;
 	};
 
+	const storeUser = (value) =>
+		localStorage.setItem('storedUser', JSON.stringify({ usernameOrEmail: value }));
+
 	const rememberUser = (usernameOrEmail, rememberMe) => {
 		const storedUser = loadUser();
+		if (storedUser && storedUser !== usernameOrEmail) storeUser(usernameOrEmail);
 		if (storedUser && !rememberMe) localStorage.removeItem('storedUser');
-		if (!storedUser && rememberMe)
-			localStorage.setItem('storedUser', JSON.stringify({ usernameOrEmail: usernameOrEmail }));
+		if (!storedUser && rememberMe) storeUser(usernameOrEmail);
 	};
 
 	return { loadUser, rememberUser };

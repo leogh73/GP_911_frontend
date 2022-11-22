@@ -1,35 +1,39 @@
-import { useState } from 'react';
-import registerInputs from '../inputFields/RegisterInputs';
+import { useEffect, useRef, useState } from 'react';
 import loginInputs from '../inputFields/LoginInputs';
-import registerSchema from '../schemas/RegisterForm';
 import loginSchema from '../schemas/LoginForm';
+import registerInputs from '../inputFields/RegisterInputs';
+import registerSchema from '../schemas/RegisterForm';
 import useHttpConnection from './useHttpConnection';
-
 import useRememberMe from './useRememberMe';
 
 const useForm = (pageName, sendUserForm) => {
+	const [inputs, setInputs] = useState([]);
+	const [schema, setSchema] = useState();
 	const { loadUser } = useRememberMe();
 	const [formIsValid, setFormIsValid] = useState(false);
-	const [loginError, setLoginError] = useState(false);
 	const { loading, httpRequestHandler } = useHttpConnection();
+	const [loginError, setLoginError] = useState(false);
 
-	let schema;
-	let loadedInputs = [];
-	const loadStartInputs = () => {
+	useEffect(() => {
+		let formInputs = [];
+		let schema;
 		let storedUser = loadUser();
 		if (pageName === 'register') {
-			loadedInputs = registerInputs;
+			formInputs = registerInputs;
 			schema = registerSchema;
 		}
 		if (pageName === 'login') {
-			loadedInputs = loginInputs;
+			formInputs = loginInputs;
 			schema = loginSchema;
-			if (storedUser) loadedInputs[0].value = storedUser;
+			formInputs[0].value = storedUser ? storedUser : '';
 		}
-		return loadedInputs;
-	};
-
-	const [inputs, setInputs] = useState(loadStartInputs());
+		setInputs(formInputs);
+		setSchema(schema);
+		return () => {
+			setInputs([]);
+			setSchema();
+		};
+	}, []);
 
 	function registeredData(inputs) {
 		let registeredData = {};
@@ -65,11 +69,7 @@ const useForm = (pageName, sendUserForm) => {
 		return { resultData, validInputs };
 	};
 
-	const clearInputTexts = () => {
-		inputs.forEach((i) => (i.value = ''));
-	};
-
-	const validateData = (validateType, inputIndex, newInputs, event) => {
+	const validateData = (validateType, inputIndex, newInputs, value) => {
 		let joiValidation = schema.validate(registeredData(newInputs), {
 			abortEarly: false,
 		});
@@ -85,7 +85,7 @@ const useForm = (pageName, sendUserForm) => {
 				let errorIndex = searchErrorIndex(newInputs[inputIndex].name);
 				if (errorIndex !== -1)
 					newInputs[inputIndex].errorMessage = joiValidation.error.details[errorIndex].message;
-				if (newInputs[inputIndex].name === 'repetirContraseña' && !event.target.value)
+				if (newInputs[inputIndex].name === 'repetirContraseña' && !value)
 					newInputs[inputIndex].errorMessage = 'Repita su contraseña.';
 			}
 
@@ -139,7 +139,7 @@ const useForm = (pageName, sendUserForm) => {
 		event.target.getAttribute('name') === 'section'
 			? (newInputs[inputIndex].value = event.target.getAttribute('value'))
 			: (newInputs[inputIndex].value = event.target.value);
-		validateData('input', inputIndex, newInputs, event);
+		validateData('input', inputIndex, newInputs, event.target.value);
 	};
 
 	const validateForm = async (event) => {
@@ -157,7 +157,6 @@ const useForm = (pageName, sendUserForm) => {
 
 	return {
 		inputs,
-		loadStartInputs,
 		changeHandler,
 		validateForm,
 		formIsValid,
