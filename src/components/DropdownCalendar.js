@@ -4,6 +4,7 @@ import 'react-calendar/dist/Calendar.css';
 import './DropdownCalendar.css';
 import { MdArrowDropDown } from 'react-icons/md';
 import { BsCalendar2DateFill, BsCalendarDate } from 'react-icons/bs';
+import { useEffect } from 'react';
 
 const DropdownCalendar = ({ name, icon, titleValue, value, onChange }) => {
 	const toggleMenu = () => {
@@ -36,6 +37,7 @@ const DropdownCalendar = ({ name, icon, titleValue, value, onChange }) => {
 				<div className="calendar-component" style={{ top: '58px' }}>
 					<Calendar
 						onChange={(date) => {
+							toggleMenu();
 							selectedOption();
 							onChange(date);
 						}}

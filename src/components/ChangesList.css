@@ -17,6 +17,7 @@
 	outline: 0;
 	/* min-width: 95vmin; */
 	width: 80em;
+	min-height: 83.7vh;
 }
 
 .tabs-container {

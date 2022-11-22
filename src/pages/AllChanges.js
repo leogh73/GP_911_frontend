@@ -2,10 +2,10 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import Loading from '../components/Loading';
 import UserContext from '../context/UserContext';
 import useHttpConnection from '../hooks/useHttpConnection';
-import ChangesList from '../components/ChangesList';
 import Message from '../components/Message';
 import { useNavigate } from 'react-router-dom';
 import { FaExclamationTriangle } from 'react-icons/fa';
+import ChangesList from '../components/ChangesList.js';
 
 const AllChanges = () => {
 	const [changes, setChanges] = useState([]);
@@ -28,7 +28,6 @@ const AllChanges = () => {
 			);
 			setLoading(false);
 			setChanges(consult);
-			return consult;
 		} catch (error) {
 			setError(true);
 			console.log(error);

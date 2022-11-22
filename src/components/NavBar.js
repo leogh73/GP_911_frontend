@@ -162,9 +162,7 @@ const NavBar = () => {
 							<div className="user-menu">
 								<h3 className="user-header">
 									<FaUserCircle size={32} />
-									<div className="user-name">
-										{context.fullName.split(' ').reverse().join(' ')}
-									</div>
+									<div className="user-name">{`${context.firstName} ${context.lastName}`}</div>
 								</h3>
 								<Link className="user-link" to="/changepassword">
 									<FaKey />

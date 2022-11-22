@@ -104,10 +104,7 @@ const useSelectUser = (resultData, name) => {
 	}, [httpRequestHandler, context.token]);
 
 	useEffect(() => {
-		async function loadData() {
-			await loadUsers();
-		}
-		loadData();
+		loadUsers();
 	}, [loadUsers]);
 
 	const inputHandler = (value) => {
@@ -126,12 +123,12 @@ const useSelectUser = (resultData, name) => {
 		});
 	};
 
-	const loadUser = (value) => {
+	const loadUser = (user) => {
 		dispatch({
 			type: 'load user',
-			payload: { user: value },
+			payload: { user },
 		});
-		resultData(name, value);
+		resultData(user);
 	};
 
 	return {

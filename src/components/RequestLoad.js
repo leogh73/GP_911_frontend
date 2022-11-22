@@ -11,7 +11,7 @@ import SelectDate from './SelectDate';
 
 const RequestLoad = ({ sendResult }) => {
 	const [showModal, setShowModal] = useState(false);
-	const { state, loadDateData, dataIsValid, loadingSendChange, sendNewChange } =
+	const { state, loadDate, dataIsValid, loadingSendChange, sendNewChange } =
 		useRequestLoad(sendResult);
 
 	return (
@@ -21,15 +21,15 @@ const RequestLoad = ({ sendResult }) => {
 				<div className="user-change-section">
 					<SelectDate
 						name="request"
-						items={['Fecha pedida', 'Horario pedido', 'Día pedido', 'Guardia pedida']}
-						sendSelectedData={loadDateData}
+						titles={['Fecha pedida', 'Horario pedido', 'Día pedido', 'Guardia pedida']}
+						sendSelectedData={loadDate}
 					/>
 				</div>
 				<div className="user-change-section">
 					<SelectDate
 						name="offer"
-						items={['Fecha ofrecida', 'Horario ofrecido', 'Día ofrecido', 'Guardia ofrecida']}
-						sendSelectedData={loadDateData}
+						titles={['Fecha ofrecida', 'Horario ofrecido', 'Día ofrecido', 'Guardia ofrecida']}
+						sendSelectedData={loadDate}
 					/>
 				</div>
 			</div>

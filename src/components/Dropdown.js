@@ -24,11 +24,7 @@ const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, st
 
 	return (
 		<div id={name} className="dropdown-wrapper" tabIndex={1}>
-			<div
-				className="dropdown-button"
-				// style={{ padding: `${style.padding}` }}
-				onClick={toggleMenu}
-			>
+			<div className="dropdown-button" onClick={toggleMenu}>
 				{icon && <div className="dropdown-icon">{icon}</div>}
 				<div className="dropdown-text">
 					<div className="dropdown-title" style={{ fontSize: `${style.fontSize}` }}>

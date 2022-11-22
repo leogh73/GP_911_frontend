@@ -1,7 +1,6 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useMemo } from 'react';
 import Title from './Title';
 import 'react-calendar/dist/Calendar.css';
-import './ChangeLoad.css';
 import { ToastContainer } from 'react-toastify';
 import { FaUser, FaExchangeAlt } from 'react-icons/fa';
 import DropdownMenu from './Dropdown';
@@ -9,9 +8,9 @@ import Modal from './Modal';
 import UserContext from '../context/UserContext';
 import Button from './Button';
 import SelectDate from './SelectDate';
-
 import useChangeLoad from '../hooks/useChangeLoad';
 import SelectUser from './SelectUser';
+import './ChangeLoad.css';
 
 const ChangeLoad = ({ sendResult }) => {
 	const context = useContext(UserContext);
@@ -42,10 +41,16 @@ const ChangeLoad = ({ sendResult }) => {
 			<Title icon={<FaExchangeAlt />} text={'Nuevo cambio'} />
 			<div className="new-change-data">
 				<div className="user-change-section">
-					{changeSection('01', null, <FaUser />, 'Quien cubre', context.fullName)}
+					{changeSection(
+						'01',
+						null,
+						<FaUser />,
+						'Quien cubre',
+						`${context.lastName} ${context.firstName}`,
+					)}
 					<SelectDate
 						name="cover"
-						items={['Fecha a cubrir', 'Horario a cubrir', 'Día a cubrir', 'Guardia a cubrir']}
+						titles={['Fecha a cubrir', 'Horario a cubrir', 'Día a cubrir', 'Guardia a cubrir']}
 						sendSelectedData={loadDate}
 					/>
 				</div>
@@ -61,10 +66,10 @@ const ChangeLoad = ({ sendResult }) => {
 					)}
 					<SelectDate
 						name="return"
-						items={[
+						titles={[
 							'Fecha a devolver',
 							'Horario a devolver',
-							'Día a devovler',
+							'Día a devolver',
 							'Guardia a devolver',
 						]}
 						sendSelectedData={loadDate}

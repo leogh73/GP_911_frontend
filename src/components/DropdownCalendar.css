@@ -9,7 +9,7 @@
 	/* height: -10px; */
 	/* min-width: 250px; */
 	position: relative;
-	/* cursor: context-menu; */
+	cursor: pointer;
 	/* height: 35px; */
 	/* border: 1px solid rgba(0, 0, 0, 0.2); */
 	border-radius: 5px;
@@ -97,6 +97,10 @@
 	background-color: var(--text-color);
 	border-radius: 10px;
 }
+
+/* .react-calendar__navigation {
+	pointer-events: fill;
+} */
 
 .calendar-component.active {
 	opacity: 1;

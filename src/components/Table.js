@@ -5,16 +5,18 @@ import './Table.css';
 
 import Title from './Title';
 import Button from './Button';
-
+import { useContext } from 'react';
 import { toast } from 'react-toastify';
 import { IconContext } from 'react-icons';
 import { BiDownArrow } from 'react-icons/bi';
 import { GoSearch } from 'react-icons/go';
+import UserContext from '../context/UserContext';
 import './Table.css';
 import Row from './Row';
 
 const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 	const { listData, dispatch } = useListData(dataList);
+	const context = useContext(UserContext);
 	const navigate = useNavigate();
 
 	const resultModifyRow = (action, result) => {
@@ -68,35 +70,41 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 	return (
 		<div id={id}>
 			<div className="changes-filters">
-				<div className="radio-buttons">
-					<div className="changes-filter" value="Todos" name="todos" onClick={radioClickHandler}>
-						<input
-							type="radio"
-							className="changes-radio-icon"
-							value="Todos"
-							name={id}
-							defaultChecked={true}
-						/>
-						Todos
+				{rowType !== 'affected' && !context.superior ? (
+					<Button text={'NUEVO CAMBIO'} width={170} onClick={() => navigate(newLink)} />
+				) : rowType === 'affected' && context.superior ? (
+					<Button text={'NUEVO CAMBIO'} width={170} onClick={() => navigate(newLink)} />
+				) : null}
+				{!context.superior && (
+					<div className="radio-buttons">
+						<div className="changes-filter" value="Todos" name="todos" onClick={radioClickHandler}>
+							<input
+								type="radio"
+								className="changes-radio-icon"
+								value="Todos"
+								name={id}
+								defaultChecked={true}
+							/>
+							Todos
+						</div>
+						<div
+							className="changes-filter"
+							value="Propios"
+							name="propios"
+							onClick={radioClickHandler}
+						>
+							<input type="radio" className="changes-radio-icon" value="Propios" name={id} />
+							Propios
+						</div>
 					</div>
-					<div
-						className="changes-filter"
-						value="Propios"
-						name="propios"
-						onClick={radioClickHandler}
-					>
-						<input type="radio" className="changes-radio-icon" value="Propios" name={id} />
-						Propios
-					</div>
-				</div>
+				)}
+
 				<div className="changes-search-box">
 					<div className="changes-search-icon">
 						<GoSearch />
 					</div>
 					<input className="changes-search" placeholder="Buscar" onChange={inputChangeHandler} />
 				</div>
-
-				<Button text={'NUEVO CAMBIO'} width={170} onClick={() => navigate(newLink)} />
 			</div>
 			{listData.filter.length ? (
 				<table>
@@ -130,20 +138,9 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 					</tbody>
 				</table>
 			) : (
-				<IconContext.Provider
-					value={{
-						style: {
-							color: 'slategray',
-							minWidth: '50px',
-							minHeight: '50px',
-							marginBottom: '5px',
-						},
-					}}
-				>
-					<div>
-						<Title text={'No hay datos para mostrar.'} />
-					</div>
-				</IconContext.Provider>
+				<div className="no-data">
+					<Title text={'No hay datos para mostrar.'} />
+				</div>
 			)}
 		</div>
 	);

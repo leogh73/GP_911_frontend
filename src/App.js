@@ -12,14 +12,15 @@ import useRoutes from './hooks/useRoutes';
 import UserContext from './context/UserContext';
 
 const App = () => {
-	const { token, fullName, guardId, superior, login, logout } = useUser();
+	const { token, firstName, lastName, guardId, superior, login, logout } = useUser();
 	const { routes } = useRoutes(token, superior);
 
 	return (
 		<UserContext.Provider
 			value={{
 				token,
-				fullName,
+				firstName,
+				lastName,
 				guardId,
 				superior,
 				login,

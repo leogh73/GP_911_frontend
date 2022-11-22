@@ -3,6 +3,7 @@ import UserContext from '../context/UserContext';
 
 const useListData = (itemsList) => {
 	const context = useContext(UserContext);
+	const fullName = `${context.lastName} ${context.firstName}`;
 	const [listData, dispatch] = useReducer(reducer, {
 		header: '#',
 		showAll: true,
@@ -156,19 +157,19 @@ const useListData = (itemsList) => {
 			switch (action.payload.list) {
 				case 'change':
 					return listData.fetched.filter(
-						(i) => i.coverData.name === context.fullName || i.returnData.name === context.fullName,
+						(i) => i.coverData.name === fullName || i.returnData.name === fullName,
 					);
 				case 'request':
-					return listData.fetched.filter((i) => i.name === context.fullName);
+					return listData.fetched.filter((i) => i.name === fullName);
 				case 'affected':
-					return listData.fetched.filter((i) => i.name === context.fullName);
+					return listData.fetched.filter((i) => i.name === fullName);
 				default:
 					break;
 			}
 		};
 
 		const itemRowData = (item, type) => {
-			const changeItemFormat = (i) => [i.name, i.date, i.day, i.shift, i.guardId];
+			const changeItemFormat = (i) => [i.name.split(' '), i.date, i.day, i.shift, i.guardId];
 			const requestAffectedItemFormat = (i) => [i.date, i.shift, i.day, i.guardId];
 			switch (type) {
 				case 'change': {
@@ -176,18 +177,18 @@ const useListData = (itemsList) => {
 						changeItemFormat(item.coverData),
 						changeItemFormat(item.returnData),
 						item.status,
-					].flat(1);
+					].flat(2);
 				}
 				case 'request': {
 					return [
-						item.name,
+						item.name.split(' '),
 						requestAffectedItemFormat(item.offerData),
 						requestAffectedItemFormat(item.requestData),
 					].flat(1);
 				}
 				case 'affected': {
 					return [
-						item.name,
+						item.name.split(' '),
 						requestAffectedItemFormat(item.affectedData),
 						requestAffectedItemFormat(item.disaffectedData),
 					].flat(1);
@@ -202,6 +203,7 @@ const useListData = (itemsList) => {
 			return searchList.filter((item) => {
 				let formattedRow = itemRowData(item, action.payload.list);
 				let rowValues = formattedRow.map((w) => w.toLowerCase());
+				console.log(rowValues);
 				let containsValue = false;
 				rowValues.forEach((rowValue) => {
 					if (rowValue.startsWith(value.toString().toLowerCase())) containsValue = true;

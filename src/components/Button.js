@@ -14,6 +14,7 @@ const Button = ({ text, width, onClick, disabled, loading }) => {
 				style={{ width: `${width}` }}
 				className={`button ${disabled || loading ? 'disabled' : ''}`}
 				onClick={onClick}
+				disabled={disabled}
 			>
 				<div className="bt-content">
 					{loading ? (

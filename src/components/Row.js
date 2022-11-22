@@ -10,6 +10,7 @@ import DropdownMenu from './Dropdown';
 const Row = ({ type, data, modifyCallback }) => {
 	const { httpRequestHandler } = useHttpConnection();
 	const context = useContext(UsuarioContext);
+	const fullName = `${context.lastName} ${context.firstName}`;
 
 	const loadButtons = () => {
 		const idModalCancel = (Math.random() + 1).toString(36).substring(4).replace(/\d+/g, '');
@@ -41,11 +42,7 @@ const Row = ({ type, data, modifyCallback }) => {
 			// );
 		};
 
-		if (
-			!context.superior &&
-			context.fullName === data.coverData.name &&
-			data.status === 'Solicitado'
-		)
+		if (!context.superior && fullName === data.coverData.name && data.status === 'Solicitado')
 			return (
 				<>
 					{generateModalButton(

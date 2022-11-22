@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useReducer } from 'react';
+import { useState, useCallback, useEffect, useContext, useReducer } from 'react';
 import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
@@ -11,7 +11,7 @@ const useChangeLoad = (resultData) => {
 
 	const initialState = {
 		coverData: {
-			name: context.fullName,
+			name: `${context.lastName} ${context.firstName} `,
 			date: '-',
 			shift: '-',
 			day: '-',
@@ -33,10 +33,10 @@ const useChangeLoad = (resultData) => {
 					...state,
 					coverData: {
 						...state.coverData,
-						date: action.payload.date,
-						day: action.payload.day,
-						shift: action.payload.shift,
-						guardId: action.payload.guardId,
+						date: action.payload.data.date,
+						day: action.payload.data.day,
+						shift: action.payload.data.shift,
+						guardId: action.payload.data.guardId,
 					},
 				};
 			case 'load return data':
@@ -44,10 +44,10 @@ const useChangeLoad = (resultData) => {
 					...state,
 					returnData: {
 						...state.returnData,
-						date: action.payload.date,
-						day: action.payload.day,
-						shift: action.payload.shift,
-						guardId: action.payload.guardId,
+						date: action.payload.data.date,
+						day: action.payload.data.day,
+						shift: action.payload.data.shift,
+						guardId: action.payload.data.guardId,
 					},
 				};
 			case 'load return user':
@@ -65,31 +65,34 @@ const useChangeLoad = (resultData) => {
 
 	const [state, dispatch] = useReducer(reducer, initialState);
 
-	const loadDate = (data, section) => {
-		section === 'cover'
-			? dispatch({
-					type: 'load cover data',
-					payload: { data },
-			  })
-			: dispatch({
-					type: 'load return data',
-					payload: { data },
-			  });
-	};
+	const loadDate = useCallback(
+		(data, section) => {
+			section === 'cover'
+				? dispatch({
+						type: 'load cover data',
+						payload: { data },
+				  })
+				: dispatch({
+						type: 'load return data',
+						payload: { data },
+				  });
+		},
+		[dispatch],
+	);
 
-	const loadUser = (section, value) => {
+	const loadUser = (user, section) => {
 		section === 'cover'
 			? dispatch({
 					type: 'load cover user',
-					payload: { user: value },
+					payload: { user },
 			  })
 			: dispatch({
 					type: 'load return user',
-					payload: { user: value },
+					payload: { user },
 			  });
 	};
 
-	useEffect(() => {
+	const sendDataCallback = useCallback(() => {
 		let formData = [
 			Object.entries(state.coverData).map((data) => data[1]),
 			Object.entries(state.returnData).map((data) => data[1]),
@@ -99,6 +102,10 @@ const useChangeLoad = (resultData) => {
 			.filter((result) => !!result).length;
 		let isValid = formCheck === 10 ? true : false;
 		setDataIsValid(isValid);
+	}, [state]);
+
+	useEffect(() => {
+		sendDataCallback();
 	}, [state]);
 
 	const sendNewChange = async () => {

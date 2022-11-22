@@ -6,7 +6,6 @@ import DropdownMenu from './Dropdown';
 
 const InputField = ({
 	name,
-	// showTitle,
 	optionsList,
 	password,
 	icon,

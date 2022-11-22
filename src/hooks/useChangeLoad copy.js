@@ -9,6 +9,7 @@ const useChangeLoad = (resultData) => {
 	const [dataIsValid, setDataIsValid] = useState(false);
 	const context = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
+	const fullName = `${context.lastName} ${context.firstName}`;
 
 	const initialState = {
 		fetchedData: {
@@ -21,7 +22,7 @@ const useChangeLoad = (resultData) => {
 			returnUsers: [],
 		},
 		coverData: {
-			name: context.fullName,
+			name: fullName,
 			date: '-',
 			shift: '-',
 			day: '-',
@@ -140,7 +141,7 @@ const useChangeLoad = (resultData) => {
 				type: 'load users',
 				payload: { users: consult },
 			});
-			let index = consult.findIndex((user) => user === `${context.fullName}`);
+			let index = consult.findIndex((user) => user === fullName);
 			consult.splice(index, 1);
 			dispatch({
 				type: 'filter cover users',
@@ -156,7 +157,7 @@ const useChangeLoad = (resultData) => {
 		} finally {
 			setLoadingUsers(false);
 		}
-	}, [httpRequestHandler, context.fullName, context.token]);
+	}, [httpRequestHandler, fullName, context.token]);
 
 	const loadGuardId = (section, shift) => {
 		let dayGuards = section === 'cover' ? state.fetchedData.coverDay : state.fetchedData.returnDay;

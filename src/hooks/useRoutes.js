@@ -6,9 +6,7 @@ import RequestNew from '../pages/RequestNew';
 import ChangeNew from '../pages/ChangeNew';
 import NotFound from '../pages/NotFound';
 import AllAffected from '../pages/AllAffected';
-import AffectedList from '../components/AffectedLIst';
-import { FaExchangeAlt, FaUserClock } from 'react-icons/fa';
-import { GoRequestChanges } from 'react-icons/go';
+import AffectedNew from '../pages/AffectedNew';
 
 const useRoutes = (token, superior) => {
 	const superiorRoutes = [
@@ -16,7 +14,8 @@ const useRoutes = (token, superior) => {
 		{
 			key: '02',
 			path: '/newaffected',
-			element: <ChangeNew />,
+			element: <AffectedNew />,
+			// element: <ChangeNew type={'affected'} icon={<FaUserClock />} title={'Nuevo afectado'} />,
 			// element: <ChangeNew type={'affected'} icon={<FaUserClock />} title={'Nuevo afectado'} />,
 		},
 	];

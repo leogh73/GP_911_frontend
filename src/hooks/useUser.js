@@ -6,7 +6,8 @@ import { toast } from 'react-toastify';
 // let sessionLogoutTime;
 
 const useUser = () => {
-	const [fullName, setFullName] = useState();
+	const [firstName, setFirstName] = useState();
+	const [lastName, setLastName] = useState();
 	const [guardId, setGuardId] = useState();
 	const [superior, setSuperior] = useState();
 	const [token, setToken] = useState();
@@ -15,13 +16,14 @@ const useUser = () => {
 
 	// const navigate = useNavigate();
 
-	const storeUser = (fullName, guardId, superior) => {
+	const storeUser = (firstName, lastName, guardId, superior) => {
 		localStorage.setItem(
 			'userData',
 			JSON.stringify({
-				fullName: fullName,
-				guardId: guardId,
-				superior: superior,
+				firstName,
+				lastName,
+				guardId,
+				superior,
 			}),
 		);
 	};
@@ -37,21 +39,26 @@ const useUser = () => {
 		);
 	};
 
-	const login = useCallback((token, fullName, guardId, superior, expirationTokenTime) => {
-		setToken(token);
-		setFullName(fullName);
-		setGuardId(guardId);
-		setSuperior(superior);
-		const expirationDateToken =
-			expirationTokenTime || new Date(new Date().getTime() + 1000 * 60 * 59);
-		// setExpirationTokenTime(expirationDateToken);
-		storeUser(fullName, guardId, superior);
-		storeToken(false, token, expirationDateToken);
-	}, []);
+	const login = useCallback(
+		(token, firstName, lastName, guardId, superior, expirationTokenTime) => {
+			setToken(token);
+			setFirstName(firstName);
+			setLastName(lastName);
+			setGuardId(guardId);
+			setSuperior(superior);
+			const expirationDateToken =
+				expirationTokenTime || new Date(new Date().getTime() + 1000 * 60 * 59);
+			// setExpirationTokenTime(expirationDateToken);
+			storeUser(firstName, lastName, guardId, superior);
+			storeToken(false, token, expirationDateToken);
+		},
+		[],
+	);
 
 	const logout = (expiredSession) => {
 		setToken(null);
-		setFullName(null);
+		setFirstName(null);
+		setLastName(null);
 		setGuardId(null);
 		setSuperior(null);
 		// setExpirationTokenTime(null);
@@ -102,7 +109,8 @@ const useUser = () => {
 		) {
 			login(
 				storedTokenData.token,
-				storedUserData.fullName,
+				storedUserData.firstName,
+				storedUserData.lastName,
 				storedUserData.guardId,
 				storedUserData.superior,
 				new Date(storedTokenData.expirationDate),
@@ -112,7 +120,8 @@ const useUser = () => {
 
 	return {
 		token,
-		fullName,
+		firstName,
+		lastName,
 		guardId,
 		superior,
 		login,

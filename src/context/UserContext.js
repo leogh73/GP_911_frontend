@@ -2,7 +2,8 @@ import { createContext } from 'react';
 
 const UserContext = createContext({
 	token: null,
-	fullName: null,
+	firstName: null,
+	lastName: null,
 	guardId: null,
 	superior: null,
 	userGuards: null,

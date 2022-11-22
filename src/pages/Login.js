@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FaSignInAlt } from 'react-icons/fa';
 import Form from '../components/Form';
@@ -9,12 +9,24 @@ import useRememberMe from '../hooks/useRememberMe';
 const Login = () => {
 	const { rememberUser, loadUser } = useRememberMe();
 	const [error, setError] = useState();
-	const [rememberMe, setRememberMe] = useState(loadUser() ? true : false);
+	const rememberMe = useRef(loadUser() ? true : false);
 	const context = useContext(UserContext);
 
 	const loginResult = (result, usernameOrPassword) => {
-		context.login(result.token, result.fullName, result.guardId, result.superior);
-		rememberUser(usernameOrPassword, rememberMe);
+		const { token, firstName, lastName, guardId, superior } = result;
+		context.login(token, firstName, lastName, guardId, superior);
+		rememberUser(usernameOrPassword, rememberMe.current);
+	};
+
+	const rememberMeClickHandler = (e) => {
+		const checkedInput = document.querySelector('.form-check-input');
+		const textClicked = e.target.classList.contains('check-space');
+		if (textClicked) {
+			checkedInput.checked = !checkedInput.checked;
+			rememberMe.current = !rememberMe.current;
+		} else {
+			rememberMe.current = checkedInput.checked;
+		}
 	};
 
 	return error ? (
@@ -34,15 +46,12 @@ const Login = () => {
 				icon={<FaSignInAlt />}
 				buttonText="INGRESAR"
 				rememberMe={
-					<div className="remember-me">
+					<div className="remember-me" onClick={rememberMeClickHandler}>
 						<input
 							className="form-check-input"
+							name="remember-me"
 							type="checkbox"
-							id="rememberPasswordCheck"
-							defaultChecked={rememberMe}
-							onClick={(event) => {
-								setRememberMe(event.target.checked);
-							}}
+							defaultChecked={rememberMe.current}
 						/>
 						<label className="check-space" form="rememberPasswordCheck">
 							Recordarme

@@ -3,21 +3,21 @@ import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
-const useRequestLoad = (sendResult) => {
+const useAffectedLoad = (sendResult) => {
 	const [loadingSendChange, setLoadingSendChange] = useState(false);
 	const [dataIsValid, setDataIsValid] = useState(false);
 	const context = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
 
 	const initialState = {
-		name: `${context.lastName} ${context.firstName}`,
-		requestData: {
+		name: '-',
+		affectedData: {
 			date: '-',
 			shift: '-',
 			day: '-',
 			guardId: '-',
 		},
-		offerData: {
+		disaffectedData: {
 			date: '-',
 			shift: '-',
 			day: '-',
@@ -27,15 +27,21 @@ const useRequestLoad = (sendResult) => {
 
 	function reducer(state, action) {
 		switch (action.type) {
-			case 'load request data':
+			case 'load affected data':
 				return {
 					...state,
-					requestData: action.payload.data,
+					affectedData: action.payload.data,
 				};
-			case 'load offer data': {
+			case 'load disaffected data': {
 				return {
 					...state,
-					offerData: action.payload.data,
+					disaffectedData: action.payload.data,
+				};
+			}
+			case 'load affected user': {
+				return {
+					...state,
+					name: action.payload.user,
 				};
 			}
 			default:
@@ -47,18 +53,24 @@ const useRequestLoad = (sendResult) => {
 
 	const loadDate = useCallback(
 		(data, section) => {
-			section === 'request'
+			section === 'affected'
 				? dispatch({
-						type: 'load request data',
+						type: 'load affected data',
 						payload: { data },
 				  })
 				: dispatch({
-						type: 'load offer data',
+						type: 'load disaffected data',
 						payload: { data },
 				  });
 		},
 		[dispatch],
 	);
+
+	const loadUser = (user) =>
+		dispatch({
+			type: 'load affected user',
+			payload: { user },
+		});
 
 	const sendNewChange = async () => {
 		try {
@@ -67,8 +79,8 @@ const useRequestLoad = (sendResult) => {
 				'http://localhost:5000/api/changes/new',
 				'POST',
 				JSON.stringify({
-					requestData: state.requestData,
-					offerData: state.offerData,
+					coverData: state.coverData,
+					returnData: state.returnData,
 				}),
 				{
 					authorization: `Bearer ${context.token}`,
@@ -85,13 +97,14 @@ const useRequestLoad = (sendResult) => {
 
 	const sendDataCallback = useCallback(() => {
 		let formData = [
-			Object.entries(state.requestData).map((data) => data[1]),
-			Object.entries(state.offerData).map((data) => data[1]),
+			state.name,
+			Object.entries(state.affectedData).map((data) => data[1]),
+			Object.entries(state.disaffectedData).map((data) => data[1]),
 		].flat(1);
 		let formCheck = formData
 			.map((data) => (data !== '-' ? true : false))
 			.filter((result) => !!result).length;
-		let isValid = formCheck === 8 ? true : false;
+		let isValid = formCheck === 9 ? true : false;
 		setDataIsValid(isValid);
 	}, [state]);
 
@@ -101,6 +114,7 @@ const useRequestLoad = (sendResult) => {
 
 	return {
 		state,
+		loadUser,
 		loadDate,
 		dataIsValid,
 		loadingSendChange,
@@ -108,4 +122,4 @@ const useRequestLoad = (sendResult) => {
 	};
 };
 
-export default useRequestLoad;
+export default useAffectedLoad;

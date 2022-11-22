@@ -6,7 +6,7 @@ import useSelectDate from '../hooks/useSelectDate';
 import DropdownCalendar from './DropdownCalendar';
 import DropdownMenu from './Dropdown';
 
-const SelectDate = ({ name, items, sendSelectedData }) => {
+const SelectDate = ({ name, titles, sendSelectedData }) => {
 	const { state, loadDateGuards, loadShift } = useSelectDate(sendSelectedData, name);
 
 	const changeSection = (key, content, icon, title, data) => (
@@ -29,24 +29,24 @@ const SelectDate = ({ name, items, sendSelectedData }) => {
 
 	const formData = [
 		{
-			key: items[0],
+			key: titles[0],
 			content: (
 				<DropdownCalendar
-					name={items[0]}
+					name={titles[0]}
 					icon={<BsCalendarDate size={20} />}
-					titleValue={items[0]}
+					titleValue={titles[0]}
 					value={state.data.date !== '-' ? state.data.date : 'Seleccionar'}
 					onChange={(date) => loadDateGuards(date)}
 				/>
 			),
 		},
 		{
-			key: items[1],
+			key: titles[1],
 			content: (
 				<DropdownMenu
-					name={items[1]}
+					name={titles[1]}
 					icon={<IoMdTime size={22} />}
-					titleValue={items[1]}
+					titleValue={titles[1]}
 					value={state.data.shift !== '-' ? state.data.shift : 'Seleccionar'}
 					optionsList={['6 a 14 hs.', '14 a 22 hs.', '22 a 6 hs.']}
 					onChange={(e) => loadShift(e.target.getAttribute('value'))}
@@ -55,14 +55,14 @@ const SelectDate = ({ name, items, sendSelectedData }) => {
 			),
 		},
 		{
-			key: items[2],
-			title: items[2],
+			key: titles[2],
+			title: titles[2],
 			icon: <FaCalendarDay />,
 			data: state.data.day,
 		},
 		{
-			key: items[3],
-			title: items[3],
+			key: titles[3],
+			title: titles[3],
 			icon: <FaUsers />,
 			data: state.data.guardId,
 		},

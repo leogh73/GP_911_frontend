@@ -7,7 +7,7 @@ const useSelectDate = (sendDate, name) => {
 	const context = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
 	const initialState = {
-		fetched: {},
+		fetched: [],
 		data: {
 			date: '-',
 			shift: '-',
@@ -118,10 +118,6 @@ const useSelectDate = (sendDate, name) => {
 		}
 	};
 
-	const sendDataCallback = useCallback(() => {
-		sendDate(state.data, name);
-	}, [sendDate, state.data, name]);
-
 	useEffect(() => {
 		let formData = Object.entries(state.data)
 			.map((data) => data[1])
@@ -129,8 +125,8 @@ const useSelectDate = (sendDate, name) => {
 		let formCheck = formData
 			.map((data) => (data !== '-' ? true : false))
 			.filter((result) => !!result).length;
-		if (formCheck === 4) sendDataCallback();
-	}, [state, sendDataCallback]);
+		if (formCheck === 4) sendDate(state.data, name);
+	}, [sendDate, state.data, name]);
 
 	return {
 		state,
