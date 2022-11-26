@@ -5,7 +5,6 @@ import { IconContext } from 'react-icons';
 import {
 	FaRegCalendarAlt,
 	FaList,
-	FaExchangeAlt,
 	FaUserClock,
 	FaUserPlus,
 	FaUserAlt,

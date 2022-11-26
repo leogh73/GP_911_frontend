@@ -1,30 +1,39 @@
-import './Dropdown.css';
+import { useCallback, useContext, useEffect } from 'react';
 import { MdArrowDropDown } from 'react-icons/md';
-import { GoSearch } from 'react-icons/go';
-import { useEffect } from 'react';
-import { css } from '@emotion/react';
-import { MoonLoader } from 'react-spinners';
 import './Button.css';
-import { IconContext } from 'react-icons';
+import './Dropdown.css';
+import SendNewContext from '../context/SendNewContext';
 
 const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, style }) => {
-	const toggleMenu = () => {
+	const context = useContext(SendNewContext);
+
+	const toggleMenu = useCallback(() => {
 		document.getElementById(name).querySelector('.dropdown-content').classList.toggle('active');
 		document.getElementById(name).querySelector('.dropdown-arrow').classList.toggle('active');
-	};
+	}, [name]);
 
 	const selectedOption = () => {
 		document.getElementById(name).querySelector('.dropdown-button').classList.add('selected');
 	};
 
-	const override = css`
-		margin: 0;
-		display: center;
-	`;
+	useEffect(() => {
+		if (
+			!!context.openedMenu &&
+			context.openedMenu !== name &&
+			document.getElementById(name).querySelector('.dropdown-content').classList.contains('active')
+		)
+			toggleMenu();
+	}, [context.openedMenu, name, toggleMenu]);
 
 	return (
 		<div id={name} className="dropdown-wrapper" tabIndex={1}>
-			<div className="dropdown-button" onClick={toggleMenu}>
+			<div
+				className="dropdown-button"
+				onClick={() => {
+					toggleMenu();
+					context.loadOpenedMenu(name);
+				}}
+			>
 				{icon && <div className="dropdown-icon">{icon}</div>}
 				<div className="dropdown-text">
 					<div className="dropdown-title" style={{ fontSize: `${style.fontSize}` }}>

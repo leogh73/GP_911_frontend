@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import loginInputs from '../inputFields/LoginInputs';
 import loginSchema from '../schemas/LoginForm';
 import registerInputs from '../inputFields/RegisterInputs';
@@ -13,11 +13,11 @@ const useForm = (pageName, sendUserForm) => {
 	const [formIsValid, setFormIsValid] = useState(false);
 	const { loading, httpRequestHandler } = useHttpConnection();
 	const [loginError, setLoginError] = useState(false);
+	const storedUser = loadUser();
 
 	useEffect(() => {
 		let formInputs = [];
 		let schema;
-		let storedUser = loadUser();
 		if (pageName === 'register') {
 			formInputs = registerInputs;
 			schema = registerSchema;
@@ -33,7 +33,7 @@ const useForm = (pageName, sendUserForm) => {
 			setInputs([]);
 			setSchema();
 		};
-	}, []);
+	}, [pageName, storedUser]);
 
 	function registeredData(inputs) {
 		let registeredData = {};
@@ -148,10 +148,7 @@ const useForm = (pageName, sendUserForm) => {
 		let userDataResult = validateData('form', null, newInputs, event);
 		if (userDataResult) {
 			let databaseResult = await sendFormData(registeredData(newInputs));
-			if (databaseResult.validInputs) {
-				sendUserForm(databaseResult.resultData, newInputs[0].value);
-				clearInputTexts();
-			}
+			if (databaseResult.validInputs) sendUserForm(databaseResult.resultData, newInputs[0].value);
 		}
 	};
 

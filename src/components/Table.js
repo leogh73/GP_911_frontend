@@ -1,18 +1,18 @@
 import React from 'react';
-import useListData from '../hooks/useListData';
 import { useNavigate } from 'react-router-dom';
-import './Table.css';
-
-import Title from './Title';
-import Button from './Button';
 import { useContext } from 'react';
 import { toast } from 'react-toastify';
-import { IconContext } from 'react-icons';
 import { BiDownArrow } from 'react-icons/bi';
 import { GoSearch } from 'react-icons/go';
-import UserContext from '../context/UserContext';
-import './Table.css';
+
+import Title from './Title';
 import Row from './Row';
+import Button from './Button';
+
+import './Table.css';
+
+import useListData from '../hooks/useListData';
+import UserContext from '../context/UserContext';
 
 const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 	const { listData, dispatch } = useListData(dataList);

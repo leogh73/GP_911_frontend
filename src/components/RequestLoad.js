@@ -8,51 +8,62 @@ import Modal from './Modal';
 import Button from './Button';
 import { GoRequestChanges } from 'react-icons/go';
 import SelectDate from './SelectDate';
+import SendNewContext from '../context/SendNewContext';
 
 const RequestLoad = ({ sendResult }) => {
+	const [openedMenu, setOpenedMenu] = useState('');
 	const [showModal, setShowModal] = useState(false);
 	const { state, loadDate, dataIsValid, loadingSendChange, sendNewChange } =
 		useRequestLoad(sendResult);
 
+	const loadOpenedMenu = (id) => setOpenedMenu(id);
+
 	return (
-		<div className="new-change">
-			<Title icon={<GoRequestChanges />} text={'Nuevo pedido'} />
-			<div className="new-change-data">
-				<div className="user-change-section">
-					<SelectDate
-						name="request"
-						titles={['Fecha pedida', 'Horario pedido', 'Día pedido', 'Guardia pedida']}
-						sendSelectedData={loadDate}
-					/>
+		<SendNewContext.Provider
+			value={{
+				openedMenu,
+				loadOpenedMenu,
+			}}
+		>
+			<div className="new-change">
+				<Title icon={<GoRequestChanges />} text={'Nuevo pedido'} />
+				<div className="new-change-data">
+					<div className="user-change-section">
+						<SelectDate
+							name="request"
+							titles={['Fecha pedida', 'Horario pedido', 'Día pedido', 'Guardia pedida']}
+							sendSelectedData={loadDate}
+						/>
+					</div>
+					<div className="user-change-section">
+						<SelectDate
+							name="offer"
+							titles={['Fecha ofrecida', 'Horario ofrecido', 'Día ofrecido', 'Guardia ofrecida']}
+							sendSelectedData={loadDate}
+						/>
+					</div>
 				</div>
-				<div className="user-change-section">
-					<SelectDate
-						name="offer"
-						titles={['Fecha ofrecida', 'Horario ofrecido', 'Día ofrecido', 'Guardia ofrecida']}
-						sendSelectedData={loadDate}
-					/>
-				</div>
-			</div>
-			<Button
-				className="button"
-				text={'ENVIAR'}
-				width={200}
-				disabled={!dataIsValid}
-				loading={loadingSendChange}
-				onClick={() => setShowModal(true)}
-			/>
-			{showModal && (
-				<Modal
-					id="change-modal"
-					title="Confirmar nuevo pedido"
-					body={`¿Enviar nuevo pedido para el ${state.requestData.date}?`}
-					closeText={'No'}
-					closeFunction={() => setShowModal(false)}
-					actionFunction={sendNewChange}
+				<Button
+					className="button"
+					text={'ENVIAR'}
+					width={200}
+					disabled={!dataIsValid}
+					loading={loadingSendChange}
+					onClick={() => setShowModal(true)}
 				/>
-			)}
-			<ToastContainer />
-		</div>
+				{showModal && (
+					<Modal
+						id="change-modal"
+						title="Confirmar nuevo pedido"
+						body={`¿Enviar nuevo pedido para el ${state.requestData.date}?`}
+						closeText={'No'}
+						closeFunction={() => setShowModal(false)}
+						actionFunction={sendNewChange}
+					/>
+				)}
+				<ToastContainer />
+			</div>
+		</SendNewContext.Provider>
 	);
 };
 

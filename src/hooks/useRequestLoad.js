@@ -97,7 +97,7 @@ const useRequestLoad = (sendResult) => {
 
 	useEffect(() => {
 		sendDataCallback();
-	}, [state]);
+	}, [state, sendDataCallback]);
 
 	return {
 		state,

@@ -10,6 +10,7 @@ const useAffectedLoad = (sendResult) => {
 	const { httpRequestHandler } = useHttpConnection();
 
 	const initialState = {
+		dropdownActive: false,
 		name: '-',
 		affectedData: {
 			date: '-',
@@ -23,6 +24,7 @@ const useAffectedLoad = (sendResult) => {
 			day: '-',
 			guardId: '-',
 		},
+		bookPage: '',
 	};
 
 	function reducer(state, action) {
@@ -42,6 +44,18 @@ const useAffectedLoad = (sendResult) => {
 				return {
 					...state,
 					name: action.payload.user,
+				};
+			}
+			case 'load book page': {
+				return {
+					...state,
+					bookPage: action.payload.page,
+				};
+			}
+			case 'change dropdown status': {
+				return {
+					...state,
+					dropdownActive: action.payload.status,
 				};
 			}
 			default:
@@ -66,11 +80,17 @@ const useAffectedLoad = (sendResult) => {
 		[dispatch],
 	);
 
-	const loadUser = (user) =>
-		dispatch({
-			type: 'load affected user',
-			payload: { user },
-		});
+	const loadItem = (type, value) => {
+		type === 'users'
+			? dispatch({
+					type: 'load affected user',
+					payload: { user: value },
+			  })
+			: dispatch({
+					type: 'load book page',
+					payload: { page: value },
+			  });
+	};
 
 	const sendNewChange = async () => {
 		try {
@@ -100,21 +120,22 @@ const useAffectedLoad = (sendResult) => {
 			state.name,
 			Object.entries(state.affectedData).map((data) => data[1]),
 			Object.entries(state.disaffectedData).map((data) => data[1]),
+			state.bookPage,
 		].flat(1);
 		let formCheck = formData
 			.map((data) => (data !== '-' ? true : false))
 			.filter((result) => !!result).length;
-		let isValid = formCheck === 9 ? true : false;
+		let isValid = formCheck === 10 ? true : false;
 		setDataIsValid(isValid);
 	}, [state]);
 
 	useEffect(() => {
 		sendDataCallback();
-	}, [state]);
+	}, [state, sendDataCallback]);
 
 	return {
 		state,
-		loadUser,
+		loadItem,
 		loadDate,
 		dataIsValid,
 		loadingSendChange,

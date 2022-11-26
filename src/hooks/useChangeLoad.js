@@ -106,7 +106,7 @@ const useChangeLoad = (resultData) => {
 
 	useEffect(() => {
 		sendDataCallback();
-	}, [state]);
+	}, [state, sendDataCallback]);
 
 	const sendNewChange = async () => {
 		try {
