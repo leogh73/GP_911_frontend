@@ -1,7 +1,7 @@
 import React, { useContext, useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { SlOptionsVertical } from 'react-icons/sl';
-import UsuarioContext from '../context/UserContext';
+import UserContext from '../context/UserContext';
 import useHttpConnection from '../hooks/useHttpConnection';
 import Button from './Button';
 import Modal from './Modal';
@@ -9,7 +9,7 @@ import DropdownMenu from './Dropdown';
 
 const Row = ({ type, data, modifyCallback }) => {
 	const { httpRequestHandler } = useHttpConnection();
-	const context = useContext(UsuarioContext);
+	const context = useContext(UserContext);
 	const fullName = `${context.lastName} ${context.firstName}`;
 
 	const loadButtons = () => {
@@ -41,6 +41,8 @@ const Row = ({ type, data, modifyCallback }) => {
 			// 	/>
 			// );
 		};
+
+		console.log(data);
 
 		if (!context.superior && fullName === data.coverData.name && data.status === 'Solicitado')
 			return (
@@ -122,54 +124,93 @@ const Row = ({ type, data, modifyCallback }) => {
 
 	const changeText = (s) => `${s.date} - ${s.shift} - ${s.day} - Guardia ${s.guardId}`;
 
+	const generateRow = (dataList) => (
+		<>
+			{dataList.map((item) => (
+				<td className="row-data" key={item.columnName}>
+					<div className="col-name">{item.columnName}</div>
+					<div className="data-col">{item.rowData}</div>
+				</td>
+			))}
+		</>
+	);
+
 	const rowContent = () => {
 		switch (type) {
 			case 'change': {
-				return (
-					<>
-						<td data-column="#">{data.priorityId}</td>
-						<td data-column="Quien cubre">{data.coverData.name}</td>
-						<td data-column="A cubrir" className="change-detail">
-							{changeText(data.coverData)}
-						</td>
-						<td data-column="Quien devuelve">{data.returnData.name}</td>
-						<td data-column="A devolver" className="change-detail">
-							{changeText(data.returnData)}
-						</td>
-						<td data-column="Estado">{data.status}</td>
-						<td data-column="Opciones">{loadButtons()}</td>
-					</>
-				);
+				return generateRow([
+					{
+						columnName: '#',
+						rowData: data.priorityId,
+					},
+					{ columnName: 'Quien cubre', rowData: data.coverData.name },
+					{
+						columnName: 'A cubrir',
+						rowData: changeText(data.coverData),
+					},
+					{
+						columnName: 'Quien devuelve',
+						rowData: data.returnData.name,
+					},
+					{
+						columnName: 'A devolver',
+						rowData: changeText(data.returnData),
+					},
+					{
+						columnName: 'Estado',
+						rowData: data.status,
+					},
+					{
+						columnName: 'Opciones',
+						rowData: '(BOTON OPCIONES)',
+					},
+				]);
 			}
 			case 'request': {
-				return (
-					<>
-						<td data-column="#">{data.priorityId}</td>
-						<td data-column="Personal">{data.name}</td>
-						<td data-column="Pedido" className="change-detail">
-							{changeText(data.requestData)}
-						</td>
-						<td data-column="Ofrecido" className="change-detail">
-							{changeText(data.offerData)}
-						</td>
-						<td data-column="Opciones">{'Opciones'}</td>
-					</>
-				);
+				return generateRow([
+					{
+						columnName: '#',
+						rowData: data.priorityId,
+					},
+					{ columnName: 'Personal', rowData: data.name },
+					{
+						columnName: 'Pedido',
+						rowData: changeText(data.requestData),
+					},
+					{
+						columnName: 'Ofrecido',
+						rowData: changeText(data.offerData),
+					},
+					{
+						columnName: 'Opciones',
+						rowData: '(BOTON OPCIONES)',
+					},
+				]);
 			}
 			case 'affected': {
-				return (
-					<>
-						<td data-column="#">{data.priorityId}</td>
-						<td data-column="Personal">{data.name}</td>
-						<td data-column="Afectado" className="change-detail">
-							{changeText(data.affectedData)}
-						</td>
-						<td data-column="Desafectado" className="change-detail">
-							{changeText(data.disaffectedData)}
-						</td>
-						<td data-column="Opciones">{'Opciones'}</td>
-					</>
-				);
+				return generateRow([
+					{
+						columnName: '#',
+						rowData: data.priorityId,
+					},
+					{ columnName: 'Personal', rowData: data.name },
+					{
+						columnName: 'Afectado',
+						rowData: changeText(data.affectedData),
+					},
+					{
+						columnName: 'Desafectado',
+						rowData: changeText(data.disaffectedData),
+					},
+					{
+						columnName: 'Foja del Libro de Guardia',
+						rowData: data.bookPage,
+					},
+					{
+						columnName: 'Opciones',
+						rowData: '(BOTON OPCIONES)',
+					},
+				]);
 			}
 
 			default:

@@ -31,6 +31,7 @@ const useRoutes = (token, superior) => {
 			element: <RequestNew />,
 		},
 	];
+
 	const routes = token ? (
 		<Routes>
 			<Route path="/" element={<AllChanges />} />

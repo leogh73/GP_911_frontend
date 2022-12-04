@@ -7,17 +7,17 @@ import useHttpConnection from './useHttpConnection';
 import useRememberMe from './useRememberMe';
 
 const useForm = (pageName, sendUserForm) => {
-	const [inputs, setInputs] = useState([]);
-	const [schema, setSchema] = useState();
 	const { loadUser } = useRememberMe();
 	const [formIsValid, setFormIsValid] = useState(false);
 	const { loading, httpRequestHandler } = useHttpConnection();
 	const [loginError, setLoginError] = useState(false);
 	const storedUser = loadUser();
+	const [inputs, setInputs] = useState([]);
+	const [schema, setSchema] = useState();
 
 	useEffect(() => {
-		let formInputs = [];
 		let schema;
+		let formInputs = [];
 		if (pageName === 'register') {
 			formInputs = registerInputs;
 			schema = registerSchema;
@@ -27,11 +27,10 @@ const useForm = (pageName, sendUserForm) => {
 			schema = loginSchema;
 			formInputs[0].value = storedUser ? storedUser : '';
 		}
-		setInputs(formInputs);
 		setSchema(schema);
+		setInputs(formInputs);
 		return () => {
-			setInputs([]);
-			setSchema();
+			formInputs.forEach((field) => (field.value = ''));
 		};
 	}, [pageName, storedUser]);
 

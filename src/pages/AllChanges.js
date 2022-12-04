@@ -50,7 +50,7 @@ const AllChanges = () => {
 			onClick={() => navigate('/')}
 		/>
 	) : loading ? (
-		<Loading />
+		<Loading type={'closed'} />
 	) : (
 		<ChangesList changes={changes} />
 	);

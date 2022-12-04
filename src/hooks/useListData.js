@@ -144,6 +144,9 @@ const useListData = (itemsList) => {
 								),
 						);
 					}
+					case 'Foja del Libro de Guardia': {
+						return listData.sort((a, b) => a.bookPage - b.bookPage);
+					}
 					default:
 						return listData;
 				}
@@ -191,6 +194,7 @@ const useListData = (itemsList) => {
 						item.name.split(' '),
 						requestAffectedItemFormat(item.affectedData),
 						requestAffectedItemFormat(item.disaffectedData),
+						item.bookPage,
 					].flat(1);
 				}
 				default:

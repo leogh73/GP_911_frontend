@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import './ChangesList.css';
 import Table from './Table';
 

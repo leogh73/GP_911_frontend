@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
-const useSelectList = (name, type, sendSelectedItem) => {
+const useSelectList = (type, sendSelectedItem) => {
 	const [loadingUsers, setLoadingUsers] = useState(false);
 	const context = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
@@ -96,7 +96,7 @@ const useSelectList = (name, type, sendSelectedItem) => {
 			type: 'load item',
 			payload: { item },
 		});
-		sendSelectedItem(item, name);
+		sendSelectedItem(type, item);
 	};
 
 	return {

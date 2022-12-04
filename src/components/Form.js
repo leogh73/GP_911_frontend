@@ -5,6 +5,7 @@ import Title from './Title';
 import useForm from '../hooks/useForm';
 import './Form.css';
 import Modal from './Modal';
+import Loading from './Loading';
 
 const Form = ({
 	sendUserForm,
@@ -26,7 +27,7 @@ const Form = ({
 
 	return (
 		<div className="new-form">
-			<div className={`form ${pageName}`}>
+			<div className={`form ${pageName} ${loading ? 'loading' : ''}`}>
 				{/* <LoadingOverlay
 					active={loading}
 					styles={{
@@ -93,6 +94,7 @@ const Form = ({
 				</form>
 				{/* </LoadingOverlay> */}
 			</div>
+			{loading && <Loading type={'closed'} />}
 			{loginError && (
 				<Modal
 					id="login-error"

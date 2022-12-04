@@ -1,20 +1,15 @@
-import './Dropdown.css';
 import { MdArrowDropDown } from 'react-icons/md';
 import { GoSearch } from 'react-icons/go';
-import { css } from '@emotion/react';
-import { MoonLoader } from 'react-spinners';
 import './Button.css';
 import useSelectList from '../hooks/useSelectList';
 import { useCallback, useContext, useEffect } from 'react';
 import SendNewContext from '../context/SendNewContext';
+import Loading from './Loading';
+import './Dropdown.css';
 
 const SelectList = ({ name, type, icon, titleValue, sendSelectedItem }) => {
 	const context = useContext(SendNewContext);
-	const { state, loadingUsers, loadItem, inputHandler } = useSelectList(
-		name,
-		type,
-		sendSelectedItem,
-	);
+	const { state, loadingUsers, loadItem, inputHandler } = useSelectList(type, sendSelectedItem);
 
 	const toggleMenu = useCallback(() => {
 		document.getElementById(name).querySelector('.dropdown-content').classList.toggle('active');
@@ -24,11 +19,6 @@ const SelectList = ({ name, type, icon, titleValue, sendSelectedItem }) => {
 	const selectedOption = () => {
 		document.getElementById(name).querySelector('.dropdown-button').classList.add('selected');
 	};
-
-	const override = css`
-		margin: 0;
-		display: center;
-	`;
 
 	useEffect(() => {
 		if (
@@ -55,7 +45,7 @@ const SelectList = ({ name, type, icon, titleValue, sendSelectedItem }) => {
 						{state.selectedItem === '-' ? 'Seleccionar' : state.selectedItem}
 					</div>
 					{loadingUsers ? (
-						<MoonLoader color={'black'} css={override} size={18} />
+						<Loading type={'opened'} />
 					) : (
 						<div className="dropdown-arrow">
 							<MdArrowDropDown size={22} />

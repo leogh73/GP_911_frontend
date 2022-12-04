@@ -18,6 +18,7 @@
 	flex-direction: column;
 	align-items: center;
 	justify-content: space-around;
+	animation: bgFadeIn 0.6s ease;
 }
 
 form {
@@ -38,6 +39,19 @@ form {
 
 .form.login {
 	width: 450px;
+}
+
+.form.login.loading,
+.form.register.loading {
+	/* background-color: rgba(255, 255, 255, 0.5); */
+	/* top: 0;
+	left: 0; */
+	opacity: 0.4;
+	/* z-index: 0; */
+	/* opacity: 0; */
+	/* position: fixed;
+	justify-content: center;
+	align-items: center; */
 }
 
 .inputs-container.register {

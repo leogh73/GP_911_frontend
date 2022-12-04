@@ -28,19 +28,19 @@ const NavBar = () => {
 
 	useEffect(() => {
 		const burger = document.querySelector('.burger');
-		const nav = document.querySelector('.nav-links');
+		const navLinks = document.querySelector('.nav-links');
 		const layout = document.querySelector('.layout');
 		const userMenu = context.token ? document.querySelector('.user-toggle') : null;
-		const navLinks = document.querySelectorAll('.nav-links li');
+		const navLinksList = document.querySelectorAll('.nav-links li');
 
 		const toggleNavBar = () => {
-			nav.classList.toggle('nav-active');
-			navLinks.forEach((link, index) => {
+			navLinks.classList.toggle('nav-active');
+			navLinksList.forEach((link, index) => {
 				if (link.style.animation === '') {
 					link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.4}s`;
 				} else link.style.animation = '';
 				link.addEventListener('click', () => {
-					if (nav.classList.contains('nav-active')) toggleNavBar();
+					if (navLinks.classList.contains('nav-active')) toggleNavBar();
 				});
 			});
 			burger.classList.toggle('toggle');
@@ -54,11 +54,11 @@ const NavBar = () => {
 			});
 			userMenu.addEventListener('click', () => {
 				userMenu.classList.toggle('active');
-				if (nav.classList.contains('nav-active')) toggleNavBar();
+				if (navLinks.classList.contains('nav-active')) toggleNavBar();
 				layout.classList.add('background');
 			});
 			layout.addEventListener('click', () => {
-				if (nav.classList.contains('nav-active')) toggleNavBar();
+				if (navLinks.classList.contains('nav-active')) toggleNavBar();
 				if (userMenu.classList.contains('active')) userMenu.classList.toggle('active');
 			});
 		}
@@ -66,7 +66,9 @@ const NavBar = () => {
 		const body = document.querySelector('body');
 		const modeToggle = document.querySelector('.dark-light');
 
-		if (localStorage.getItem('mode') === 'dark-mode') {
+		if (localStorage.getItem('mode') === null) {
+			localStorage.setItem('mode', 'light-mode');
+		} else if (localStorage.getItem('mode') === 'dark-mode') {
 			body.classList.add('dark');
 			modeToggle.classList.toggle('active');
 		}
@@ -82,15 +84,15 @@ const NavBar = () => {
 			if (context.token) {
 				userMenu.removeEventListener('click', () => {});
 				burger.removeEventListener('click', () => {
-					nav.classList.toggle('nav-links');
+					navLinks.classList.toggle('nav-links');
 				});
 				layout.removeEventListener('click', () => {
-					if (nav.classList.value === 'nav-links nav-active') toggleNavBar();
+					if (navLinks.classList.value === 'nav-links nav-active') toggleNavBar();
 				});
 				modeToggle.removeEventListener('click', () => {});
-				navLinks.forEach((link) =>
+				navLinksList.forEach((link) =>
 					link.removeEventListener('click', () =>
-						nav.classList.contains('nav-active') ? toggleNavBar() : null,
+						navLinks.classList.contains('nav-active') ? toggleNavBar() : null,
 					),
 				);
 			}
@@ -116,7 +118,7 @@ const NavBar = () => {
 				style: { marginRight: '12px', marginBottom: '3px' },
 			}}
 		>
-			<nav className="nav-color">
+			<nav className="nav">
 				<div className="logo">
 					<h4>Guardias 911</h4>
 				</div>

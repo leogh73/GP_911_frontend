@@ -45,6 +45,7 @@ const AllAffected = () => {
 						day: 'Miercoles',
 						guardId: 'B',
 					},
+					bookPage: '114',
 				},
 				{
 					priorityId: '002',
@@ -55,12 +56,14 @@ const AllAffected = () => {
 						day: 'Viernes',
 						guardId: 'F',
 					},
+
 					disaffectedData: {
 						date: '14/12/2022',
 						shift: '14 a 22 hs.',
 						day: 'Miercoles',
 						guardId: 'B',
 					},
+					bookPage: '117',
 				},
 				{
 					priorityId: '003',
@@ -77,6 +80,7 @@ const AllAffected = () => {
 						day: 'Miercoles',
 						guardId: 'B',
 					},
+					bookPage: '110',
 				},
 			];
 			setChanges(changes);
@@ -114,6 +118,7 @@ const AllAffected = () => {
 						{ key: 1, title: 'Personal' },
 						{ key: 2, title: 'Afectado' },
 						{ key: 3, title: 'Desafectado' },
+						{ key: 4, title: 'Foja del Libro de Guardia' },
 					]}
 					rowType={'affected'}
 					dataList={changes}

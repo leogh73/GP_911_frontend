@@ -73,13 +73,13 @@
 	opacity: 1;
 }
 
-.no-data {
+/* .no-data {
 	display: flex;
 	flex-direction: column;
 	min-height: 60vh;
 	justify-content: center;
 	text-align: center;
-}
+} */
 
 @media only screen and (max-width: 667px) {
 	.changes-filters {
@@ -125,18 +125,12 @@ table {
 	border-collapse: collapse;
 	text-align: center;
 	z-index: 0;
-	/* opacity: 0; */
-	/* margin-left: 5px auto; */
 }
 
 /* Zebra striping */
 tr:nth-of-type(odd) {
 	background: rgb(243, 243, 243);
 }
-
-/* tr:hover {
-	background-color: #39a7e7;
-} */
 
 body.dark tr:nth-of-type(even) {
 	background: rgba(233, 230, 230, 0.774);
@@ -164,14 +158,6 @@ th {
 }
 
 .arrow-down {
-	/* z-index: -5; */
-	/* display: inline-block; */
-	/* padding: 1em; */
-	/* margin: 0; */
-	/* text-decoration: none; */
-	/* padding: 6px 8px; */
-	/* pointer-events: auto; */
-
 	display: flex;
 	align-items: flex-end;
 	pointer-events: none;
@@ -215,6 +201,12 @@ tr:hover {
 	padding: 0px;
 }
 
+.col-name {
+	display: none;
+	color: #000;
+	font-weight: bold;
+}
+
 /* 
 Max width before this PARTICULAR table gets nasty
 This query will take effect for any screen smaller than 760px
@@ -253,27 +245,32 @@ and also iPads specifically.
 		/* Behave  like a "row" */
 		border: none;
 		border-bottom: 1px solid #eee;
-		position: relative;
-		padding-left: 35%;
-		min-height: 45px;
+		/* display: flex; */
+		/* flex-direction: row; */
+		/* align-content: center; */
+		/* position: relative; */
+		/* padding-left: 35%; */
+		min-height: 70px;
 	}
 
 	td div.options {
 		padding: 5px;
 	}
 
-	td:before {
-		/* Now like a table header */
-		position: absolute;
-		/* Top/left values mimic padding */
-		top: 10px;
-		left: 20px;
-		max-width: 25%;
-		/* padding-right: 65%; */
-		/* white-space: normal; */
-		/* Label the data */
-		content: attr(data-column);
-		color: #000;
-		font-weight: bold;
+	.row-data {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.col-name {
+		display: flex;
+		padding-left: 10px;
+		padding-right: 10px;
+		width: 35%;
+	}
+
+	.data-col {
+		width: 65%;
 	}
 }
