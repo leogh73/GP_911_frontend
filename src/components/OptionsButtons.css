@@ -1,0 +1,25 @@
+.option-buttons {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	height: 50px;
+}
+
+.option-button {
+	border-radius: 50%;
+	width: 34px;
+	height: 34px;
+	background-color: var(--button-color);
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.option-container {
+	margin: 5px;
+}
+
+.option-button:hover {
+	background-color: var(--hover-button);
+}

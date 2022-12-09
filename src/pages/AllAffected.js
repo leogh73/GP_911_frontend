@@ -118,7 +118,7 @@ const AllAffected = () => {
 						{ key: 1, title: 'Personal' },
 						{ key: 2, title: 'Afectado' },
 						{ key: 3, title: 'Desafectado' },
-						{ key: 4, title: 'Foja del Libro de Guardia' },
+						{ key: 4, title: 'Foja' },
 					]}
 					rowType={'affected'}
 					dataList={changes}
