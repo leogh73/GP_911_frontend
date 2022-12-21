@@ -7,8 +7,21 @@ import ChangeNew from '../pages/ChangeNew';
 import NotFound from '../pages/NotFound';
 import AllAffected from '../pages/AllAffected';
 import AffectedNew from '../pages/AffectedNew';
+import { useState } from 'react';
+import ChangeEdit from '../pages/ChangeEdit';
 
 const useRoutes = (token, superior) => {
+	const [activeEditRoute, setActiveEditRoute] = useState(false);
+	const [changeData, setChangeData] = useState();
+
+	const loadChangeData = (data) => {
+		setChangeData(data);
+	};
+
+	const activateEditionRoute = () => {
+		setActiveEditRoute(true);
+	};
+
 	const superiorRoutes = [
 		{ key: '01', path: '/register', element: <Register /> },
 		{
@@ -38,6 +51,7 @@ const useRoutes = (token, superior) => {
 			<Route path="/changes" element={<AllChanges />} />
 			<Route path="/affected" element={<AllAffected />} />
 			<Route path="*" element={<NotFound />} />
+			{activeEditRoute && <Route path="/edit" element={<ChangeEdit changeData={changeData} />} />}
 			{superior
 				? superiorRoutes.map((route) => (
 						<Route key={route.key} path={route.path} element={route.element} />
@@ -53,7 +67,7 @@ const useRoutes = (token, superior) => {
 		</Routes>
 	);
 
-	return { routes };
+	return { routes, loadChangeData, activateEditionRoute };
 };
 
 export default useRoutes;

@@ -1,5 +1,6 @@
 .spinner1,
-.spinner2 {
+.spinner2,
+.spinner3 {
 	border-radius: 50%;
 	z-index: 2;
 	animation: spinner 0.5s linear infinite;
@@ -16,134 +17,22 @@
 	border: 8px solid var(--inner-spinner);
 }
 
-.spinner2 {
+.spinner2,
+.spinner3 {
 	width: 20px;
 	height: 20px;
+}
+
+.spinner2 {
 	border: 2px solid var(--nav-color);
+}
+
+.spinner3 {
+	border: 2px solid #ddd;
 }
 
 @keyframes spinner {
 	100% {
 		transform: rotate(360deg);
-	}
-}
-
-.circular {
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	margin-left: -40px;
-	margin-top: -40px;
-	-webkit-animation: rotate 2s linear infinite;
-	animation: rotate 2s linear infinite;
-}
-@-webkit-keyframes rotate {
-	from {
-		-webkit-transform: rotate(0deg);
-	}
-	to {
-		-webkit-transform: rotate(360deg);
-	}
-}
-
-@keyframes rotate {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(360deg);
-	}
-}
-
-.path {
-	stroke-dasharray: 1, 200;
-	stroke-dashoffset: 0;
-	-webkit-animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
-	animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
-	stroke-linecap: round;
-	stroke: #3f88f8;
-}
-
-@-webkit-keyframes dash {
-	0% {
-		stroke-dasharray: 1, 200;
-		stroke-dashoffset: 0;
-	}
-	50% {
-		stroke-dasharray: 89, 200;
-		stroke-dashoffset: -35;
-	}
-	100% {
-		stroke-dasharray: 89, 200;
-		stroke-dashoffset: -124;
-	}
-}
-
-@keyframes dash {
-	0% {
-		stroke-dasharray: 1, 200;
-		stroke-dashoffset: 0;
-	}
-	50% {
-		stroke-dasharray: 89, 200;
-		stroke-dashoffset: -35;
-	}
-	100% {
-		stroke-dasharray: 89, 200;
-		stroke-dashoffset: -124;
-	}
-}
-
-@-webkit-keyframes color {
-	0% {
-		stroke: #3f88f8;
-	}
-	20% {
-		stroke: #3f88f8;
-	}
-	25% {
-		stroke: #dd413b;
-	}
-	45% {
-		stroke: #dd413b;
-	}
-	50% {
-		stroke: #f6ae2e;
-	}
-	70% {
-		stroke: #f6ae2e;
-	}
-	75% {
-		stroke: #259a5d;
-	}
-	95% {
-		stroke: #259a5d;
-	}
-}
-
-@keyframes color {
-	0% {
-		stroke: #3f88f8;
-	}
-	20% {
-		stroke: #3f88f8;
-	}
-	25% {
-		stroke: #dd413b;
-	}
-	45% {
-		stroke: #dd413b;
-	}
-	50% {
-		stroke: #f6ae2e;
-	}
-	70% {
-		stroke: #f6ae2e;
-	}
-	75% {
-		stroke: #259a5d;
-	}
-	95% {
-		stroke: #259a5d;
 	}
 }

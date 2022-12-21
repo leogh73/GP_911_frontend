@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { MdArrowDropDown } from 'react-icons/md';
 import './Button.css';
 import './Dropdown.css';
@@ -6,6 +6,7 @@ import SendNewContext from '../context/SendNewContext';
 
 const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, style }) => {
 	const context = useContext(SendNewContext);
+	const [listState, setListState] = useState(optionsList);
 
 	const toggleMenu = useCallback(() => {
 		document.getElementById(name).querySelector('.dropdown-content').classList.toggle('active');
@@ -14,6 +15,16 @@ const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, st
 
 	const selectedOption = () => {
 		document.getElementById(name).querySelector('.dropdown-button').classList.add('selected');
+	};
+
+	const clickOptionHandler = (e) => {
+		let newList = [...optionsList];
+		newList.splice(
+			optionsList.findIndex((option) => option === e.target.getAttribute('value')),
+			1,
+		);
+		setListState(newList);
+		onChange(e);
 	};
 
 	useEffect(() => {
@@ -46,7 +57,7 @@ const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, st
 				</div>
 			</div>
 			<div style={style && style} className="dropdown-content">
-				{optionsList.map((option, i) => {
+				{listState.map((option, i) => {
 					return (
 						<div
 							key={i}
@@ -57,7 +68,7 @@ const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, st
 							onClick={(e) => {
 								toggleMenu();
 								selectedOption();
-								onChange(e);
+								clickOptionHandler(e);
 							}}
 						>
 							{option}

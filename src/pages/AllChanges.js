@@ -9,7 +9,7 @@ import ChangesList from '../components/ChangesList.js';
 
 const AllChanges = () => {
 	const [changes, setChanges] = useState([]);
-	const [loading, setLoading] = useState(true);
+	const [loading, setLoading] = useState();
 	const [error, setError] = useState();
 	const { httpRequestHandler } = useHttpConnection();
 
@@ -18,6 +18,7 @@ const AllChanges = () => {
 
 	const fetchAllChanges = useCallback(async () => {
 		try {
+			setLoading(true);
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/changes/all',
 				'POST',
@@ -43,10 +44,10 @@ const AllChanges = () => {
 
 	return error ? (
 		<Message
-			titulo="Error loading cambios"
-			icono={<FaExclamationTriangle />}
-			cuerpo="No se pudieron cargar cambios de guardia. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas."
-			textoBoton="VOLVER"
+			title="Error cargando cambios"
+			icon={<FaExclamationTriangle />}
+			body="No se pudieron cargar cambios de guardia. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas."
+			buttonText="VOLVER"
 			onClick={() => navigate('/')}
 		/>
 	) : loading ? (

@@ -1,4 +1,5 @@
 import './Button.css';
+import Loading from './Loading';
 
 const Button = ({ text, width, onClick, disabled, loading }) => {
 	return (
@@ -10,7 +11,11 @@ const Button = ({ text, width, onClick, disabled, loading }) => {
 				disabled={disabled}
 			>
 				<div className="bt-content">
-					<div className="bt-text">{text}</div>
+					{loading ? (
+						<Loading type={'opened-button'} button={true} />
+					) : (
+						<div className="bt-text">{text}</div>
+					)}
 				</div>
 			</button>
 		</div>

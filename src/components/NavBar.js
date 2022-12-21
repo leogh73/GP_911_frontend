@@ -112,6 +112,13 @@ const NavBar = () => {
 		</>
 	);
 
+	const linkClickHandler = (e) => {
+		let id = e.target.getAttribute('href');
+		let links = document.querySelectorAll('.link-container');
+		links.forEach((link) => link.classList.remove('clicked'));
+		document.getElementById(id).querySelector('.link-container').classList.add('clicked');
+	};
+
 	return (
 		<IconContext.Provider
 			value={{
@@ -124,31 +131,39 @@ const NavBar = () => {
 				</div>
 				{context.token ? (
 					<>
-						<ul className="nav-links">
-							<li>
-								<Link to="/schedule">
-									<FaRegCalendarAlt />
-									CRONOGRAMA
-								</Link>
+						<ul className="nav-links" onClick={linkClickHandler}>
+							<li id={'/schedule'}>
+								<div className="link-container">
+									<Link to="/schedule">
+										<FaRegCalendarAlt />
+										CRONOGRAMA
+									</Link>
+								</div>
 							</li>
-							<li>
-								<Link to="/changes">
-									<FaList />
-									CAMBIOS
-								</Link>
+							<li id={'/changes'}>
+								<div className="link-container clicked">
+									<Link to="/changes">
+										<FaList />
+										CAMBIOS
+									</Link>
+								</div>
 							</li>{' '}
-							<li>
-								<Link to="/affected">
-									<FaUserClock />
-									AFECTADOS/DESAFECTADOS
-								</Link>
+							<li id={'/affected'}>
+								<div className="link-container">
+									<Link to="/affected">
+										<FaUserClock />
+										AFECTADOS/DESAFECTADOS
+									</Link>
+								</div>
 							</li>
 							{context.superior && (
-								<li>
-									<Link to="/register">
-										<FaUserPlus />
-										NUEVO USUARIO
-									</Link>
+								<li id={'/register'}>
+									<div className="link-container">
+										<Link to="/register">
+											<FaUserPlus />
+											NUEVO USUARIO
+										</Link>
+									</div>
 								</li>
 							)}
 						</ul>

@@ -13,7 +13,7 @@ import UserContext from './context/UserContext';
 
 const App = () => {
 	const { token, firstName, lastName, guardId, superior, login, logout } = useUser();
-	const { routes } = useRoutes(token, superior);
+	const { routes, loadChangeData, activateEditionRoute } = useRoutes(token, superior);
 
 	return (
 		<UserContext.Provider
@@ -25,6 +25,8 @@ const App = () => {
 				superior,
 				login,
 				logout,
+				loadChangeData,
+				activateEditionRoute,
 			}}
 		>
 			<NavBar />

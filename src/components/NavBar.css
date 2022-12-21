@@ -23,7 +23,6 @@ h4 {
 .nav-links,
 .user-menu {
 	display: flex;
-	height: 25px;
 	z-index: 2;
 	list-style: none;
 	color: var(--nav-secondary-color);
@@ -45,26 +44,32 @@ h4 {
 .user-menu a {
 	color: var(--nav-secondary-color);
 	text-decoration: none;
-	height: 50px;
-	padding: 10px;
-	padding-top: 10px;
+	padding: 14px;
+	/* padding-top: 10px;
 	padding-bottom: 10px;
 	padding-right: 10px;
-	letter-spacing: 1px;
+	letter-spacing: 1px; */
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-around;
+}
+
+.link-container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	height: 40px;
 }
 
 .nav-links li a:after {
 	content: '';
 	position: relative;
 	display: block;
-	margin-left: 5px;
 	width: 0;
 	height: 2px;
 	background: var(--nav-secondary-color);
-	bottom: -1px;
+	bottom: -1x;
 	left: 50%;
 	transition: all 0.3s;
 }
@@ -375,6 +380,7 @@ h3 svg {
 	padding-left: 7px;
 }
 
+.clicked,
 .user-menu .user-link:hover {
 	/* color: var(--nav-color); */
 	background-color: var(--button-color);

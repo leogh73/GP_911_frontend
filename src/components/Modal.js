@@ -68,7 +68,11 @@ const Modal = ({
 						<>
 							<div className="modal-header">
 								<h5 className="modal-title">{title}</h5>
-								<IoMdClose style={{ cursor: 'pointer' }} size={25} onClick={closeModal} />
+								<IoMdClose
+									style={{ cursor: 'pointer', color: 'black' }}
+									size={25}
+									onClick={closeModal}
+								/>
 							</div>
 							<p className="modal-divider" />
 							<div className="modal-body">{body}</div>

@@ -7,9 +7,14 @@ import SendNewContext from '../context/SendNewContext';
 import Loading from './Loading';
 import './Dropdown.css';
 
-const SelectList = ({ name, type, icon, titleValue, sendSelectedItem }) => {
+const SelectList = ({ name, type, icon, titleValue, sendSelectedItem, startData }) => {
 	const context = useContext(SendNewContext);
-	const { state, loadingUsers, loadItem, inputHandler } = useSelectList(type, sendSelectedItem);
+	const { state, loadingUsers, loadItem, inputHandler } = useSelectList(
+		name,
+		type,
+		sendSelectedItem,
+		startData,
+	);
 
 	const toggleMenu = useCallback(() => {
 		document.getElementById(name).querySelector('.dropdown-content').classList.toggle('active');

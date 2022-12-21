@@ -6,11 +6,10 @@ const UserContext = createContext({
 	lastName: null,
 	guardId: null,
 	superior: null,
-	userGuards: null,
-	loadAction: () => {},
-	activateActionRoute: () => {},
 	login: () => {},
 	logout: () => {},
+	loadChangeData: () => {},
+	activateEditionRoute: () => {},
 });
 
 export default UserContext;

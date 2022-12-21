@@ -3,15 +3,15 @@ import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
-const useSelectList = (type, sendSelectedItem) => {
+const useSelectList = (name, type, sendSelectedItem, startData) => {
 	const [loadingUsers, setLoadingUsers] = useState(false);
-	const context = useContext(UserContext);
+	const userContext = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
 
 	const initialState = {
 		totalList: [],
 		filterList: [],
-		selectedItem: '-',
+		selectedItem: startData ? startData.name : '-',
 	};
 
 	function reducer(state, action) {
@@ -20,7 +20,7 @@ const useSelectList = (type, sendSelectedItem) => {
 				return {
 					...state,
 					totalList: action.payload.items,
-					filterList: action.payload.items,
+					filterList: action.payload.filteredData,
 				};
 			case 'filter items':
 				return {
@@ -30,9 +30,9 @@ const useSelectList = (type, sendSelectedItem) => {
 			case 'load item':
 				return {
 					...state,
+					filterList: action.payload.filteredList,
 					selectedItem: action.payload.item,
 				};
-
 			default:
 				break;
 		}
@@ -50,7 +50,7 @@ const useSelectList = (type, sendSelectedItem) => {
 					'GET',
 					null,
 					{
-						authorization: `Bearer ${context.token}`,
+						authorization: `Bearer ${userContext.token}`,
 					},
 				);
 			} catch (error) {
@@ -62,11 +62,28 @@ const useSelectList = (type, sendSelectedItem) => {
 		} else {
 			for (let i = 1; i <= 200; i++) data.push(i.toString().padStart(3, 0));
 		}
+		let filteredData = [...data];
+		!!startData
+			? filteredData.splice(
+					data.findIndex((user) => user === startData.name),
+					1,
+			  )
+			: filteredData.splice(
+					data.findIndex((user) => user === `${userContext.lastName} ${userContext.firstName}`),
+					1,
+			  );
 		dispatch({
 			type: 'load start data',
-			payload: { items: data },
+			payload: { items: data, filteredData },
 		});
-	}, [type, httpRequestHandler, context.token]);
+	}, [
+		httpRequestHandler,
+		type,
+		startData,
+		userContext.token,
+		userContext.firstName,
+		userContext.lastName,
+	]);
 
 	useEffect(() => {
 		loadStartData();
@@ -75,7 +92,7 @@ const useSelectList = (type, sendSelectedItem) => {
 	const inputHandler = (value) => {
 		let result =
 			type === 'users'
-				? state.totalList.filter((user) => {
+				? state.filterList.filter((user) => {
 						let formattedUser = user.split(' ').map((w) => w.toLowerCase());
 						let containsValue = false;
 						formattedUser.forEach((name) => {
@@ -83,7 +100,7 @@ const useSelectList = (type, sendSelectedItem) => {
 						});
 						return containsValue ? user : null;
 				  })
-				: state.totalList.filter((item) => parseInt(item, 10).toString().startsWith(value));
+				: state.filterList.filter((item) => parseInt(item, 10).toString().startsWith(value));
 		if (!result.length) result = ['No se encontraron resultados.'];
 		dispatch({
 			type: 'filter items',
@@ -92,18 +109,35 @@ const useSelectList = (type, sendSelectedItem) => {
 	};
 
 	const loadItem = (item) => {
+		let filteredList = [...state.totalList];
+		filteredList.splice(
+			state.totalList.findIndex((user) => user === item),
+			1,
+		);
 		dispatch({
 			type: 'load item',
-			payload: { item },
+			payload: { item, filteredList },
 		});
-		sendSelectedItem(type, item);
+		sendSelectedItem(item, name);
 	};
+
+	// const reFilterList = (item) => {
+	// 	let newFilteredList = [...state.filterList];
+	// 	newFilteredList.splice(
+	// 		state.filterList.findIndex((user) => user === item),
+	// 		1,
+	// 	);
+	// 	dispatch({
+	// 		type: 'filter items',
+	// 		payload: { items: newFilteredList },
+	// 	});
+	// };
 
 	return {
 		state,
 		loadingUsers,
-		loadItem,
 		inputHandler,
+		loadItem,
 	};
 };
 

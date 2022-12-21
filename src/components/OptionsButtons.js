@@ -4,31 +4,43 @@ import Modal from './Modal';
 import { IconContext } from 'react-icons';
 import { MdEdit, MdHistory, MdOutlineCheck, MdOutlineClose } from 'react-icons/md';
 import { CgUnavailable } from 'react-icons/cg';
-import { CiNoWaitingSign } from 'react-icons/ci';
-
-import { FcCancel } from 'react-icons/fc';
 import { MdDeleteForever } from 'react-icons/md';
 import UserContext from '../context/UserContext';
 import useHttpConnection from '../hooks/useHttpConnection';
 import './OptionsButtons.css';
+import Changelog from './Changelog';
+import { useNavigate } from 'react-router-dom';
 
 const OptionsButtons = ({ type, data, callbackFn }) => {
 	const { httpRequestHandler } = useHttpConnection();
 	const context = useContext(UserContext);
 	const fullName = `${context.lastName} ${context.firstName}`;
+	const navigate = useNavigate();
 
 	const generateRandomId = () => (Math.random() + 1).toString(36).substring(4).replace(/\d+/g, '');
 
-	const button = (icon, idModal, title, body, actionFunction) => (
+	const editChangePage = () => {
+		context.loadChangeData(data);
+		context.activateEditionRoute(true);
+		navigate('/edit');
+	};
+
+	const button = (icon, idModal, title, body, actionFunction, closeText, edit) => (
 		<div className="option-container">
-			<Modal
-				id={idModal}
-				clickComponent={<div className="option-button">{icon}</div>}
-				title={title}
-				body={body}
-				actionFunction={actionFunction}
-				closeText="No"
-			/>
+			{edit ? (
+				<div className="option-button" onClick={editChangePage}>
+					{icon}
+				</div>
+			) : (
+				<Modal
+					id={idModal}
+					clickComponent={<div className="option-button">{icon}</div>}
+					title={title}
+					body={body}
+					actionFunction={actionFunction}
+					closeText={closeText}
+				/>
+			)}
 		</div>
 	);
 
@@ -43,6 +55,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							'Confirmar aprobar cambio',
 							`¿Aprobar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
 							() => modifyData('approve', data._id),
+							'No',
 						)}
 						{button(
 							<MdOutlineClose size={24} />,
@@ -50,6 +63,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							'Confirmar no aprobar cambio',
 							`¿No aprobar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
 							() => modifyData('notapprove', data._id),
+							'No',
 						)}
 					</>
 				);
@@ -62,6 +76,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							'Confirmar anular cambio',
 							`¿Anular cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
 							() => modifyData('void', data._id),
+							'No',
 						)}
 					</>
 				);
@@ -74,6 +89,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							'Confirmar eliminar cambio',
 							`¿Anular cambio de servicio para ${data.name}?`,
 							() => modifyData('void', data._id),
+							'No',
 						)}
 					</>
 				);
@@ -82,19 +98,14 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 			if (type === 'change' && fullName === data.coverData.name && data.status === 'Solicitado')
 				return (
 					<>
-						{button(
-							<MdEdit size={24} />,
-							generateRandomId(),
-							'Confirmar eliminar cambio',
-							`¿Anular cambio de servicio para ${data.name}?`,
-							() => modifyData('void', data._id),
-						)}
+						{button(<MdEdit size={24} />, null, null, null, null, null, true)}
 						{button(
 							<MdDeleteForever size={24} />,
 							generateRandomId(),
 							'Confirmar cancelar cambio',
 							`¿Cancelar cambio con ${data.returnData.name}?`,
 							() => modifyData('cancel', data._id),
+							'No',
 						)}
 					</>
 				);
@@ -107,6 +118,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							'Confirmar eliminar pedido',
 							`¿Eliminar pedido de cambio para el ${data.requestData.date}?`,
 							() => modifyData('cancel', data._id),
+							'No',
 						)}
 					</>
 				);
@@ -147,9 +159,15 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		>
 			<div className="option-buttons">
 				{optionButtons()}
-				{button(<MdHistory size={30} />, generateRandomId(), () =>
-					modifyData('approve', data._id),
-				)}
+				{type === 'change' &&
+					button(
+						<MdHistory size={30} />,
+						generateRandomId(),
+						'Historial de edición',
+						<Changelog log={data.changelog} />,
+						null,
+						'Cerrar',
+					)}
 			</div>
 		</IconContext.Provider>
 	);

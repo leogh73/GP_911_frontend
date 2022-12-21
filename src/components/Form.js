@@ -27,7 +27,7 @@ const Form = ({
 
 	return (
 		<div className="new-form">
-			<div className={`form ${pageName} ${loading ? 'loading' : ''}`}>
+			<div className={`form ${pageName}`}>
 				{/* <LoadingOverlay
 					active={loading}
 					styles={{
@@ -94,7 +94,7 @@ const Form = ({
 				</form>
 				{/* </LoadingOverlay> */}
 			</div>
-			{loading && <Loading type={'closed'} />}
+			{/* {loading && <Loading type={'closed'} />} */}
 			{loginError && (
 				<Modal
 					id="login-error"

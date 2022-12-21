@@ -162,9 +162,7 @@ const useListData = (itemsList) => {
 					return listData.fetched.filter(
 						(i) => i.coverData.name === fullName || i.returnData.name === fullName,
 					);
-				case 'request':
-					return listData.fetched.filter((i) => i.name === fullName);
-				case 'affected':
+				case 'request' || 'affected':
 					return listData.fetched.filter((i) => i.name === fullName);
 				default:
 					break;
