@@ -1,13 +1,15 @@
 .log-container {
 	display: flex;
 	flex-direction: column;
-	max-height: 246px;
+	max-height: 14.5em;
 	overflow-y: auto;
 }
 
 .event-box {
+	height: 7.3em;
 	display: flex;
 	flex-direction: column;
+	justify-content: space-around;
 	margin: 10px;
 }
 
@@ -15,14 +17,27 @@
 	border: 0.1px solid rgba(238, 238, 238, 0.5);
 }
 
-.data-container {
-	padding: 2px;
-	margin: 3px;
+.detail-list {
 	display: flex;
+	flex-direction: column;
+}
+
+.detail {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+}
+
+.data-container {
+	padding-left: 2px;
+	padding-right: 2px;
+	margin: 5px;
+	display: flex;
+	flex-direction: row;
 }
 
 .date-time {
-	width: 80%;
+	width: 100%;
 	display: flex;
 	flex-direction: row;
 }

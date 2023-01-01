@@ -1,11 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
 import Login from '../pages/Login';
-import AllChanges from '../pages/AllChanges';
 import Register from '../pages/Register';
 import RequestNew from '../pages/RequestNew';
 import ChangeNew from '../pages/ChangeNew';
 import NotFound from '../pages/NotFound';
-import AllAffected from '../pages/AllAffected';
+import List from '../pages/List';
 import AffectedNew from '../pages/AffectedNew';
 import { useState } from 'react';
 import ChangeEdit from '../pages/ChangeEdit';
@@ -47,9 +46,9 @@ const useRoutes = (token, superior) => {
 
 	const routes = token ? (
 		<Routes>
-			<Route path="/" element={<AllChanges />} />
-			<Route path="/changes" element={<AllChanges />} />
-			<Route path="/affected" element={<AllAffected />} />
+			<Route path="/" element={<List type={'change'} />} />
+			<Route path="/changes" element={<List type={'change'} />} />
+			<Route path="/affected" element={<List type={'affected'} />} />
 			<Route path="*" element={<NotFound />} />
 			{activeEditRoute && <Route path="/edit" element={<ChangeEdit changeData={changeData} />} />}
 			{superior

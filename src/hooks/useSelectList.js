@@ -121,18 +121,6 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 		sendSelectedItem(item, name);
 	};
 
-	// const reFilterList = (item) => {
-	// 	let newFilteredList = [...state.filterList];
-	// 	newFilteredList.splice(
-	// 		state.filterList.findIndex((user) => user === item),
-	// 		1,
-	// 	);
-	// 	dispatch({
-	// 		type: 'filter items',
-	// 		payload: { items: newFilteredList },
-	// 	});
-	// };
-
 	return {
 		state,
 		loadingUsers,

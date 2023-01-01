@@ -10,7 +10,6 @@ const useAffectedLoad = (sendResult) => {
 	const { httpRequestHandler } = useHttpConnection();
 
 	const initialState = {
-		dropdownActive: false,
 		name: '-',
 		affectedData: {
 			date: '-',
@@ -50,12 +49,6 @@ const useAffectedLoad = (sendResult) => {
 				return {
 					...state,
 					bookPage: action.payload.page,
-				};
-			}
-			case 'change dropdown status': {
-				return {
-					...state,
-					dropdownActive: action.payload.status,
 				};
 			}
 			default:

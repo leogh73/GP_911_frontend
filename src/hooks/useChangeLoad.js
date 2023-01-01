@@ -28,7 +28,7 @@ const useChangeLoad = (resultData, startData) => {
 		  }
 		: {
 				coverData: {
-					name: `${context.lastName} ${context.firstName} `,
+					name: `${context.lastName} ${context.firstName}`,
 					date: '-',
 					shift: '-',
 					day: '-',
@@ -127,9 +127,10 @@ const useChangeLoad = (resultData, startData) => {
 			.filter((result) => !!result).length;
 		let isValid = formCheck === 10 ? true : false;
 		if (
-			!!startData &&
-			startData.coverData.name === state.coverData.name &&
-			startData.returnData.name === state.returnData.name
+			(!!startData &&
+				startData.coverData.name === state.coverData.name &&
+				startData.returnData.name === state.returnData.name) ||
+			(!!startData && state.coverData.name === state.returnData.name)
 		) {
 			isValid = false;
 		}
@@ -141,20 +142,34 @@ const useChangeLoad = (resultData, startData) => {
 	}, [state, sendDataCallback]);
 
 	const sendNewChange = async () => {
+		let headers = {
+			authorization: `Bearer ${context.token}`,
+			'Content-type': 'application/json',
+		};
+		let body = startData
+			? {
+					changeId: startData._id,
+					coverName:
+						state.coverData.name !== startData.coverData.name ? state.coverData.name : null,
+					returnName:
+						state.returnData.name !== startData.returnData.name ? state.returnData.name : null,
+			  }
+			: { type: 'change', coverData: state.coverData, returnData: state.returnData };
 		try {
 			setLoadingSendChange(true);
-			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/changes/new',
-				'POST',
-				JSON.stringify({
-					coverData: state.coverData,
-					returnData: state.returnData,
-				}),
-				{
-					authorization: `Bearer ${context.token}`,
-					'Content-type': 'application/json',
-				},
-			);
+			let consult = startData
+				? await httpRequestHandler(
+						'http://localhost:5000/api/list/modify',
+						'POST',
+						JSON.stringify(body),
+						headers,
+				  )
+				: await httpRequestHandler(
+						'http://localhost:5000/api/list/new',
+						'POST',
+						JSON.stringify(body),
+						headers,
+				  );
 			setLoadingSendChange(false);
 			resultData(consult);
 		} catch (error) {

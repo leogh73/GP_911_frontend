@@ -5,42 +5,38 @@ import useHttpConnection from '../hooks/useHttpConnection';
 import Message from '../components/Message';
 import { useNavigate } from 'react-router-dom';
 import { FaExclamationTriangle } from 'react-icons/fa';
-import ChangesList from '../components/ChangesList.js';
+import ItemsList from '../components/ItemsList.js';
 
-const AllChanges = () => {
-	const [changes, setChanges] = useState([]);
-	const [loading, setLoading] = useState();
+const List = ({ type }) => {
+	const [items, setItems] = useState();
+	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState();
 	const { httpRequestHandler } = useHttpConnection();
-
 	const context = useContext(UserContext);
 	const navigate = useNavigate();
 
-	const fetchAllChanges = useCallback(async () => {
+	const fetchListItems = useCallback(async () => {
 		try {
-			setLoading(true);
 			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/changes/all',
+				'http://localhost:5000/api/list/all',
 				'POST',
-				{},
-				{
-					authorization: `Bearer ${context.token}`,
-				},
+				JSON.stringify({ type: type }),
+				{ authorization: `Bearer ${context.token}`, 'Content-type': 'application/json' },
 			);
+			setItems(consult);
 			setLoading(false);
-			setChanges(consult);
 		} catch (error) {
 			setError(true);
 			console.log(error);
 		}
-	}, [httpRequestHandler, context]);
+	}, [httpRequestHandler, type, context]);
 
 	useEffect(() => {
-		fetchAllChanges();
+		fetchListItems();
 		return () => {
-			setChanges([]);
+			setItems(null);
 		};
-	}, [fetchAllChanges]);
+	}, [fetchListItems]);
 
 	return error ? (
 		<Message
@@ -53,8 +49,8 @@ const AllChanges = () => {
 	) : loading ? (
 		<Loading type={'closed'} />
 	) : (
-		<ChangesList changes={changes} />
+		<ItemsList type={type} items={items} />
 	);
 };
 
-export default AllChanges;
+export default List;
