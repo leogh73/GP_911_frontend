@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import UserContext from '../context/UserContext';
 import useHttpConnection from '../hooks/useHttpConnection';
@@ -23,18 +24,21 @@ const List = ({ type }) => {
 				JSON.stringify({ type: type }),
 				{ authorization: `Bearer ${context.token}`, 'Content-type': 'application/json' },
 			);
+			console.log(consult);
 			setItems(consult);
-			setLoading(false);
 		} catch (error) {
 			setError(true);
-			console.log(error);
+			console.log(error.toString());
+		} finally {
+			setLoading(false);
 		}
 	}, [httpRequestHandler, type, context]);
 
 	useEffect(() => {
+		console.log('EFFECT');
 		fetchListItems();
 		return () => {
-			setItems(null);
+			setLoading(true);
 		};
 	}, [fetchListItems]);
 

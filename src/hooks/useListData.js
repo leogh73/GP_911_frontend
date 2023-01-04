@@ -156,18 +156,12 @@ const useListData = (itemsList) => {
 	}
 
 	function reducer(listData, action) {
-		const filterUserItemsList = () => {
-			switch (action.payload.list) {
-				case 'change':
-					return listData.fetched.filter(
+		const filterUserItemsList = () =>
+			action.payload.list === 'change'
+				? listData.fetched.filter(
 						(i) => i.coverData.name === fullName || i.returnData.name === fullName,
-					);
-				case 'request' || 'affected':
-					return listData.fetched.filter((i) => i.name === fullName);
-				default:
-					break;
-			}
-		};
+				  )
+				: listData.fetched.filter((i) => i.name === fullName);
 
 		const itemRowData = (item, type) => {
 			const changeItemFormat = (i) => [i.name.split(' '), i.date, i.day, i.shift, i.guardId];
@@ -238,9 +232,10 @@ const useListData = (itemsList) => {
 			}
 			case 'radioButton': {
 				if (action.payload.value === 'Propios' && listData.showAll) {
+					console.log(filterUserItemsList());
 					return {
 						...listData,
-						user: filterUserItemsList(listData, action),
+						user: filterUserItemsList(),
 						filter: listData.search.length
 							? inputFilter(listData.search, true)
 							: filterUserItemsList(),

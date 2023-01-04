@@ -73,13 +73,13 @@
 	opacity: 1;
 }
 
-/* .no-data {
+.no-data {
 	display: flex;
 	flex-direction: column;
-	min-height: 60vh;
+	min-height: 55vh;
 	justify-content: center;
 	text-align: center;
-} */
+}
 
 @media only screen and (max-width: 667px) {
 	.changes-filters {

@@ -47,8 +47,8 @@ const useRoutes = (token, superior) => {
 	const routes = token ? (
 		<Routes>
 			<Route path="/" element={<List type={'change'} />} />
-			<Route path="/changes" element={<List type={'change'} />} />
-			<Route path="/affected" element={<List type={'affected'} />} />
+			<Route path="/changes" element={<List type={'change'} key={'change'} />} />
+			<Route path="/affected" element={<List type={'affected'} key={'affected'} />} />
 			<Route path="*" element={<NotFound />} />
 			{activeEditRoute && <Route path="/edit" element={<ChangeEdit changeData={changeData} />} />}
 			{superior
