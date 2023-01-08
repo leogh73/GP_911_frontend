@@ -35,7 +35,6 @@ const List = ({ type }) => {
 	}, [httpRequestHandler, type, context]);
 
 	useEffect(() => {
-		console.log('EFFECT');
 		fetchListItems();
 		return () => {
 			setLoading(true);

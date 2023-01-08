@@ -66,10 +66,7 @@ const useRequestLoad = (sendResult) => {
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/changes/new',
 				'POST',
-				JSON.stringify({
-					requestData: state.requestData,
-					offerData: state.offerData,
-				}),
+				JSON.stringify(state),
 				{
 					authorization: `Bearer ${context.token}`,
 					'Content-type': 'application/json',

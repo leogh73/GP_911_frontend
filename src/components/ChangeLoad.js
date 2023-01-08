@@ -39,8 +39,6 @@ const ChangeLoad = ({ sendResult, startData }) => {
 		</div>
 	);
 
-	console.log();
-
 	return (
 		<SendNewContext.Provider
 			value={{

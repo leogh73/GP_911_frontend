@@ -1,13 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
-import RequestNew from '../pages/RequestNew';
-import ChangeNew from '../pages/ChangeNew';
 import NotFound from '../pages/NotFound';
 import List from '../pages/List';
-import AffectedNew from '../pages/AffectedNew';
 import { useState } from 'react';
 import ChangeEdit from '../pages/ChangeEdit';
+import NewItem from '../pages/NewItem';
 
 const useRoutes = (token, superior) => {
 	const [activeEditRoute, setActiveEditRoute] = useState(false);
@@ -26,7 +24,7 @@ const useRoutes = (token, superior) => {
 		{
 			key: '02',
 			path: '/newaffected',
-			element: <AffectedNew />,
+			element: <NewItem type={'affected'} key={'newaffected'} />,
 			// element: <ChangeNew type={'affected'} icon={<FaUserClock />} title={'Nuevo afectado'} />,
 			// element: <ChangeNew type={'affected'} icon={<FaUserClock />} title={'Nuevo afectado'} />,
 		},
@@ -35,12 +33,12 @@ const useRoutes = (token, superior) => {
 		{
 			key: '01',
 			path: '/newchange',
-			element: <ChangeNew />,
+			element: <NewItem type={'change'} key={'newchange'} />,
 		},
 		{
 			key: '02',
 			path: '/newrequest',
-			element: <RequestNew />,
+			element: <NewItem type={'request'} key={'newrequest'} />,
 		},
 	];
 
