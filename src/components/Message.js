@@ -5,7 +5,6 @@ import Title from './Title';
 const Message = ({ title, icon, body, buttonText, onClick }) => {
 	return (
 		<div
-			className="content"
 			style={{
 				display: 'flex',
 				flexDirection: 'column',
@@ -13,6 +12,8 @@ const Message = ({ title, icon, body, buttonText, onClick }) => {
 				justifyContent: 'space-evenly',
 				minHeight: '300px',
 				minWidth: '400px',
+				maxWidth: '850px',
+				animation: 'bgFadeIn 0.6s ease',
 			}}
 		>
 			<div>
@@ -27,7 +28,7 @@ const Message = ({ title, icon, body, buttonText, onClick }) => {
 			>
 				{body}
 			</div>
-			<Button text={buttonText} width={250} onClick={onClick} />
+			{buttonText && <Button text={buttonText} width={250} onClick={onClick} />}
 		</div>
 	);
 };

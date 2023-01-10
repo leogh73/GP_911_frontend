@@ -1,15 +1,16 @@
-import { useContext, useReducer } from 'react';
+import { useReducer, useContext } from 'react';
 import UserContext from '../context/UserContext';
 
-const useListData = (itemsList) => {
+const useListData = (dataList) => {
 	const context = useContext(UserContext);
 	const fullName = `${context.lastName} ${context.firstName}`;
+
 	const [listData, dispatch] = useReducer(reducer, {
 		header: '#',
 		showAll: true,
-		fetched: itemsList,
-		user: itemsList,
-		filter: itemsList,
+		fetched: dataList,
+		user: dataList,
+		filter: dataList,
 		search: '',
 	});
 

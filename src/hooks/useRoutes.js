@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import NotFound from '../pages/NotFound';
@@ -6,6 +6,8 @@ import List from '../pages/List';
 import { useState } from 'react';
 import ChangeEdit from '../pages/ChangeEdit';
 import NewItem from '../pages/NewItem';
+import Changes from '../pages/Changes';
+import Affected from '../pages/Affected';
 
 const useRoutes = (token, superior) => {
 	const [activeEditRoute, setActiveEditRoute] = useState(false);
@@ -44,9 +46,14 @@ const useRoutes = (token, superior) => {
 
 	const routes = token ? (
 		<Routes>
-			<Route path="/" element={<List type={'change'} />} />
-			<Route path="/changes" element={<List type={'change'} key={'change'} />} />
-			<Route path="/affected" element={<List type={'affected'} key={'affected'} />} />
+			<Route path="/" element={<Navigate to="/changes/agreed" />} />
+			<Route path="/changes" element={<Navigate to="/changes/agreed" />} />
+			<Route path="/changes">
+				<Route path="/changes/agreed" element={<Changes />} />
+				<Route path="/changes/requested" element={<Changes />} />
+				<Route path="/changes/*" element={<NotFound />} />
+			</Route>
+			<Route path="/affected" element={<Affected />} />
 			<Route path="*" element={<NotFound />} />
 			{activeEditRoute && <Route path="/edit" element={<ChangeEdit changeData={changeData} />} />}
 			{superior

@@ -62,6 +62,10 @@ const NavBar = () => {
 			switch (path) {
 				case '/':
 					return '/changes';
+				case '/changes/agreed':
+					return '/changes';
+				case '/changes/requested':
+					return '/changes';
 				case '/newrequest':
 					return '/changes';
 				case '/newchange':

@@ -6,13 +6,15 @@ const NotFound = () => {
 	const navigate = useNavigate();
 
 	return (
-		<Message
-			title="Página inexistente"
-			icon={<FaExclamationTriangle />}
-			body="La página que intenta acceder no existe."
-			buttonText="VOLVER"
-			onClick={() => navigate('/')}
-		/>
+		<div className="content">
+			<Message
+				title="Página inexistente"
+				icon={<FaExclamationTriangle />}
+				body="La página que intenta acceder no existe."
+				buttonText="VOLVER"
+				onClick={() => navigate('/')}
+			/>
+		</div>
 	);
 };
 

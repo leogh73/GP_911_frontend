@@ -62,17 +62,6 @@
 	flex-direction: row;
 }
 
-.changes {
-	display: none;
-	opacity: 0;
-}
-
-.changes.show {
-	display: flex;
-	flex-direction: column;
-	opacity: 1;
-}
-
 .no-data {
 	display: flex;
 	flex-direction: column;

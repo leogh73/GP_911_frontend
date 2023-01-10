@@ -4,7 +4,6 @@ import { useContext } from 'react';
 import { toast } from 'react-toastify';
 import { BiDownArrow } from 'react-icons/bi';
 import { GoSearch } from 'react-icons/go';
-
 import Title from './Title';
 import Row from './Row';
 import Button from './Button';
@@ -15,9 +14,9 @@ import useListData from '../hooks/useListData';
 import UserContext from '../context/UserContext';
 
 const Table = ({ id, headersList, rowType, dataList, newLink }) => {
-	const { listData, dispatch } = useListData(dataList);
 	const context = useContext(UserContext);
 	const navigate = useNavigate();
+	const { listData, dispatch } = useListData(dataList);
 
 	const resultModifyRow = (action, result) => {
 		let accion;
@@ -68,7 +67,7 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 	};
 
 	return (
-		<div id={id}>
+		<div id={id} style={{ animation: 'bgFadeIn 0.6s ease' }}>
 			<div className="changes-filters">
 				{rowType !== 'affected' && !context.superior ? (
 					<Button text={'NUEVO CAMBIO'} width={170} onClick={() => navigate(newLink)} />
