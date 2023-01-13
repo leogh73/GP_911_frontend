@@ -36,6 +36,14 @@ const NewItem = ({ type }) => {
 		}
 	};
 
+	const resultNewChange = (result) => {
+		if (type === 'change') navigate('/changes/agreed');
+		if (type === 'request') navigate('/changes/requested');
+		if (type === 'affected') navigate('/affected');
+		if (result && result._id) toast(toastMessage('success'), { type: 'success' });
+		if (!result || result.error) toast(toastMessage('error'), { type: 'error' });
+	};
+
 	const loadForm = (type) => {
 		switch (type) {
 			case 'change':
@@ -47,12 +55,6 @@ const NewItem = ({ type }) => {
 			default:
 				break;
 		}
-	};
-
-	const resultNewChange = (result) => {
-		if (result && result._id) toast(toastMessage('success'), { type: 'success' });
-		if (!result || result.error) toast(toastMessage('error'), { type: 'error' });
-		navigate('/');
 	};
 
 	return <>{loadForm(type)}</>;

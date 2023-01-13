@@ -9,7 +9,7 @@ const useChangeLoad = (resultData) => {
 	const [dataIsValid, setDataIsValid] = useState(false);
 	const context = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
-	const fullName = `${context.lastName} ${context.firstName}`;
+	const fullName = `${context.userData.lastName} ${context.userData.firstName}`;
 
 	const initialState = {
 		fetchedData: {

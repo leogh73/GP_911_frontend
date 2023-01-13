@@ -71,7 +71,7 @@ const ChangeLoad = ({ sendResult, startData }) => {
 									null,
 									<FaUser />,
 									'Quien cubre',
-									`${context.lastName} ${context.firstName}`,
+									`${context.userData.lastName} ${context.userData.firstName}`,
 							  )}
 						<SelectDate
 							name="cover"

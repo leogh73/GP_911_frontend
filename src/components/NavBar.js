@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { IconContext } from 'react-icons';
@@ -27,15 +27,24 @@ const NavBar = () => {
 		navigate('/');
 	};
 
-	// const selectedLink = useCallback(() => {
-	// 	document.querySelectorAll('link-container').forEach((link) => {
-	// 		if (link.classList.contains('clicked')) link.classList.remove('clicked');
-	// 	});
-	// 	let url = getActiveLink(location.pathname);
-	// 	let activeLink = document.getElementById(url);
-	// 	console.log(activeLink);
-	// 	activeLink.classList.add('clicked');
-	// }, []);
+	const getActiveLink = (path) => {
+		switch (path) {
+			case '/':
+				return '/changes';
+			case '/changes/agreed':
+				return '/changes';
+			case '/changes/requested':
+				return '/changes';
+			case '/newrequest':
+				return '/changes';
+			case '/newchange':
+				return '/changes';
+			case '/newaffected':
+				return '/affected';
+			default:
+				return path;
+		}
+	};
 
 	useEffect(() => {
 		const burger = document.querySelector('.burger');
@@ -58,36 +67,7 @@ const NavBar = () => {
 			layout.classList.toggle('body-overlay');
 		};
 
-		const getActiveLink = (path) => {
-			switch (path) {
-				case '/':
-					return '/changes';
-				case '/changes/agreed':
-					return '/changes';
-				case '/changes/requested':
-					return '/changes';
-				case '/newrequest':
-					return '/changes';
-				case '/newchange':
-					return '/changes';
-				case '/newaffected':
-					return '/affected';
-				default:
-					return path;
-			}
-		};
-
-		const activeLink = () => {
-			let url = getActiveLink(location.pathname);
-			navLinksList.forEach((link) => {
-				if (link.classList.contains('clicked')) link.classList.remove('clicked');
-			});
-			let activeLink = document.getElementById(url);
-			activeLink.classList.add('clicked');
-		};
-
 		if (context.token) {
-			activeLink();
 			burger.addEventListener('click', () => {
 				toggleNavBar();
 				if (userMenu.classList.contains('active')) userMenu.classList.toggle('active');
@@ -135,8 +115,19 @@ const NavBar = () => {
 						navLinks.classList.contains('nav-active') ? toggleNavBar() : null,
 					),
 				);
+				navLinksList.forEach((link) => {
+					if (link.classList.contains('clicked')) link.classList.remove('clicked');
+				});
 			}
 		};
+	}, [context.token]);
+
+	useEffect(() => {
+		if (context.token) {
+			let clickedUrl = getActiveLink(location.pathname);
+			let activeLink = document.getElementById(clickedUrl);
+			activeLink.classList.add('clicked');
+		}
 	}, [context.token, location.pathname]);
 
 	const modeButton = () => (
@@ -152,6 +143,18 @@ const NavBar = () => {
 		</>
 	);
 
+	const navLinksClickHandler = (e) => {
+		const navLinksList = document.querySelectorAll('.nav-links li');
+		let clickedUrl = getActiveLink(e.target.getAttribute('href'));
+		if (!!clickedUrl) {
+			navLinksList.forEach((link) => {
+				if (link.classList.contains('clicked')) link.classList.remove('clicked');
+			});
+			let activeLink = document.getElementById(clickedUrl);
+			activeLink.classList.add('clicked');
+		}
+	};
+
 	return (
 		<IconContext.Provider
 			value={{
@@ -164,7 +167,7 @@ const NavBar = () => {
 				</div>
 				{context.token ? (
 					<>
-						<ul className="nav-links">
+						<ul className="nav-links" onClick={navLinksClickHandler}>
 							<li id={'/schedule'}>
 								<div className="link-container">
 									<Link to="/schedule">
@@ -175,7 +178,7 @@ const NavBar = () => {
 							</li>
 							<li id={'/changes'}>
 								<div className="link-container">
-									<Link to="/changes">
+									<Link to={!!context.activeTab ? context.activeTab : '/changes'}>
 										<FaList />
 										CAMBIOS
 									</Link>
@@ -189,7 +192,7 @@ const NavBar = () => {
 									</Link>
 								</div>
 							</li>
-							{context.superior && (
+							{context.userData.superior && (
 								<li id={'/register'}>
 									<div className="link-container">
 										<Link to="/register">
@@ -211,19 +214,13 @@ const NavBar = () => {
 							<div className="user-menu">
 								<h3 className="user-header">
 									<FaUserCircle size={32} />
-									<div className="user-name">{`${context.firstName} ${context.lastName}`}</div>
+									<div className="user-name">{`${context.userData.firstName} ${context.userData.lastName}`}</div>
 								</h3>
 								<Link className="user-link" to="/changepassword">
 									<FaKey />
 									Cambiar contraseña
 								</Link>
-								<Link
-									className="user-link"
-									to="/"
-									onClick={logout}
-									// data-bs-target={`#exampleModal`}
-									// data-bs-toggle="modal"
-								>
+								<Link className="user-link" to="/" onClick={logout}>
 									<FaSignOutAlt />
 									Cerrar sesión
 								</Link>

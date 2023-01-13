@@ -1,13 +1,12 @@
 import { createContext } from 'react';
 
 const UserContext = createContext({
+	userData: {},
 	token: null,
-	firstName: null,
-	lastName: null,
-	guardId: null,
-	superior: null,
 	login: () => {},
 	logout: () => {},
+	showRequestTab: null,
+	toggleActiveTab: () => {},
 	loadChangeData: () => {},
 	activateEditionRoute: () => {},
 });

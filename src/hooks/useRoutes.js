@@ -2,7 +2,6 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import NotFound from '../pages/NotFound';
-import List from '../pages/List';
 import { useState } from 'react';
 import ChangeEdit from '../pages/ChangeEdit';
 import NewItem from '../pages/NewItem';
@@ -11,6 +10,7 @@ import Affected from '../pages/Affected';
 
 const useRoutes = (token, superior) => {
 	const [activeEditRoute, setActiveEditRoute] = useState(false);
+	const [activeTab, setActiveTab] = useState(null);
 	const [changeData, setChangeData] = useState();
 
 	const loadChangeData = (data) => {
@@ -19,6 +19,10 @@ const useRoutes = (token, superior) => {
 
 	const activateEditionRoute = () => {
 		setActiveEditRoute(true);
+	};
+
+	const loadActiveTab = (type) => {
+		setActiveTab(type);
 	};
 
 	const superiorRoutes = [
@@ -49,9 +53,9 @@ const useRoutes = (token, superior) => {
 			<Route path="/" element={<Navigate to="/changes/agreed" />} />
 			<Route path="/changes" element={<Navigate to="/changes/agreed" />} />
 			<Route path="/changes">
-				<Route path="/changes/agreed" element={<Changes />} />
-				<Route path="/changes/requested" element={<Changes />} />
-				<Route path="/changes/*" element={<NotFound />} />
+				<Route path="agreed" element={<Changes type={'change'} />} />
+				<Route path="requested" element={<Changes type={'request'} />} />
+				<Route path="*" element={<NotFound />} />
 			</Route>
 			<Route path="/affected" element={<Affected />} />
 			<Route path="*" element={<NotFound />} />
@@ -71,7 +75,7 @@ const useRoutes = (token, superior) => {
 		</Routes>
 	);
 
-	return { routes, loadChangeData, activateEditionRoute };
+	return { routes, activeTab, loadActiveTab, loadChangeData, activateEditionRoute };
 };
 
 export default useRoutes;

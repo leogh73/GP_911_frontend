@@ -69,12 +69,12 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 	return (
 		<div id={id} style={{ animation: 'bgFadeIn 0.6s ease' }}>
 			<div className="changes-filters">
-				{rowType !== 'affected' && !context.superior ? (
+				{rowType !== 'affected' && !context.userData.superior ? (
 					<Button text={'NUEVO CAMBIO'} width={170} onClick={() => navigate(newLink)} />
-				) : rowType === 'affected' && context.superior ? (
+				) : rowType === 'affected' && context.userData.superior ? (
 					<Button text={'NUEVO CAMBIO'} width={170} onClick={() => navigate(newLink)} />
 				) : null}
-				{!context.superior && (
+				{!context.userData.superior && (
 					<div className="radio-buttons">
 						<div className="changes-filter" value="Todos" name="todos" onClick={radioClickHandler}>
 							<input

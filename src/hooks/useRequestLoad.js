@@ -10,7 +10,7 @@ const useRequestLoad = (sendResult) => {
 	const { httpRequestHandler } = useHttpConnection();
 
 	const initialState = {
-		name: `${context.lastName} ${context.firstName}`,
+		name: `${context.userData.lastName} ${context.userData.firstName}`,
 		requestData: {
 			date: '-',
 			shift: '-',

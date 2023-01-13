@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 const OptionsButtons = ({ type, data, callbackFn }) => {
 	const { httpRequestHandler } = useHttpConnection();
 	const context = useContext(UserContext);
-	const fullName = `${context.lastName} ${context.firstName}`;
+	const fullName = `${context.userData.lastName} ${context.userData.firstName}`;
 	const navigate = useNavigate();
 
 	const generateRandomId = () => (Math.random() + 1).toString(36).substring(4).replace(/\d+/g, '');
@@ -45,7 +45,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 	);
 
 	const optionButtons = () => {
-		if (context.superior) {
+		if (context.userData.superior) {
 			if (type === 'change' && data.status === 'Solicitado')
 				return (
 					<>
@@ -94,7 +94,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					</>
 				);
 		}
-		if (!context.superior) {
+		if (!context.userData.superior) {
 			if (type === 'change' && fullName === data.coverData.name && data.status === 'Solicitado')
 				return (
 					<>
@@ -129,11 +129,11 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 	const modifyData = async (action, changeId) => {
 		let url = '';
 		let body = {};
-		if (!context.superior) {
+		if (!context.userData.superior) {
 			url = 'http://localhost:5000/api/changes/cancel';
 			body.changeId = changeId;
 		}
-		if (context.superior) {
+		if (context.userData.superior) {
 			url = 'http://localhost:5000/api/changes/modify';
 			body.action = action;
 			body.changeId = changeId;

@@ -3,7 +3,7 @@ import UserContext from '../context/UserContext';
 
 const useListData = (dataList) => {
 	const context = useContext(UserContext);
-	const fullName = `${context.lastName} ${context.firstName}`;
+	const fullName = `${context.userData.lastName} ${context.userData.firstName}`;
 
 	const [listData, dispatch] = useReducer(reducer, {
 		header: '#',

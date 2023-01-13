@@ -6,10 +6,7 @@ import { toast } from 'react-toastify';
 // let sessionLogoutTime;
 
 const useUser = () => {
-	const [firstName, setFirstName] = useState();
-	const [lastName, setLastName] = useState();
-	const [guardId, setGuardId] = useState();
-	const [superior, setSuperior] = useState();
+	const [userData, setUserData] = useState();
 	const [token, setToken] = useState();
 	// const [expirationTokenTime, setExpirationTokenTime] = useState(false);
 	// const { httpRequestHandler } = useHttpConnection();
@@ -42,10 +39,7 @@ const useUser = () => {
 	const login = useCallback(
 		(token, firstName, lastName, guardId, superior, expirationTokenTime) => {
 			setToken(token);
-			setFirstName(firstName);
-			setLastName(lastName);
-			setGuardId(guardId);
-			setSuperior(superior);
+			setUserData({ firstName, lastName, guardId, superior });
 			const expirationDateToken =
 				expirationTokenTime || new Date(new Date().getTime() + 1000 * 60 * 59);
 			// setExpirationTokenTime(expirationDateToken);
@@ -57,11 +51,7 @@ const useUser = () => {
 
 	const logout = (expiredSession) => {
 		setToken(null);
-		setFirstName(null);
-		setLastName(null);
-		setGuardId(null);
-		setSuperior(null);
-		// setExpirationTokenTime(null);
+		setUserData(null);
 		if (expiredSession) toast('Por su seguridad, vuelva a iniciar sesión.', { type: 'warning' });
 		localStorage.removeItem('userData');
 		localStorage.removeItem('userToken');
@@ -119,11 +109,8 @@ const useUser = () => {
 	}, [login]);
 
 	return {
+		userData,
 		token,
-		firstName,
-		lastName,
-		guardId,
-		superior,
 		login,
 		logout,
 	};

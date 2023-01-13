@@ -28,7 +28,7 @@ const useChangeLoad = (resultData, startData) => {
 		  }
 		: {
 				coverData: {
-					name: `${context.lastName} ${context.firstName}`,
+					name: `${context.userData.lastName} ${context.userData.firstName}`,
 					date: '-',
 					shift: '-',
 					day: '-',

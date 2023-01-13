@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react';
 import { FaExclamationTriangle } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import Table from '../components/Table';
@@ -10,8 +10,7 @@ import useHttpConnection from '../hooks/useHttpConnection';
 
 import './Changes.css';
 
-const Changes = () => {
-	const [showRequested, setShowRequested] = useState(false);
+const Changes = ({ type }) => {
 	const [error, setError] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [dataList, setDataList] = useState();
@@ -19,13 +18,14 @@ const Changes = () => {
 	const { httpRequestHandler } = useHttpConnection();
 	const context = useContext(UserContext);
 	const navigate = useNavigate();
+	const location = useLocation();
 
 	const fetchListItems = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/list/all',
 				'POST',
-				JSON.stringify({ type: showRequested ? 'request' : 'change' }),
+				JSON.stringify({ type }),
 				{ authorization: `Bearer ${context.token}`, 'Content-type': 'application/json' },
 			);
 			setDataList(consult);
@@ -35,39 +35,44 @@ const Changes = () => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, showRequested, context]);
+	}, [httpRequestHandler, type, context]);
 
 	useEffect(() => {
 		fetchListItems();
-	}, [fetchListItems, showRequested]);
+	}, [fetchListItems]);
+
+	useEffect(() => {
+		let tabs = document.querySelectorAll('.tab');
+		let element = document.getElementById(location.pathname);
+		tabs.forEach((tab) => tab.classList.remove('selected'));
+		if (!element.classList.contains('selected')) element.classList.add('selected');
+		context.loadActiveTab(location.pathname);
+	}, [location.pathname, context]);
 
 	const tabClickHandler = (e) => {
-		let element = document.getElementById(e.target.id);
-		if (element) {
-			// let index = element.getAttribute('index');
-			let tabs = document.querySelectorAll('.tab');
-			// let contents = document.querySelectorAll('.changes');
-			tabs.forEach((tab) => tab.classList.remove('selected'));
-			// contents.forEach((content) => {
-			// 	content.classList.remove('show');
-			// });
-			element.classList.add('selected');
-			// contents[index].classList.add('show');
+		let elementId = e.target.getAttribute('id');
+		let elementUrl = e.target.getAttribute('href');
+		let url = !!elementId ? elementId : elementUrl;
+		if (!!url && url !== location.pathname) {
+			navigate(url);
+			context.loadActiveTab(url);
 			setError(false);
 			setLoading(true);
-			setShowRequested(!showRequested);
 		}
 	};
+
+	const agreedId = '/changes/agreed';
+	const requestedId = '/changes/requested';
 
 	return (
 		<div className="changes-list">
 			<div className="tabs-container" onClick={tabClickHandler}>
 				<div className="tabs-list">
-					<div className="tab selected" id="requested" index={0}>
-						Acordados
+					<div className="tab" id={agreedId} index={0}>
+						<Link to={agreedId}>Acordados</Link>
 					</div>
-					<div className="tab" id="opened" index={1}>
-						Solicitados
+					<div className="tab" id={requestedId} index={1}>
+						<Link to={requestedId}>Solicitados</Link>
 					</div>
 				</div>
 			</div>
@@ -80,7 +85,7 @@ const Changes = () => {
 					/>
 				) : loading ? (
 					<Loading type={'closed'} />
-				) : showRequested ? (
+				) : context.activeTab === '/changes/requested' ? (
 					<Table
 						id={Math.random() * 10000}
 						headersList={[
