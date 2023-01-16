@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import 'react-calendar/dist/Calendar.css';
 import { ToastContainer } from 'react-toastify';
 import { FaUser, FaExchangeAlt, FaEdit } from 'react-icons/fa';
@@ -16,7 +16,7 @@ const ChangeLoad = ({ sendResult, startData }) => {
 	const context = useContext(UserContext);
 	const [openedMenu, setOpenedMenu] = useState('');
 	const [showModal, setShowModal] = useState(false);
-	const { state, loadDate, loadUser, dataIsValid, loadingSendChange, sendNewChange } =
+	const { state, loadDate, loadUser, dataIsValid, loadingSendData, sendChangeData } =
 		useChangeLoad(sendResult, startData);
 
 	const loadOpenedMenu = (id) => setOpenedMenu(id);
@@ -38,6 +38,12 @@ const ChangeLoad = ({ sendResult, startData }) => {
 			</div>
 		</div>
 	);
+
+	useEffect(() => {
+		return () => {
+			context.activateEditionRoute();
+		};
+	}, [context]);
 
 	return (
 		<SendNewContext.Provider
@@ -110,7 +116,7 @@ const ChangeLoad = ({ sendResult, startData }) => {
 					text={startData ? 'EDITAR' : 'ENVIAR'}
 					width={200}
 					disabled={!dataIsValid}
-					loading={loadingSendChange}
+					loading={loadingSendData}
 					onClick={() => setShowModal(true)}
 				/>
 				{showModal && (
@@ -124,7 +130,7 @@ const ChangeLoad = ({ sendResult, startData }) => {
 						}
 						closeText={'No'}
 						closeFunction={() => setShowModal(false)}
-						actionFunction={sendNewChange}
+						actionFunction={sendChangeData}
 					/>
 				)}
 				<ToastContainer />

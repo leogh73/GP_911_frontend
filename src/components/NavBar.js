@@ -35,10 +35,14 @@ const NavBar = () => {
 				return '/changes';
 			case '/changes/requested':
 				return '/changes';
+			case '/changes/edit':
+				return '/changes';
 			case '/newrequest':
 				return '/changes';
 			case '/newchange':
 				return '/changes';
+			case '/affected':
+				return '/affected';
 			case '/newaffected':
 				return '/affected';
 			default:
@@ -124,6 +128,10 @@ const NavBar = () => {
 
 	useEffect(() => {
 		if (context.token) {
+			const navLinksList = document.querySelectorAll('.nav-links li');
+			navLinksList.forEach((link) => {
+				if (link.classList.contains('clicked')) link.classList.remove('clicked');
+			});
 			let clickedUrl = getActiveLink(location.pathname);
 			let activeLink = document.getElementById(clickedUrl);
 			activeLink.classList.add('clicked');

@@ -10,7 +10,7 @@ const ChangeEdit = ({ changeData }) => {
 	const resultEditChange = (result) => {
 		if (result && result._id) toast('Cambio modificado correctamente.', { type: 'success' });
 		if (!result || result.error)
-			toast('No se pudo completar la modificación de cambio.', { type: 'error' });
+			toast('No se pudo completar la modificación del cambio.', { type: 'error' });
 		navigate('/');
 	};
 

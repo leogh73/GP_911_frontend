@@ -208,17 +208,31 @@ const useListData = (dataList) => {
 			});
 		};
 
+		const modifyList = (id, newStatus, removeItem) => {
+			let newItemsList = { ...listData };
+			let index1 = newItemsList.fetched.findIndex((i) => i._id === id);
+			let index2 = newItemsList.user.findIndex((i) => i._id === id);
+			let index3 = newItemsList.filter.findIndex((i) => i._id === id);
+			if (removeItem) {
+				newItemsList.fetched.splice(index1, 1);
+				newItemsList.user.splice(index2, 1);
+				newItemsList.filter.splice(index3, 1);
+			} else {
+				newItemsList.fetched[index1].status = newStatus;
+				newItemsList.user[index2].status = newStatus;
+				newItemsList.filter[index3].status = newStatus;
+			}
+			return newItemsList;
+		};
+
 		switch (action.payload.type) {
-			case 'change': {
-				let accion;
-				if (action.payload.action === 'cancel') accion = 'Cancelado';
-				if (action.payload.action === 'approve') accion = 'Aprobado';
-				if (action.payload.action === 'notapprove') accion = 'No aprobado';
-				if (action.payload.action === 'void') accion = 'Anulado';
-				let index = listData.user.findIndex((ch) => ch._id === action.payload.id);
-				let newitemsList = { ...listData };
-				newitemsList.user[index].status = accion;
-				return { ...listData, user: newitemsList.user };
+			case 'modify': {
+				let newList = modifyList(action.payload.id, action.payload.status, false);
+				return { ...newList };
+			}
+			case 'delete': {
+				let newList = modifyList(action.payload.id, null, true);
+				return { ...newList };
 			}
 			case 'header': {
 				return listData.header === action.payload.value
@@ -233,7 +247,6 @@ const useListData = (dataList) => {
 			}
 			case 'radioButton': {
 				if (action.payload.value === 'Propios' && listData.showAll) {
-					console.log(filterUserItemsList());
 					return {
 						...listData,
 						user: filterUserItemsList(),

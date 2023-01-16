@@ -8,7 +8,7 @@ import NewItem from '../pages/NewItem';
 import Changes from '../pages/Changes';
 import Affected from '../pages/Affected';
 
-const useRoutes = (token, superior) => {
+const useRoutes = (token, userData) => {
 	const [activeEditRoute, setActiveEditRoute] = useState(false);
 	const [activeTab, setActiveTab] = useState(null);
 	const [changeData, setChangeData] = useState();
@@ -55,18 +55,17 @@ const useRoutes = (token, superior) => {
 			<Route path="/changes">
 				<Route path="agreed" element={<Changes type={'change'} />} />
 				<Route path="requested" element={<Changes type={'request'} />} />
-				<Route path="*" element={<NotFound />} />
+				{activeEditRoute && <Route path="edit" element={<ChangeEdit changeData={changeData} />} />}
 			</Route>
 			<Route path="/affected" element={<Affected />} />
-			<Route path="*" element={<NotFound />} />
-			{activeEditRoute && <Route path="/edit" element={<ChangeEdit changeData={changeData} />} />}
-			{superior
+			{userData.superior
 				? superiorRoutes.map((route) => (
 						<Route key={route.key} path={route.path} element={route.element} />
 				  ))
 				: userRoutes.map((route) => (
 						<Route key={route.key} path={route.path} element={route.element} />
 				  ))}
+			<Route path="*" element={<NotFound />} />
 		</Routes>
 	) : (
 		<Routes>

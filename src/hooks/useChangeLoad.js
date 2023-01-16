@@ -4,7 +4,7 @@ import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useChangeLoad = (resultData, startData) => {
-	const [loadingSendChange, setLoadingSendChange] = useState(false);
+	const [loadingSendChange, setLoadingSendData] = useState(false);
 	const [dataIsValid, setDataIsValid] = useState(false);
 	const context = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
@@ -141,7 +141,7 @@ const useChangeLoad = (resultData, startData) => {
 		sendDataCallback();
 	}, [state, sendDataCallback]);
 
-	const sendNewChange = async () => {
+	const sendChangeData = async () => {
 		let headers = {
 			authorization: `Bearer ${context.token}`,
 			'Content-type': 'application/json',
@@ -149,17 +149,22 @@ const useChangeLoad = (resultData, startData) => {
 		let body = startData
 			? {
 					changeId: startData._id,
-					coverName:
-						state.coverData.name !== startData.coverData.name ? state.coverData.name : null,
-					returnName:
-						state.returnData.name !== startData.returnData.name ? state.returnData.name : null,
+					coverName: {
+						previous: startData.coverData.name,
+						new: state.coverData.name !== startData.coverData.name ? state.coverData.name : null,
+					},
+					returnName: {
+						previous: startData.returnData.name,
+						new:
+							state.returnData.name !== startData.returnData.name ? state.returnData.name : null,
+					},
 			  }
 			: { type: 'change', coverData: state.coverData, returnData: state.returnData };
 		try {
-			setLoadingSendChange(true);
+			setLoadingSendData(true);
 			let consult = startData
 				? await httpRequestHandler(
-						'http://localhost:5000/api/list/modify',
+						'http://localhost:5000/api/list/edit',
 						'POST',
 						JSON.stringify(body),
 						headers,
@@ -170,7 +175,7 @@ const useChangeLoad = (resultData, startData) => {
 						JSON.stringify(body),
 						headers,
 				  );
-			setLoadingSendChange(false);
+			setLoadingSendData(false);
 			resultData(consult);
 		} catch (error) {
 			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
@@ -184,7 +189,7 @@ const useChangeLoad = (resultData, startData) => {
 		loadUser,
 		dataIsValid,
 		loadingSendChange,
-		sendNewChange,
+		sendChangeData,
 	};
 };
 

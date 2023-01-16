@@ -18,15 +18,33 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 	const navigate = useNavigate();
 	const { listData, dispatch } = useListData(dataList);
 
+	console.log('load table!!');
+
 	const resultModifyRow = (action, result) => {
-		let accion;
-		if (action === 'cancel') accion = 'cancelado';
-		if (action === 'approve') accion = 'aprobado';
-		if (action === 'notapprove') accion = 'no aprobado';
-		if (action === 'void') accion = 'anulado';
 		if (result && result._id) {
-			dispatch({ payload: { action, type: 'change', id: result._id } });
-			toast(`Cambio ${accion} correctamente.`, { type: 'success' });
+			if (action === 'delete') {
+				dispatch({
+					payload: {
+						type: 'delete',
+						id: result._id,
+					},
+				});
+				toast(`Cambio eliminado correctamente.`, { type: 'success' });
+			} else {
+				let status;
+				if (action === 'cancel') status = 'cancelado';
+				if (action === 'approve') status = 'aprobado';
+				if (action === 'notapprove') status = 'no aprobado';
+				if (action === 'void') status = 'anulado';
+				dispatch({
+					payload: {
+						status: `${status.charAt(0).toUpperCase() + status.slice(1)}`,
+						type: 'modify',
+						id: result._id,
+					},
+				});
+				toast(`Cambio ${status} correctamente.`, { type: 'success' });
+			}
 		}
 		if (!result || result.error) toast('No se pudo completar el proceso.', { type: 'error' });
 	};
