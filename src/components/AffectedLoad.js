@@ -92,9 +92,9 @@ const AffectedLoad = ({ sendResult }) => {
 						id="change-modal"
 						title="Confirmar"
 						body={`¿Enviar cambios de servicio para ${state.name}?`}
+						actionFunction={sendNewChange}
 						closeText={'No'}
 						closeFunction={() => setShowModal(false)}
-						actionFunction={sendNewChange}
 					/>
 				)}
 				<ToastContainer />

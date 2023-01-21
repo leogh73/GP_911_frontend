@@ -11,26 +11,25 @@ import useHttpConnection from '../hooks/useHttpConnection';
 import './Changes.css';
 
 const Affected = () => {
-	const [error, setError] = useState(false);
-	const [loading, setLoading] = useState(true);
-	const [dataList, setDataList] = useState();
-
 	const { httpRequestHandler } = useHttpConnection();
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(false);
+	const [dataList, setDataList] = useState();
 	const context = useContext(UserContext);
-	const navigate = useNavigate();
 
 	const fetchListItems = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/list/all',
+				'http://localhost:5000/api/item/all',
 				'POST',
 				JSON.stringify({ type: 'affected' }),
 				{ authorization: `Bearer ${context.token}`, 'Content-type': 'application/json' },
 			);
+			if (consult.error) return setError(true);
 			setDataList(consult);
 		} catch (error) {
+			console.log(error);
 			setError(true);
-			console.log(error.toString());
 		} finally {
 			setLoading(false);
 		}
@@ -42,12 +41,12 @@ const Affected = () => {
 
 	return (
 		<div className="changes-list">
-			<div className={error || loading ? 'center-content' : ''}>
+			<div className={`${error ? 'loading-error' : ''}`}>
 				{error ? (
 					<Message
 						title="Error cargando cambios"
 						icon={<FaExclamationTriangle />}
-						body="No se pudieron cargar cambios de guardia. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas."
+						body="No se pudieron cargar datos de personal afectado y desafectado. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas."
 					/>
 				) : loading ? (
 					<Loading type={'closed'} />

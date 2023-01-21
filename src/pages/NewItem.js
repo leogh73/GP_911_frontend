@@ -57,6 +57,7 @@ const NewItem = ({ type }) => {
 		}
 	};
 
+
 	return <>{loadForm(type)}</>;
 };
 

@@ -208,30 +208,30 @@ const useListData = (dataList) => {
 			});
 		};
 
-		const modifyList = (id, newStatus, removeItem) => {
+		const modifyList = (id, newStatus, removeItem, changelog) => {
 			let newItemsList = { ...listData };
-			let index1 = newItemsList.fetched.findIndex((i) => i._id === id);
-			let index2 = newItemsList.user.findIndex((i) => i._id === id);
-			let index3 = newItemsList.filter.findIndex((i) => i._id === id);
+			let index = newItemsList.fetched.findIndex((i) => i._id === id);
 			if (removeItem) {
-				newItemsList.fetched.splice(index1, 1);
-				newItemsList.user.splice(index2, 1);
-				newItemsList.filter.splice(index3, 1);
+				newItemsList.fetched.splice(index, 1);
 			} else {
-				newItemsList.fetched[index1].status = newStatus;
-				newItemsList.user[index2].status = newStatus;
-				newItemsList.filter[index3].status = newStatus;
+				newItemsList.fetched[index].status = newStatus;
+				newItemsList.fetched[index].changelog.push(changelog);
 			}
 			return newItemsList;
 		};
 
 		switch (action.payload.type) {
 			case 'modify': {
-				let newList = modifyList(action.payload.id, action.payload.status, false);
+				let newList = modifyList(
+					action.payload.id,
+					action.payload.status,
+					false,
+					action.payload.changelog,
+				);
 				return { ...newList };
 			}
 			case 'delete': {
-				let newList = modifyList(action.payload.id, null, true);
+				let newList = modifyList(action.payload.id, null, true, null);
 				return { ...newList };
 			}
 			case 'header': {

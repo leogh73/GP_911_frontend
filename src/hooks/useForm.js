@@ -9,7 +9,8 @@ import useRememberMe from './useRememberMe';
 const useForm = (pageName, sendUserForm) => {
 	const { loadUser } = useRememberMe();
 	const [formIsValid, setFormIsValid] = useState(false);
-	const { loading, httpRequestHandler } = useHttpConnection();
+	const { httpRequestHandler } = useHttpConnection();
+	const [loading, setLoading] = useState(false);
 	const [loginError, setLoginError] = useState(false);
 	const storedUser = loadUser();
 	const [inputs, setInputs] = useState([]);
@@ -58,12 +59,14 @@ const useForm = (pageName, sendUserForm) => {
 	}
 
 	const sendFormData = async (data) => {
+		setLoading(true);
 		let resultData = await httpRequestHandler(
 			`http://localhost:5000/api/user/${pageName}`,
 			'POST',
 			JSON.stringify(data),
 			{ 'Content-type': 'application/json' },
 		);
+		setLoading(false);
 		let validInputs = verifyField(resultData);
 		return { resultData, validInputs };
 	};

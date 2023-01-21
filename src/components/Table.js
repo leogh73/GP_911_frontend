@@ -18,35 +18,30 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 	const navigate = useNavigate();
 	const { listData, dispatch } = useListData(dataList);
 
-	console.log('load table!!');
-
-	const resultModifyRow = (action, result) => {
-		if (result && result._id) {
-			if (action === 'delete') {
+	const resultModifyRow = (status, consult) => {
+		console.log(consult);
+		if (consult.result && consult.result._id) {
+			if (!status) {
 				dispatch({
 					payload: {
 						type: 'delete',
-						id: result._id,
+						id: consult.result._id,
 					},
 				});
 				toast(`Cambio eliminado correctamente.`, { type: 'success' });
 			} else {
-				let status;
-				if (action === 'cancel') status = 'cancelado';
-				if (action === 'approve') status = 'aprobado';
-				if (action === 'notapprove') status = 'no aprobado';
-				if (action === 'void') status = 'anulado';
 				dispatch({
 					payload: {
-						status: `${status.charAt(0).toUpperCase() + status.slice(1)}`,
 						type: 'modify',
-						id: result._id,
+						id: consult.result._id,
+						status: status.new,
+						changelog: consult.changelogItem,
 					},
 				});
-				toast(`Cambio ${status} correctamente.`, { type: 'success' });
+				toast(`Cambio ${status.new.toLowerCase()} correctamente.`, { type: 'success' });
 			}
 		}
-		if (!result || result.error) toast('No se pudo completar el proceso.', { type: 'error' });
+		if (!consult || consult.error) toast('No se pudo completar el proceso.', { type: 'error' });
 	};
 
 	const headerClickHandler = (i, value) => {

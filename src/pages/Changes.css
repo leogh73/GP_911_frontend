@@ -1,11 +1,10 @@
-.center-content {
-	width: 100%;
-	min-height: 62vh;
-	top: 20%;
-	left: 0;
-	position: fixed;
+.loading-error {
+	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	min-height: 60vh;
+	min-width: 400px;
 }
 
 .changes-list {

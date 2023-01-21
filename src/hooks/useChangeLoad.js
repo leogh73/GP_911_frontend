@@ -164,13 +164,13 @@ const useChangeLoad = (resultData, startData) => {
 			setLoadingSendData(true);
 			let consult = startData
 				? await httpRequestHandler(
-						'http://localhost:5000/api/list/edit',
+						'http://localhost:5000/api/item/edit',
 						'POST',
 						JSON.stringify(body),
 						headers,
 				  )
 				: await httpRequestHandler(
-						'http://localhost:5000/api/list/new',
+						'http://localhost:5000/api/item/new',
 						'POST',
 						JSON.stringify(body),
 						headers,

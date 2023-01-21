@@ -2,6 +2,8 @@ import React from 'react';
 import Button from './Button';
 import Title from './Title';
 
+import '../pages/Changes.css';
+
 const Message = ({ title, icon, body, buttonText, onClick }) => {
 	return (
 		<div
@@ -10,7 +12,7 @@ const Message = ({ title, icon, body, buttonText, onClick }) => {
 				flexDirection: 'column',
 				alignItems: 'center',
 				justifyContent: 'space-evenly',
-				minHeight: '300px',
+				minHeight: '250px',
 				minWidth: '400px',
 				maxWidth: '850px',
 				animation: 'bgFadeIn 0.6s ease',

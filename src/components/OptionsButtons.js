@@ -56,7 +56,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							generateRandomId(),
 							'Confirmar aprobar cambio',
 							`¿Aprobar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
-							() => modifyData(type, data._id, 'approve'),
+							() => modifyData(type, data._id, { previous: data.status, new: 'Aprobado' }),
 							'No',
 						)}
 						{button(
@@ -64,7 +64,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							generateRandomId(),
 							'Confirmar no aprobar cambio',
 							`¿No aprobar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
-							() => modifyData(type, data._id, 'notapprove'),
+							() => modifyData(type, data._id, { previous: data.status, new: 'No aprobado' }),
 							'No',
 						)}
 					</>
@@ -77,7 +77,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							generateRandomId(),
 							'Confirmar anular cambio',
 							`¿Anular cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
-							() => modifyData(type, data._id, 'void'),
+							() => modifyData(type, data._id, { previous: data.status, new: 'Anulado' }),
 							'No',
 						)}
 					</>
@@ -90,7 +90,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							generateRandomId(),
 							'Confirmar eliminar cambio',
 							`¿Anular cambio de servicio para ${data.name}?`,
-							() => modifyData(type, data._id, 'void'),
+							() => modifyData(type, data._id, null),
 							'No',
 						)}
 					</>
@@ -110,7 +110,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							generateRandomId(),
 							'Confirmar cancelar cambio',
 							`¿Cancelar cambio con ${data.returnData.name}?`,
-							() => modifyData(type, data._id, 'cancel'),
+							() => modifyData(type, data._id, { previous: data.status, new: 'Cancelado' }),
 							'No',
 						)}
 					</>
@@ -123,7 +123,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							generateRandomId(),
 							'Confirmar eliminar cambio',
 							`¿Eliminar cambio con ${data.returnData.name}?`,
-							() => modifyData(type, data._id, 'delete'),
+							() => modifyData(type, data._id, null),
 							'No',
 						)}
 					</>
@@ -132,11 +132,11 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 				return (
 					<>
 						{button(
-							<MdDelete size={24} />,
+							<MdDeleteForever size={24} />,
 							generateRandomId(),
 							'Confirmar eliminar pedido',
 							`¿Eliminar pedido de cambio para el ${data.requestData.date}?`,
-							() => modifyData(type, data._id, 'cancel'),
+							() => modifyData(type, data._id, null),
 							'No',
 						)}
 					</>
@@ -145,7 +145,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		}
 	};
 
-	const modifyData = async (type, itemId, action) => {
+	const modifyData = async (type, itemId, status) => {
 		// let url = '';
 		// let body = {};
 		// if (!context.userData.superior) {
@@ -160,15 +160,16 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 
 		try {
 			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/list/modify',
+				'http://localhost:5000/api/item/modify',
 				'POST',
-				JSON.stringify({ type, itemId, action }),
+				JSON.stringify({ type, itemId, status }),
 				{
-					authorization: `Bearer ${context.token}`,
+					// authorization: `Bearer ${context.token}`,
 					'Content-type': 'application/json',
 				},
 			);
-			callbackFn(action, consult);
+			console.log(consult);
+			callbackFn(status, consult);
 		} catch (error) {
 			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
 			console.log(error);
