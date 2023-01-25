@@ -6,11 +6,11 @@ import useHttpConnection from './useHttpConnection';
 const useRequestLoad = (sendResult) => {
 	const [loadingSendChange, setLoadingSendChange] = useState(false);
 	const [dataIsValid, setDataIsValid] = useState(false);
-	const context = useContext(UserContext);
+	const userContext = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
 
 	const initialState = {
-		name: `${context.userData.lastName} ${context.userData.firstName}`,
+		name: `${userContext.userData.lastName} ${userContext.userData.firstName}`,
 		requestData: {
 			date: '-',
 			shift: '-',
@@ -68,7 +68,7 @@ const useRequestLoad = (sendResult) => {
 				'POST',
 				JSON.stringify(state),
 				{
-					authorization: `Bearer ${context.token}`,
+					authorization: `Bearer ${userContext.token}`,
 					'Content-type': 'application/json',
 				},
 			);

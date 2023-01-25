@@ -10,11 +10,11 @@ const Login = () => {
 	const { rememberUser, loadUser } = useRememberMe();
 	const [error, setError] = useState();
 	const rememberMe = useRef(loadUser() ? true : false);
-	const context = useContext(UserContext);
+	const userContext = useContext(UserContext);
 
 	const loginResult = (result, usernameOrPassword) => {
 		const { token, firstName, lastName, guardId, superior } = result;
-		context.login(token, firstName, lastName, guardId, superior);
+		userContext.login(token, firstName, lastName, guardId, superior);
 		rememberUser(usernameOrPassword, rememberMe.current);
 	};
 

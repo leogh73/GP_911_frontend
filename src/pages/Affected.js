@@ -15,7 +15,7 @@ const Affected = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
 	const [dataList, setDataList] = useState();
-	const context = useContext(UserContext);
+	const userContext = useContext(UserContext);
 
 	const fetchListItems = useCallback(async () => {
 		try {
@@ -23,7 +23,7 @@ const Affected = () => {
 				'http://localhost:5000/api/item/all',
 				'POST',
 				JSON.stringify({ type: 'affected' }),
-				{ authorization: `Bearer ${context.token}`, 'Content-type': 'application/json' },
+				{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
 			);
 			if (consult.error) return setError(true);
 			setDataList(consult);
@@ -33,7 +33,7 @@ const Affected = () => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, context]);
+	}, [httpRequestHandler, userContext]);
 
 	useEffect(() => {
 		fetchListItems();

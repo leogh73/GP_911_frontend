@@ -104,7 +104,15 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 				);
 		}
 		if (!userContext.userData.superior) {
-			if (type === 'change' && fullName === data.coverData.name && data.status === 'Solicitado')
+			if (fullName === (data.coverData.date || data.returnData.name)) {
+				console.log(data.returnData.name);
+				console.log(fullName);
+			}
+			if (
+				type === 'change' &&
+				(fullName === data.coverData.name || fullName === data.returnData.name) &&
+				data.status === 'Solicitado'
+			)
 				return (
 					<>
 						<div className="option-container">
@@ -116,7 +124,9 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							<IoMdClose size={28} />,
 							generateRandomId(),
 							'Confirmar cancelar cambio',
-							`¿Cancelar cambio con ${data.returnData.name}?`,
+							`¿Cancelar cambio con ${
+								fullName === data.coverData.name ? data.returnData.name : data.coverData.name
+							}?`,
 							() => modifyData(type, data._id, { previous: data.status, new: 'Cancelado' }),
 							'No',
 							true,
