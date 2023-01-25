@@ -2,8 +2,8 @@ import { useReducer, useContext } from 'react';
 import UserContext from '../context/UserContext';
 
 const useListData = (dataList) => {
-	const context = useContext(UserContext);
-	const fullName = `${context.userData.lastName} ${context.userData.firstName}`;
+	const userContext = useContext(UserContext);
+	const fullName = `${userContext.userData.lastName} ${userContext.userData.firstName}`;
 
 	const [listData, dispatch] = useReducer(reducer, {
 		header: '#',
@@ -276,7 +276,7 @@ const useListData = (dataList) => {
 				};
 			}
 			default:
-				return listData;
+				return { ...listData };
 		}
 	}
 

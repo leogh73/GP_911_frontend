@@ -11,15 +11,20 @@ import Title from './Title';
 import useChangeLoad from '../hooks/useChangeLoad';
 import './ChangeLoad.css';
 import SendNewContext from '../context/SendNewContext';
+import { BiCommentDetail } from 'react-icons/bi';
+import CommentContext from '../context/CommentContext';
 
 const ChangeLoad = ({ sendResult, startData }) => {
-	const context = useContext(UserContext);
+	const userContext = useContext(UserContext);
+	const commentContext = useContext(CommentContext);
 	const [openedMenu, setOpenedMenu] = useState('');
 	const [showModal, setShowModal] = useState(false);
 	const { state, loadDate, loadUser, dataIsValid, loadingSendData, sendChangeData } =
 		useChangeLoad(sendResult, startData);
 
 	const loadOpenedMenu = (id) => setOpenedMenu(id);
+
+	const loadComment = (e) => commentContext.loadComment(e.target.value);
 
 	const changeSection = (key, content, icon, title, data) => (
 		<div key={key} className="user-section">
@@ -41,9 +46,9 @@ const ChangeLoad = ({ sendResult, startData }) => {
 
 	useEffect(() => {
 		return () => {
-			context.activateEditionRoute();
+			userContext.activateEditionRoute();
 		};
-	}, [context]);
+	}, [userContext]);
 
 	return (
 		<SendNewContext.Provider
@@ -77,7 +82,7 @@ const ChangeLoad = ({ sendResult, startData }) => {
 									null,
 									<FaUser />,
 									'Quien cubre',
-									`${context.userData.lastName} ${context.userData.firstName}`,
+									`${userContext.userData.lastName} ${userContext.userData.firstName}`,
 							  )}
 						<SelectDate
 							name="cover"
@@ -111,6 +116,21 @@ const ChangeLoad = ({ sendResult, startData }) => {
 						/>
 					</div>
 				</div>
+				{startData &&
+					changeSection(
+						'01',
+						null,
+						<BiCommentDetail />,
+						'Comentario (opcional)',
+						<div className="comment-load">
+							<input
+								name={'comment-load'}
+								id={'03_comment'}
+								onChange={loadComment}
+								value={commentContext.comment}
+							/>
+						</div>,
+					)}
 				<Button
 					className="button"
 					text={startData ? 'EDITAR' : 'ENVIAR'}

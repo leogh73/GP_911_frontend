@@ -1,7 +1,7 @@
 import React from 'react';
 import { AiFillEdit } from 'react-icons/ai';
 import { BsCalendarDate } from 'react-icons/bs';
-import { BiTime } from 'react-icons/bi';
+import { BiCommentDetail, BiTime } from 'react-icons/bi';
 import { FaUserAlt } from 'react-icons/fa';
 import { IconContext } from 'react-icons';
 import './Changelog.css';
@@ -46,6 +46,14 @@ const Changelog = ({ log }) => {
 									))}
 								</div>
 							</div>
+							{l.comment && (
+								<div className="data-container">
+									<div className="icon-container">
+										<BiCommentDetail />
+									</div>
+									{l.comment}
+								</div>
+							)}
 							<div className="data-container">
 								<div className="icon-container">
 									<FaUserAlt />

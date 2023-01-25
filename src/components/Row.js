@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
-import UserContext from '../context/UserContext';
+import React, { useState } from 'react';
+import CommentContext from '../context/CommentContext';
 import OptionsButtons from './OptionsButtons';
-import DropdownOptions from './OptionsButtons';
 
 const Row = ({ type, data, modifyCallback }) => {
+	const [commentString, setCommentString] = useState('');
 	const changeText = (s) => `${s.date} - ${s.shift} - ${s.day} - Guardia ${s.guardId}`;
 
 	const generateRow = (dataList) => (
@@ -102,7 +102,16 @@ const Row = ({ type, data, modifyCallback }) => {
 		}
 	};
 
-	return <tr>{rowContent()}</tr>;
+	return (
+		<CommentContext.Provider
+			value={{
+				comment: commentString,
+				loadComment: setCommentString,
+			}}
+		>
+			<tr>{rowContent()}</tr>
+		</CommentContext.Provider>
+	);
 };
 
 export default Row;

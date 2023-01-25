@@ -41,31 +41,33 @@ const Affected = () => {
 
 	return (
 		<div className="changes-list">
-			<div className={`${error ? 'loading-error' : ''}`}>
-				{error ? (
+			{error ? (
+				<div className="spinner-container-affected">
 					<Message
 						title="Error cargando cambios"
 						icon={<FaExclamationTriangle />}
 						body="No se pudieron cargar datos de personal afectado y desafectado. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas."
 					/>
-				) : loading ? (
+				</div>
+			) : loading ? (
+				<div className="spinner-container-affected">
 					<Loading type={'closed'} />
-				) : (
-					<Table
-						id={Math.random() * 10000}
-						headersList={[
-							{ key: 0, title: '#' },
-							{ key: 1, title: 'Personal' },
-							{ key: 2, title: 'Afectado' },
-							{ key: 3, title: 'Desafectado' },
-							{ key: 4, title: 'Foja' },
-						]}
-						rowType={'affected'}
-						dataList={dataList}
-						newLink={'/newaffected'}
-					/>
-				)}
-			</div>
+				</div>
+			) : (
+				<Table
+					id={Math.random() * 10000}
+					headersList={[
+						{ key: 0, title: '#' },
+						{ key: 1, title: 'Personal' },
+						{ key: 2, title: 'Afectado' },
+						{ key: 3, title: 'Desafectado' },
+						{ key: 4, title: 'Foja' },
+					]}
+					rowType={'affected'}
+					dataList={dataList}
+					newLink={'/newaffected'}
+				/>
+			)}
 		</div>
 	);
 };

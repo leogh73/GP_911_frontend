@@ -5,7 +5,7 @@ import './Dropdown.css';
 import SendNewContext from '../context/SendNewContext';
 
 const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, style }) => {
-	const context = useContext(SendNewContext);
+	const sendNewContext = useContext(SendNewContext);
 	const [listState, setListState] = useState(optionsList);
 
 	const toggleMenu = useCallback(() => {
@@ -29,12 +29,12 @@ const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, st
 
 	useEffect(() => {
 		if (
-			!!context.openedMenu &&
-			context.openedMenu !== name &&
+			!!sendNewContext.openedMenu &&
+			sendNewContext.openedMenu !== name &&
 			document.getElementById(name).querySelector('.dropdown-content').classList.contains('active')
 		)
 			toggleMenu();
-	}, [context.openedMenu, name, toggleMenu]);
+	}, [sendNewContext.openedMenu, name, toggleMenu]);
 
 	return (
 		<div id={name} className="dropdown-wrapper" tabIndex={1}>
@@ -42,7 +42,7 @@ const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, st
 				className="dropdown-button"
 				onClick={() => {
 					toggleMenu();
-					context.loadOpenedMenu(name);
+					sendNewContext.loadOpenedMenu(name);
 				}}
 			>
 				{icon && <div className="dropdown-icon">{icon}</div>}

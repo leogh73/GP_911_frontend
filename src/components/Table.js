@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { toast } from 'react-toastify';
 import { BiDownArrow } from 'react-icons/bi';
-import { GoSearch } from 'react-icons/go';
+
+import { GrSearch } from 'react-icons/gr';
 import Title from './Title';
 import Row from './Row';
 import Button from './Button';
@@ -14,12 +15,11 @@ import useListData from '../hooks/useListData';
 import UserContext from '../context/UserContext';
 
 const Table = ({ id, headersList, rowType, dataList, newLink }) => {
-	const context = useContext(UserContext);
+	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 	const { listData, dispatch } = useListData(dataList);
 
 	const resultModifyRow = (status, consult) => {
-		console.log(consult);
 		if (consult.result && consult.result._id) {
 			if (!status) {
 				dispatch({
@@ -41,7 +41,14 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 				toast(`Cambio ${status.new.toLowerCase()} correctamente.`, { type: 'success' });
 			}
 		}
-		if (!consult || consult.error) toast('No se pudo completar el proceso.', { type: 'error' });
+		if (!consult || consult.error) {
+			dispatch({
+				payload: {
+					type: 'error',
+				},
+			});
+			toast('No se pudo completar el proceso.', { type: 'error' });
+		}
 	};
 
 	const headerClickHandler = (i, value) => {
@@ -82,12 +89,12 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 	return (
 		<div id={id} style={{ animation: 'bgFadeIn 0.6s ease' }}>
 			<div className="changes-filters">
-				{rowType !== 'affected' && !context.userData.superior ? (
+				{rowType !== 'affected' && !userContext.userData.superior ? (
 					<Button text={'NUEVO CAMBIO'} width={170} onClick={() => navigate(newLink)} />
-				) : rowType === 'affected' && context.userData.superior ? (
+				) : rowType === 'affected' && userContext.userData.superior ? (
 					<Button text={'NUEVO CAMBIO'} width={170} onClick={() => navigate(newLink)} />
 				) : null}
-				{!context.userData.superior && (
+				{!userContext.userData.superior && (
 					<div className="radio-buttons">
 						<div className="changes-filter" value="Todos" name="todos" onClick={radioClickHandler}>
 							<input
@@ -113,9 +120,10 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 
 				<div className="changes-search-box">
 					<div className="changes-search-icon">
-						<GoSearch />
+						<GrSearch />
 					</div>
 					<input className="changes-search" placeholder="Buscar" onChange={inputChangeHandler} />
+					<div className="changes-search-icon"></div>
 				</div>
 			</div>
 			{listData.filter.length ? (

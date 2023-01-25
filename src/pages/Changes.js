@@ -15,7 +15,7 @@ const Changes = ({ type }) => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
 	const [dataList, setDataList] = useState();
-	const context = useContext(UserContext);
+	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 	const location = useLocation();
 
@@ -25,7 +25,7 @@ const Changes = ({ type }) => {
 				'http://localhost:5000/api/item/all',
 				'POST',
 				JSON.stringify({ type }),
-				{ authorization: `Bearer ${context.token}`, 'Content-type': 'application/json' },
+				{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
 			);
 			if (consult.error) return setError(true);
 			setDataList(consult);
@@ -35,7 +35,7 @@ const Changes = ({ type }) => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, type, context]);
+	}, [httpRequestHandler, type, userContext]);
 
 	useEffect(() => {
 		fetchListItems();
@@ -46,8 +46,8 @@ const Changes = ({ type }) => {
 		let element = document.getElementById(location.pathname);
 		tabs.forEach((tab) => tab.classList.remove('selected'));
 		if (!element.classList.contains('selected')) element.classList.add('selected');
-		context.loadActiveTab(location.pathname);
-	}, [location.pathname, context]);
+		userContext.loadActiveTab(location.pathname);
+	}, [location.pathname, userContext]);
 
 	const tabClickHandler = (e) => {
 		let elementId = e.target.getAttribute('id');
@@ -55,7 +55,7 @@ const Changes = ({ type }) => {
 		let url = !!elementId ? elementId : elementUrl;
 		if (!!url && url !== location.pathname) {
 			navigate(url);
-			context.loadActiveTab(url);
+			userContext.loadActiveTab(url);
 			setDataList(null);
 			setLoading(true);
 			setError(false);
@@ -77,45 +77,51 @@ const Changes = ({ type }) => {
 					</div>
 				</div>
 			</div>
-			<div className={`${error ? 'loading-error' : ''}`}>
-				{error ? (
+			{error ? (
+				<div className="loading-error-change">
 					<Message
-						title="Error cargando cambios"
+						title={`Error cargando ${
+							userContext.activeTab === '/changes/agreed' ? 'cambios' : 'pedidos'
+						}`}
 						icon={<FaExclamationTriangle />}
-						body="No se pudieron cargar cambios de guardia. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas."
+						body={`No se pudieron cargar ${
+							userContext.activeTab === '/changes/agreed' ? 'cambios de guardia' : 'pedidos'
+						}. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas.`}
 					/>
-				) : loading ? (
+				</div>
+			) : loading ? (
+				<div className="spinner-container-change">
 					<Loading type={'closed'} />
-				) : context.activeTab === '/changes/requested' ? (
-					<Table
-						id={Math.random() * 10000}
-						headersList={[
-							{ key: 0, title: '#' },
-							{ key: 1, title: 'Personal' },
-							{ key: 2, title: 'Pedido' },
-							{ key: 3, title: 'Ofrecido' },
-						]}
-						rowType={'request'}
-						dataList={dataList}
-						newLink={'/newrequest'}
-					/>
-				) : (
-					<Table
-						id={Math.random() * 10000}
-						headersList={[
-							{ key: 0, title: '#' },
-							{ key: 1, title: 'Quien cubre' },
-							{ key: 2, title: 'A cubrir' },
-							{ key: 3, title: 'Quien devuelve' },
-							{ key: 4, title: 'A devolver' },
-							{ key: 5, title: 'Estado' },
-						]}
-						rowType={'change'}
-						dataList={dataList}
-						newLink={'/newchange'}
-					/>
-				)}
-			</div>
+				</div>
+			) : userContext.activeTab === '/changes/requested' ? (
+				<Table
+					id={Math.random() * 10000}
+					headersList={[
+						{ key: 0, title: '#' },
+						{ key: 1, title: 'Personal' },
+						{ key: 2, title: 'Pedido' },
+						{ key: 3, title: 'Ofrecido' },
+					]}
+					rowType={'request'}
+					dataList={dataList}
+					newLink={'/newrequest'}
+				/>
+			) : (
+				<Table
+					id={Math.random() * 10000}
+					headersList={[
+						{ key: 0, title: '#' },
+						{ key: 1, title: 'Quien cubre' },
+						{ key: 2, title: 'A cubrir' },
+						{ key: 3, title: 'Quien devuelve' },
+						{ key: 4, title: 'A devolver' },
+						{ key: 5, title: 'Estado' },
+					]}
+					rowType={'change'}
+					dataList={dataList}
+					newLink={'/newchange'}
+				/>
+			)}
 		</div>
 	);
 };

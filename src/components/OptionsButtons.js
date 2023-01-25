@@ -18,22 +18,24 @@ import './OptionsButtons.css';
 import Changelog from './Changelog';
 import { useNavigate } from 'react-router-dom';
 import { IoMdClose } from 'react-icons/io';
+import CommentContext from '../context/CommentContext';
 
 const OptionsButtons = ({ type, data, callbackFn }) => {
 	const { httpRequestHandler } = useHttpConnection();
-	const context = useContext(UserContext);
-	const fullName = `${context.userData.lastName} ${context.userData.firstName}`;
+	const userContext = useContext(UserContext);
+	const commentContext = useContext(CommentContext);
+	const fullName = `${userContext.userData.lastName} ${userContext.userData.firstName}`;
 	const navigate = useNavigate();
 
 	const generateRandomId = () => (Math.random() + 1).toString(36).substring(4).replace(/\d+/g, '');
 
 	const editChangePage = () => {
-		context.loadChangeData(data);
-		context.activateEditionRoute(true);
+		userContext.loadChangeData(data);
+		userContext.activateEditionRoute(true);
 		navigate('/changes/edit');
 	};
 
-	const button = (icon, idModal, title, body, actionFunction, closeText) => (
+	const button = (icon, idModal, title, body, actionFunction, closeText, comment) => (
 		<div className="option-container">
 			<Modal
 				id={idModal}
@@ -42,12 +44,13 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 				body={body}
 				actionFunction={actionFunction}
 				closeText={closeText}
+				comment={comment}
 			/>
 		</div>
 	);
 
 	const optionButtons = () => {
-		if (context.userData.superior) {
+		if (userContext.userData.superior) {
 			if (type === 'change' && data.status === 'Solicitado')
 				return (
 					<>
@@ -58,6 +61,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							`¿Aprobar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
 							() => modifyData(type, data._id, { previous: data.status, new: 'Aprobado' }),
 							'No',
+							true,
 						)}
 						{button(
 							<MdOutlineClose size={24} />,
@@ -66,6 +70,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							`¿No aprobar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
 							() => modifyData(type, data._id, { previous: data.status, new: 'No aprobado' }),
 							'No',
+							true,
 						)}
 					</>
 				);
@@ -79,6 +84,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							`¿Anular cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
 							() => modifyData(type, data._id, { previous: data.status, new: 'Anulado' }),
 							'No',
+							true,
 						)}
 					</>
 				);
@@ -92,11 +98,12 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							`¿Anular cambio de servicio para ${data.name}?`,
 							() => modifyData(type, data._id, null),
 							'No',
+							false,
 						)}
 					</>
 				);
 		}
-		if (!context.userData.superior) {
+		if (!userContext.userData.superior) {
 			if (type === 'change' && fullName === data.coverData.name && data.status === 'Solicitado')
 				return (
 					<>
@@ -112,6 +119,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							`¿Cancelar cambio con ${data.returnData.name}?`,
 							() => modifyData(type, data._id, { previous: data.status, new: 'Cancelado' }),
 							'No',
+							true,
 						)}
 					</>
 				);
@@ -125,6 +133,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							`¿Eliminar cambio con ${data.returnData.name}?`,
 							() => modifyData(type, data._id, null),
 							'No',
+							false,
 						)}
 					</>
 				);
@@ -138,6 +147,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							`¿Eliminar pedido de cambio para el ${data.requestData.date}?`,
 							() => modifyData(type, data._id, null),
 							'No',
+							false,
 						)}
 					</>
 				);
@@ -148,11 +158,11 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 	const modifyData = async (type, itemId, status) => {
 		// let url = '';
 		// let body = {};
-		// if (!context.userData.superior) {
+		// if (!userContext.userData.superior) {
 		// 	url = 'http://localhost:5000/api/changes/cancel';
 		// 	body.changeId = changeId;
 		// }
-		// if (context.userData.superior) {
+		// if (userContext.userData.superior) {
 		// url = 'http://localhost:5000/api/changes/modify';
 		// body.action = action;
 		// body.changeId = changeId;
@@ -162,13 +172,12 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/item/modify',
 				'POST',
-				JSON.stringify({ type, itemId, status }),
+				JSON.stringify({ type, itemId, status, comment: commentContext.comment }),
 				{
-					// authorization: `Bearer ${context.token}`,
+					authorization: `Bearer ${userContext.token}`,
 					'Content-type': 'application/json',
 				},
 			);
-			console.log(consult);
 			callbackFn(status, consult);
 		} catch (error) {
 			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
@@ -192,6 +201,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 						<Changelog log={data.changelog} />,
 						null,
 						'Cerrar',
+						false,
 					)}
 			</div>
 		</IconContext.Provider>

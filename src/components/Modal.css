@@ -82,6 +82,28 @@
 	padding-right: 8px;
 }
 
+.comment-modal {
+	display: flex;
+	align-items: center;
+	height: 40px;
+	/* width: 100%; */
+	margin: 5px 0 5px 0;
+	position: relative;
+	/* border: 1px solid rgba(0, 0, 0, 0.2); */
+}
+
+.comment-modal input {
+	height: 100%;
+	width: 100%;
+	outline: none;
+	border: none;
+	font-size: 16px;
+
+	/* font-weight: 400; */
+	/* border: 2px solid rgba(0, 0, 0, 0.2); */
+	/* transition: all 0.3s ease; */
+}
+
 @keyframes modalFadeIn {
 	from {
 		/* opacity: 0; */

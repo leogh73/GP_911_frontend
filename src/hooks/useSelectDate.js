@@ -4,7 +4,7 @@ import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useSelectDate = (sendDate, name) => {
-	const context = useContext(UserContext);
+	const userContext = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
 	const initialState = {
 		fetched: [],
@@ -96,7 +96,7 @@ const useSelectDate = (sendDate, name) => {
 				'POST',
 				JSON.stringify({ date: dateData.formattedDate }),
 				{
-					authorization: `Bearer ${context.token}`,
+					authorization: `Bearer ${userContext.token}`,
 					'Content-type': 'application/json',
 				},
 			);

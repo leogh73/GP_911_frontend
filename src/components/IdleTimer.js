@@ -4,7 +4,7 @@ import UserContext from '../context/UserContext';
 
 const IdleTimer = ({ token }) => {
 	const navigate = useNavigate();
-	const context = useContext(UserContext);
+	const userContext = useContext(UserContext);
 
 	useEffect(() => {
 		if (!token) {
@@ -17,7 +17,7 @@ const IdleTimer = ({ token }) => {
 				clearTimeout(timeout);
 			}
 			timeout = setTimeout(() => {
-				context.logout(true);
+				userContext.logout(true);
 				navigate('/');
 			}, 1000 * 300);
 		};
@@ -32,7 +32,7 @@ const IdleTimer = ({ token }) => {
 				window.removeEventListener('mousemove', restartAutoReset);
 			}
 		};
-	}, [context, token, navigate]);
+	}, [userContext, token, navigate]);
 
 	return <div />;
 };

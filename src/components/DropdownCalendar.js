@@ -7,7 +7,7 @@ import 'react-calendar/dist/Calendar.css';
 import SendNewContext from '../context/SendNewContext';
 
 const DropdownCalendar = ({ name, icon, titleValue, value, onChange }) => {
-	const context = useContext(SendNewContext);
+	const userContext = useContext(SendNewContext);
 
 	const toggleMenu = useCallback(() => {
 		document.getElementById(name).querySelector('.calendar-component').classList.toggle('active');
@@ -23,15 +23,15 @@ const DropdownCalendar = ({ name, icon, titleValue, value, onChange }) => {
 
 	useEffect(() => {
 		if (
-			!!context.openedMenu &&
-			context.openedMenu !== name &&
+			!!userContext.openedMenu &&
+			userContext.openedMenu !== name &&
 			document
 				.getElementById(name)
 				.querySelector('.calendar-component')
 				.classList.contains('active')
 		)
 			toggleMenu();
-	}, [context.openedMenu, name, toggleMenu]);
+	}, [userContext.openedMenu, name, toggleMenu]);
 
 	return (
 		<IconContext.Provider
@@ -42,7 +42,7 @@ const DropdownCalendar = ({ name, icon, titleValue, value, onChange }) => {
 					className="calendar-dropdown-button"
 					onClick={() => {
 						toggleMenu();
-						context.loadOpenedMenu(name);
+						userContext.loadOpenedMenu(name);
 					}}
 				>
 					<div className="calendar-icon">{icon}</div>

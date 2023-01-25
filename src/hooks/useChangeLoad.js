@@ -1,12 +1,15 @@
 import { useState, useCallback, useEffect, useContext, useReducer } from 'react';
 import { toast } from 'react-toastify';
+import CommentContext from '../context/CommentContext';
+import SendNewContext from '../context/SendNewContext';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useChangeLoad = (resultData, startData) => {
 	const [loadingSendChange, setLoadingSendData] = useState(false);
 	const [dataIsValid, setDataIsValid] = useState(false);
-	const context = useContext(UserContext);
+	const userContext = useContext(UserContext);
+	const commentContext = useContext(CommentContext);
 	const { httpRequestHandler } = useHttpConnection();
 
 	const initialState = startData
@@ -28,7 +31,7 @@ const useChangeLoad = (resultData, startData) => {
 		  }
 		: {
 				coverData: {
-					name: `${context.userData.lastName} ${context.userData.firstName}`,
+					name: `${userContext.userData.lastName} ${userContext.userData.firstName}`,
 					date: '-',
 					shift: '-',
 					day: '-',
@@ -143,7 +146,7 @@ const useChangeLoad = (resultData, startData) => {
 
 	const sendChangeData = async () => {
 		let headers = {
-			authorization: `Bearer ${context.token}`,
+			authorization: `Bearer ${userContext.token}`,
 			'Content-type': 'application/json',
 		};
 		let body = startData
@@ -158,6 +161,7 @@ const useChangeLoad = (resultData, startData) => {
 						new:
 							state.returnData.name !== startData.returnData.name ? state.returnData.name : null,
 					},
+					comment: commentContext.comment,
 			  }
 			: { type: 'change', coverData: state.coverData, returnData: state.returnData };
 		try {

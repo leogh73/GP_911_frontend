@@ -18,12 +18,12 @@ import UserContext from '../context/UserContext';
 import './NavBar.css';
 
 const NavBar = () => {
-	const context = useContext(UserContext);
+	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 	const location = useLocation();
 
 	const logout = () => {
-		context.logout(false);
+		userContext.logout(false);
 		navigate('/');
 	};
 
@@ -54,7 +54,7 @@ const NavBar = () => {
 		const burger = document.querySelector('.burger');
 		const navLinks = document.querySelector('.nav-links');
 		const layout = document.querySelector('.layout');
-		const userMenu = context.token ? document.querySelector('.user-toggle') : null;
+		const userMenu = userContext.token ? document.querySelector('.user-toggle') : null;
 		const navLinksList = document.querySelectorAll('.nav-links li');
 
 		const toggleNavBar = () => {
@@ -71,7 +71,7 @@ const NavBar = () => {
 			layout.classList.toggle('body-overlay');
 		};
 
-		if (context.token) {
+		if (userContext.token) {
 			burger.addEventListener('click', () => {
 				toggleNavBar();
 				if (userMenu.classList.contains('active')) userMenu.classList.toggle('active');
@@ -105,7 +105,7 @@ const NavBar = () => {
 		});
 
 		return () => {
-			if (context.token) {
+			if (userContext.token) {
 				userMenu.removeEventListener('click', () => {});
 				burger.removeEventListener('click', () => {
 					navLinks.classList.toggle('nav-links');
@@ -124,10 +124,10 @@ const NavBar = () => {
 				});
 			}
 		};
-	}, [context.token]);
+	}, [userContext.token]);
 
 	useEffect(() => {
-		if (context.token) {
+		if (userContext.token) {
 			const navLinksList = document.querySelectorAll('.nav-links li');
 			navLinksList.forEach((link) => {
 				if (link.classList.contains('clicked')) link.classList.remove('clicked');
@@ -136,7 +136,7 @@ const NavBar = () => {
 			let activeLink = document.getElementById(clickedUrl);
 			activeLink.classList.add('clicked');
 		}
-	}, [context.token, location.pathname]);
+	}, [userContext.token, location.pathname]);
 
 	const modeButton = () => (
 		<>
@@ -173,7 +173,7 @@ const NavBar = () => {
 				<div className="logo">
 					<h4>Guardias 911</h4>
 				</div>
-				{context.token ? (
+				{userContext.token ? (
 					<>
 						<ul className="nav-links" onClick={navLinksClickHandler}>
 							<li id={'/schedule'}>
@@ -186,7 +186,7 @@ const NavBar = () => {
 							</li>
 							<li id={'/changes'}>
 								<div className="link-container">
-									<Link to={!!context.activeTab ? context.activeTab : '/changes'}>
+									<Link to={!!userContext.activeTab ? userContext.activeTab : '/changes'}>
 										<FaList />
 										CAMBIOS
 									</Link>
@@ -200,7 +200,7 @@ const NavBar = () => {
 									</Link>
 								</div>
 							</li>
-							{context.userData.superior && (
+							{userContext.userData.superior && (
 								<li id={'/register'}>
 									<div className="link-container">
 										<Link to="/register">
@@ -222,7 +222,7 @@ const NavBar = () => {
 							<div className="user-menu">
 								<h3 className="user-header">
 									<FaUserCircle size={32} />
-									<div className="user-name">{`${context.userData.firstName} ${context.userData.lastName}`}</div>
+									<div className="user-name">{`${userContext.userData.firstName} ${userContext.userData.lastName}`}</div>
 								</h3>
 								<Link className="user-link" to="/changepassword">
 									<FaKey />

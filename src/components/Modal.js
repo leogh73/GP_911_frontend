@@ -1,9 +1,10 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import './Modal.css';
 import { IoMdClose } from 'react-icons/io';
 import Button from './Button';
 import { FaExclamationTriangle } from 'react-icons/fa';
 import Title from './Title';
+import CommentContext from '../context/CommentContext';
 
 const Modal = ({
 	id,
@@ -14,7 +15,10 @@ const Modal = ({
 	closeText,
 	closeFunction,
 	loginError,
+	comment,
 }) => {
+	const commentContext = useContext(CommentContext);
+
 	const openModal = useCallback(() => {
 		document.getElementById(id).classList.add('active');
 		document.getElementById(id).style.animation = 'bgFadeIn 0.4s ease forwards';
@@ -24,12 +28,17 @@ const Modal = ({
 
 	const closeModal = () => {
 		setTimeout(() => {
-			if (closeFunction != null) closeFunction();
+			if (closeFunction) closeFunction();
 			document.getElementById(id).classList.remove('active');
+			commentContext.loadComment('');
 		}, 300);
 		document.getElementById(id).querySelector('.modal-content').style.animation =
 			'modalFadeOut 0.4s ease forwards';
 		document.getElementById(id).style.animation = 'bgFadeOut 0.4s ease forwards';
+	};
+
+	const commentChangeHandler = (e) => {
+		commentContext.loadComment(e.target.value);
 	};
 
 	useEffect(() => {
@@ -77,6 +86,20 @@ const Modal = ({
 							<p className="modal-divider" />
 							<div className="modal-body">{body}</div>
 							<p className="modal-divider" />
+							{comment && (
+								<>
+									<div className="comment-modal">
+										<input
+											name={'comment-modal'}
+											id={`${id.slice(0, 4)}`}
+											onChange={commentChangeHandler}
+											value={commentContext.comment}
+											placeholder={'Comentario (opcional)'}
+										/>
+									</div>
+									<p className="modal-divider" />
+								</>
+							)}
 							<div className="modal-footer">
 								{actionFunction != null && (
 									<div className="modal-btn">

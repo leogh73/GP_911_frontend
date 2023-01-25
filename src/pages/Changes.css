@@ -1,10 +1,21 @@
-.loading-error {
+.spinner-container-change,
+.spinner-container-affected,
+.loading-error-change,
+.loading-error-affected {
 	display: flex;
-	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	min-height: 60vh;
-	min-width: 400px;
+}
+
+.spinner-container-change,
+.loading-error-change {
+	padding-bottom: 60px;
+	min-height: 71vh;
+}
+
+.spinner-container-affected,
+.loading-error-affected {
+	min-height: 79vh;
 }
 
 .changes-list {

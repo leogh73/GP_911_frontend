@@ -6,7 +6,7 @@ import useHttpConnection from './useHttpConnection';
 const useAffectedLoad = (sendResult) => {
 	const [loadingSendChange, setLoadingSendChange] = useState(false);
 	const [dataIsValid, setDataIsValid] = useState(false);
-	const context = useContext(UserContext);
+	const userContext = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
 
 	const initialState = {
@@ -96,7 +96,7 @@ const useAffectedLoad = (sendResult) => {
 					returnData: state.returnData,
 				}),
 				{
-					authorization: `Bearer ${context.token}`,
+					authorization: `Bearer ${userContext.token}`,
 					'Content-type': 'application/json',
 				},
 			);
