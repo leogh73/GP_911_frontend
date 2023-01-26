@@ -1,15 +1,8 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { toast } from 'react-toastify';
 import Modal from './Modal';
 import { IconContext } from 'react-icons';
-import {
-	MdDelete,
-	MdEdit,
-	MdHistory,
-	MdOutlineCancel,
-	MdOutlineCheck,
-	MdOutlineClose,
-} from 'react-icons/md';
+import { MdEdit, MdHistory, MdOutlineCheck, MdOutlineClose } from 'react-icons/md';
 import { CgUnavailable } from 'react-icons/cg';
 import { MdDeleteForever } from 'react-icons/md';
 import UserContext from '../context/UserContext';
@@ -104,10 +97,6 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 				);
 		}
 		if (!userContext.userData.superior) {
-			if (fullName === (data.coverData.date || data.returnData.name)) {
-				console.log(data.returnData.name);
-				console.log(fullName);
-			}
 			if (
 				type === 'change' &&
 				(fullName === data.coverData.name || fullName === data.returnData.name) &&
@@ -166,18 +155,6 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 	};
 
 	const modifyData = async (type, itemId, status) => {
-		// let url = '';
-		// let body = {};
-		// if (!userContext.userData.superior) {
-		// 	url = 'http://localhost:5000/api/changes/cancel';
-		// 	body.changeId = changeId;
-		// }
-		// if (userContext.userData.superior) {
-		// url = 'http://localhost:5000/api/changes/modify';
-		// body.action = action;
-		// body.changeId = changeId;
-		// }
-
 		try {
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/item/modify',

@@ -50,11 +50,16 @@ const ChangeLoad = ({ sendResult, startData }) => {
 		};
 	}, [userContext]);
 
+	console.log(state.coverData.name);
+	console.log(state.returnData.name);
+
 	return (
 		<SendNewContext.Provider
 			value={{
 				openedMenu,
 				loadOpenedMenu,
+				coverUser: state.coverData.name.length ? state.coverData.name : null,
+				returnUser: state.returnData.name.length ? state.returnData.name : null,
 			}}
 		>
 			<div className="new-change">

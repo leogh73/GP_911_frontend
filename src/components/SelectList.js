@@ -8,7 +8,7 @@ import Loading from './Loading';
 import './Dropdown.css';
 
 const SelectList = ({ name, type, icon, titleValue, sendSelectedItem, startData }) => {
-	const userContext = useContext(SendNewContext);
+	const sendNewContext = useContext(SendNewContext);
 	const { state, loadingUsers, loadItem, inputHandler } = useSelectList(
 		name,
 		type,
@@ -27,20 +27,22 @@ const SelectList = ({ name, type, icon, titleValue, sendSelectedItem, startData 
 
 	useEffect(() => {
 		if (
-			!!userContext.openedMenu &&
-			userContext.openedMenu !== name &&
+			!!sendNewContext.openedMenu &&
+			sendNewContext.openedMenu !== name &&
 			document.getElementById(name).querySelector('.dropdown-content').classList.contains('active')
 		)
 			toggleMenu();
-	}, [userContext.openedMenu, name, toggleMenu]);
+	}, [sendNewContext.openedMenu, name, toggleMenu]);
 
 	return (
 		<div id={name} className="dropdown-wrapper" tabIndex={1}>
 			<div
 				className="dropdown-button"
 				onClick={() => {
-					toggleMenu();
-					userContext.loadOpenedMenu(name);
+					if (!loadingUsers) {
+						toggleMenu();
+						sendNewContext.loadOpenedMenu(name);
+					}
 				}}
 			>
 				{icon && <div className="dropdown-icon">{icon}</div>}

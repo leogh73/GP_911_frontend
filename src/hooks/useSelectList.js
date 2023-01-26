@@ -1,11 +1,13 @@
 import { useState, useEffect, useContext, useReducer, useCallback } from 'react';
 import { toast } from 'react-toastify';
+import SendNewContext from '../context/SendNewContext';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useSelectList = (name, type, sendSelectedItem, startData) => {
 	const [loadingUsers, setLoadingUsers] = useState(false);
 	const userContext = useContext(UserContext);
+	const sendNewContext = useContext(SendNewContext);
 	const { httpRequestHandler } = useHttpConnection();
 
 	const initialState = {
@@ -20,7 +22,6 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 				return {
 					...state,
 					totalList: action.payload.items,
-					filterList: action.payload.filteredData,
 				};
 			case 'filter items':
 				return {
@@ -30,7 +31,6 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 			case 'load item':
 				return {
 					...state,
-					filterList: action.payload.filteredList,
 					selectedItem: action.payload.item,
 				};
 			default:
@@ -62,32 +62,54 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 		} else {
 			for (let i = 1; i <= 200; i++) data.push(i.toString().padStart(3, 0));
 		}
-		let filteredData = [...data];
-		!!startData
-			? filteredData.splice(
-					data.findIndex((user) => user === startData.name),
-					1,
-			  )
-			: filteredData.splice(
-					data.findIndex((user) => user === `${userContext.lastName} ${userContext.firstName}`),
-					1,
-			  );
+		// let filteredData = [...data];
+		// !!startData
+		// 	? filteredData.splice(
+		// 			data.findIndex((user) => user === startData.name),
+		// 			1,
+		// 	  )
+		// 	: filteredData.splice(
+		// 			data.findIndex((user) => user === `${userContext.lastName} ${userContext.firstName}`),
+		// 			1,
+		// 	  );
+		// let userArray = [];
+		// userArray.push(sendNewContext.returnUser);
+		// userArray.push(sendNewContext.coverUser);
+		// let newFilteredData = filteredData.filter((user) => !userArray.includes(user));
 		dispatch({
 			type: 'load start data',
-			payload: { items: data, filteredData },
+			payload: { items: data },
 		});
-	}, [
-		httpRequestHandler,
-		type,
-		startData,
-		userContext.token,
-		userContext.firstName,
-		userContext.lastName,
-	]);
+	}, [httpRequestHandler, type, userContext.token]);
 
 	useEffect(() => {
 		loadStartData();
 	}, [loadStartData]);
+
+	const filterList = useCallback(() => {
+		let userArray = [];
+		userArray.push(sendNewContext.coverUser);
+		userArray.push(sendNewContext.returnUser);
+		let filteredData = state.totalList.filter((user) => !userArray.includes(user));
+		dispatch({
+			type: 'filter items',
+			payload: { items: filteredData },
+		});
+	}, [sendNewContext.coverUser, sendNewContext.returnUser, state.totalList]);
+
+	useEffect(() => {
+		if (
+			(state.totalList.length && sendNewContext.coverUser.length) ||
+			(state.totalList.length && sendNewContext.returnUser.length)
+		)
+			console.log('LIST EFFECT!!');
+		filterList();
+	}, [
+		state.totalList.length,
+		sendNewContext.coverUser.length,
+		sendNewContext.returnUser.length,
+		filterList,
+	]);
 
 	const inputHandler = (value) => {
 		let result =
@@ -109,14 +131,14 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 	};
 
 	const loadItem = (item) => {
-		let filteredList = [...state.totalList];
-		filteredList.splice(
-			state.totalList.findIndex((user) => user === item),
-			1,
-		);
+		// let filteredList = [...state.totalList];
+		// filteredList.splice(
+		// 	state.totalList.findIndex((user) => user === item),
+		// 	1,
+		// );
 		dispatch({
 			type: 'load item',
-			payload: { item, filteredList },
+			payload: { item },
 		});
 		sendSelectedItem(item, name);
 	};
@@ -124,8 +146,8 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 	return {
 		state,
 		loadingUsers,
-		inputHandler,
 		loadItem,
+		inputHandler,
 	};
 };
 
