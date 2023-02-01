@@ -75,7 +75,9 @@ const useSelectDate = (sendDate, name) => {
 
 	const dateHandler = (date) => {
 		let selectedDate = new Date(date);
-		let formattedDate = `${selectedDate.getDate()}/${(selectedDate.getMonth() + 1)
+		let formattedDate = `${(selectedDate.getDate() + 1).toString().padStart(2, 0)}/${(
+			selectedDate.getMonth() + 1
+		)
 			.toString()
 			.padStart(2, 0)}/${selectedDate.getFullYear()}`;
 		let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'];

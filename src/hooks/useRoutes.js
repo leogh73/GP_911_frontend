@@ -7,6 +7,7 @@ import ChangeEdit from '../pages/ChangeEdit';
 import NewItem from '../pages/NewItem';
 import Changes from '../pages/Changes';
 import Affected from '../pages/Affected';
+import Schedule from '../pages/Schedule';
 
 const useRoutes = (token, userData) => {
 	const [activeEditRoute, setActiveEditRoute] = useState(false);
@@ -58,6 +59,11 @@ const useRoutes = (token, userData) => {
 				{activeEditRoute && <Route path="edit" element={<ChangeEdit changeData={changeData} />} />}
 			</Route>
 			<Route path="/affected" element={<Affected />} />
+			<Route path="/schedule" element={<Navigate to="/schedule/month" />} />
+			<Route path="/schedule">
+				<Route path="month" element={<Schedule type={'month'} />} />
+				<Route path="search" element={<Schedule type={'search'} />} />
+			</Route>
 			{userData.superior
 				? superiorRoutes.map((route) => (
 						<Route key={route.key} path={route.path} element={route.element} />

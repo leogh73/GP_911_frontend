@@ -1,18 +1,21 @@
 import { useContext, useEffect, useState } from 'react';
-import 'react-calendar/dist/Calendar.css';
 import { ToastContainer } from 'react-toastify';
 import { FaUser, FaExchangeAlt, FaEdit } from 'react-icons/fa';
+import { BiCommentDetail } from 'react-icons/bi';
+
+import 'react-calendar/dist/Calendar.css';
 import Modal from './Modal';
-import UserContext from '../context/UserContext';
 import Button from './Button';
 import SelectDate from './SelectDate';
 import SelectList from './SelectList';
 import Title from './Title';
+
 import useChangeLoad from '../hooks/useChangeLoad';
-import './ChangeLoad.css';
 import SendNewContext from '../context/SendNewContext';
-import { BiCommentDetail } from 'react-icons/bi';
 import CommentContext from '../context/CommentContext';
+import UserContext from '../context/UserContext';
+
+import './ChangeLoad.css';
 
 const ChangeLoad = ({ sendResult, startData }) => {
 	const userContext = useContext(UserContext);
@@ -21,6 +24,12 @@ const ChangeLoad = ({ sendResult, startData }) => {
 	const [showModal, setShowModal] = useState(false);
 	const { state, loadDate, loadUser, dataIsValid, loadingSendData, sendChangeData } =
 		useChangeLoad(sendResult, startData);
+	const creator =
+		!!startData &&
+		startData.coverData.name ===
+			`${userContext.userData.lastName} ${userContext.userData.firstName}`
+			? true
+			: false;
 
 	const loadOpenedMenu = (id) => setOpenedMenu(id);
 
@@ -44,14 +53,62 @@ const ChangeLoad = ({ sendResult, startData }) => {
 		</div>
 	);
 
-	useEffect(() => {
-		return () => {
-			userContext.activateEditionRoute();
-		};
-	}, [userContext]);
+	// useEffect(() => {
+	// 	return () => {
+	// 		userContext.activateEditionRoute();
+	// 	};
+	// }, [userContext]);
 
-	console.log(state.coverData.name);
-	console.log(state.returnData.name);
+	const userSelectOption = (type) => {
+		if (type === 'cover') {
+			if (startData) {
+				return creator ? (
+					<>
+						{changeSection(
+							'01',
+							<SelectList
+								name="cover"
+								type="users"
+								icon={<FaUser size={20} />}
+								titleValue="Quien cubre"
+								sendSelectedItem={loadUser}
+								startData={startData.coverData}
+							/>,
+						)}
+					</>
+				) : (
+					<>{changeSection('01', null, <FaUser />, 'Quien cubre', startData.coverData.name)}</>
+				);
+			} else {
+				return (
+					<>
+						{changeSection(
+							'01',
+							null,
+							<FaUser />,
+							'Quien cubre',
+							`${userContext.userData.lastName} ${userContext.userData.firstName}`,
+						)}
+					</>
+				);
+			}
+		} else
+			return (
+				<>
+					{changeSection(
+						'02',
+						<SelectList
+							name="return"
+							type="users"
+							icon={<FaUser size={20} />}
+							titleValue="Quien devuelve"
+							sendSelectedItem={loadUser}
+							startData={startData ? startData.returnData : null}
+						/>,
+					)}
+				</>
+			);
+	};
 
 	return (
 		<SendNewContext.Provider
@@ -70,25 +127,7 @@ const ChangeLoad = ({ sendResult, startData }) => {
 				)}
 				<div className="new-change-data">
 					<div className="user-change-section">
-						{startData
-							? changeSection(
-									'01',
-									<SelectList
-										name="cover"
-										type="users"
-										icon={<FaUser size={20} />}
-										titleValue="Quien cubre"
-										sendSelectedItem={loadUser}
-										startData={startData ? startData.coverData : null}
-									/>,
-							  )
-							: changeSection(
-									'01',
-									null,
-									<FaUser />,
-									'Quien cubre',
-									`${userContext.userData.lastName} ${userContext.userData.firstName}`,
-							  )}
+						{userSelectOption('cover')}
 						<SelectDate
 							name="cover"
 							titles={['Fecha a cubrir', 'Horario a cubrir', 'Día a cubrir', 'Guardia a cubrir']}
@@ -97,17 +136,7 @@ const ChangeLoad = ({ sendResult, startData }) => {
 						/>
 					</div>
 					<div className="user-change-section">
-						{changeSection(
-							'02',
-							<SelectList
-								name="return"
-								type="users"
-								icon={<FaUser size={20} />}
-								titleValue="Quien devuelve"
-								sendSelectedItem={loadUser}
-								startData={startData ? startData.returnData : null}
-							/>,
-						)}
+						{userSelectOption('return')}
 						<SelectDate
 							name="return"
 							titles={[

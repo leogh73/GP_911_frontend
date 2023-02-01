@@ -2,7 +2,7 @@ import React from 'react';
 import Button from './Button';
 import Title from './Title';
 
-import '../pages/Changes.css';
+import '../pages/Changes';
 
 const Message = ({ title, icon, body, buttonText, onClick }) => {
 	return (

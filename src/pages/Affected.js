@@ -8,7 +8,7 @@ import Table from '../components/Table';
 import UserContext from '../context/UserContext';
 import useHttpConnection from '../hooks/useHttpConnection';
 
-import './Changes.css';
+import '../pages/Changes';
 
 const Affected = () => {
 	const { httpRequestHandler } = useHttpConnection();

@@ -62,20 +62,6 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 		} else {
 			for (let i = 1; i <= 200; i++) data.push(i.toString().padStart(3, 0));
 		}
-		// let filteredData = [...data];
-		// !!startData
-		// 	? filteredData.splice(
-		// 			data.findIndex((user) => user === startData.name),
-		// 			1,
-		// 	  )
-		// 	: filteredData.splice(
-		// 			data.findIndex((user) => user === `${userContext.lastName} ${userContext.firstName}`),
-		// 			1,
-		// 	  );
-		// let userArray = [];
-		// userArray.push(sendNewContext.returnUser);
-		// userArray.push(sendNewContext.coverUser);
-		// let newFilteredData = filteredData.filter((user) => !userArray.includes(user));
 		dispatch({
 			type: 'load start data',
 			payload: { items: data },
@@ -102,8 +88,7 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 			(state.totalList.length && sendNewContext.coverUser.length) ||
 			(state.totalList.length && sendNewContext.returnUser.length)
 		)
-			console.log('LIST EFFECT!!');
-		filterList();
+			filterList();
 	}, [
 		state.totalList.length,
 		sendNewContext.coverUser.length,
@@ -131,11 +116,6 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 	};
 
 	const loadItem = (item) => {
-		// let filteredList = [...state.totalList];
-		// filteredList.splice(
-		// 	state.totalList.findIndex((user) => user === item),
-		// 	1,
-		// );
 		dispatch({
 			type: 'load item',
 			payload: { item },

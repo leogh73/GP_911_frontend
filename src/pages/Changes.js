@@ -27,6 +27,7 @@ const Changes = ({ type }) => {
 				JSON.stringify({ type }),
 				{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
 			);
+			console.log(consult);
 			if (consult.error) return setError(true);
 			setDataList(consult);
 		} catch (error) {
@@ -39,7 +40,10 @@ const Changes = ({ type }) => {
 
 	useEffect(() => {
 		fetchListItems();
-	}, [fetchListItems]);
+		return () => {
+			userContext.loadActiveTab(null);
+		};
+	}, [type]);
 
 	useEffect(() => {
 		let tabs = document.querySelectorAll('.tab');

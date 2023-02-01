@@ -35,6 +35,10 @@ const NavBar = () => {
 				return '/changes';
 			case '/changes/requested':
 				return '/changes';
+			case '/schedule/month':
+				return '/schedule';
+			case '/schedule/search':
+				return '/schedule';
 			case '/changes/edit':
 				return '/changes';
 			case '/newrequest':
@@ -178,7 +182,13 @@ const NavBar = () => {
 						<ul className="nav-links" onClick={navLinksClickHandler}>
 							<li id={'/schedule'}>
 								<div className="link-container">
-									<Link to="/schedule">
+									<Link
+										to={
+											!!userContext.activeTab && userContext.activeTab.startsWith('/schedule')
+												? userContext.activeTab
+												: '/schedule'
+										}
+									>
 										<FaRegCalendarAlt />
 										CRONOGRAMA
 									</Link>
@@ -186,7 +196,13 @@ const NavBar = () => {
 							</li>
 							<li id={'/changes'}>
 								<div className="link-container">
-									<Link to={!!userContext.activeTab ? userContext.activeTab : '/changes'}>
+									<Link
+										to={
+											!!userContext.activeTab && userContext.activeTab.startsWith('/changes')
+												? userContext.activeTab
+												: '/changes'
+										}
+									>
 										<FaList />
 										CAMBIOS
 									</Link>

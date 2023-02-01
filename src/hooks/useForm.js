@@ -59,16 +59,22 @@ const useForm = (pageName, sendUserForm) => {
 	}
 
 	const sendFormData = async (data) => {
-		setLoading(true);
-		let resultData = await httpRequestHandler(
-			`http://localhost:5000/api/user/${pageName}`,
-			'POST',
-			JSON.stringify(data),
-			{ 'Content-type': 'application/json' },
-		);
-		setLoading(false);
-		let validInputs = verifyField(resultData);
-		return { resultData, validInputs };
+		try {
+			setLoading(true);
+			let resultData = await httpRequestHandler(
+				`http://localhost:5000/api/user/${pageName}`,
+				'POST',
+				JSON.stringify(data),
+				{ 'Content-type': 'application/json' },
+			);
+			let validInputs = verifyField(resultData);
+			return { resultData, validInputs };
+		} catch (error) {
+			console.log(error.toString());
+			setLoginError(true);
+		} finally {
+			setLoading(false);
+		}
 	};
 
 	const validateData = (validateType, inputIndex, newInputs, value) => {
@@ -114,12 +120,11 @@ const useForm = (pageName, sendUserForm) => {
 		if (pageName === 'register') {
 			if (validateInputs.username) {
 				newInputs[0].errorMessage = 'El nombre de usuario ya está registrado.';
-				verification = false;
 			}
 			if (validateInputs.email) {
 				newInputs[6].errorMessage = 'El correo electrónico ya está registrado.';
-				verification = false;
 			}
+			verification = false;
 		}
 		if (pageName === 'login') {
 			if (validateInputs.usernameOrEmail || validateInputs.password) verification = false;
