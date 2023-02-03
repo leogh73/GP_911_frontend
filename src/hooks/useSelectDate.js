@@ -75,7 +75,7 @@ const useSelectDate = (sendDate, name) => {
 
 	const dateHandler = (date) => {
 		let selectedDate = new Date(date);
-		let formattedDate = `${(selectedDate.getDate() + 1).toString().padStart(2, 0)}/${(
+		let formattedDate = `${selectedDate.getDate().toString().padStart(2, 0)}/${(
 			selectedDate.getMonth() + 1
 		)
 			.toString()

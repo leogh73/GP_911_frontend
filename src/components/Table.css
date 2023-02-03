@@ -176,7 +176,12 @@ td,
 th {
 	padding: 8px;
 	border: 1px solid var(--search-text);
-	text-align: left;
+	/* text-align: left; */
+	font-size: 18px;
+}
+
+th .schedule {
+	text-align: center;
 	font-size: 18px;
 }
 
@@ -233,7 +238,7 @@ and also iPads specifically.
 	td {
 		/* Behave  like a "row" */
 		border: none;
-		border-bottom: 1px solid #eee;
+		/* border-bottom: 1px solid #eee; */
 		/* display: flex; */
 		/* flex-direction: row; */
 		/* align-content: center; */
@@ -258,8 +263,20 @@ and also iPads specifically.
 		padding-right: 10px;
 		width: 35%;
 	}
+}
 
-	.data-col {
-		width: 65%;
-	}
+tr td.row-data.past {
+	background-color: gray;
+}
+tr td.row-data.work {
+	background-color: steelblue;
+}
+tr td.row-data.work-change {
+	background-color: blue;
+}
+tr td.row-data.work-affected {
+	background-color: red;
+}
+tr td.row-data.off-affected {
+	background-color: greenyellow;
 }

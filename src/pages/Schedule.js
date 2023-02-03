@@ -3,6 +3,7 @@ import { FaExclamationTriangle } from 'react-icons/fa';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
+import ScheduleWeekTable from '../components/ScheduleWeekTable';
 import Table from '../components/Table';
 
 import UserContext from '../context/UserContext';
@@ -27,7 +28,6 @@ const Schedule = ({ type }) => {
 				null,
 				{ authorization: `Bearer ${userContext.token}` },
 			);
-			console.log(consult);
 			if (consult.error) return setError(true);
 			setDataList(consult);
 		} catch (error) {
@@ -36,11 +36,11 @@ const Schedule = ({ type }) => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, userContext]);
+	}, [httpRequestHandler, type, userContext.token]);
 
 	useEffect(() => {
 		fetchData();
-	}, [type]);
+	}, [fetchData, type]);
 
 	useEffect(() => {
 		let tabs = document.querySelectorAll('.tab');
@@ -66,6 +66,8 @@ const Schedule = ({ type }) => {
 	const monthId = '/schedule/month';
 	const searchId = '/schedule/search';
 
+	console.log(dataList);
+
 	return (
 		<div className="changes-list">
 			<div className="tabs-container" onClick={tabClickHandler}>
@@ -78,57 +80,29 @@ const Schedule = ({ type }) => {
 					</div>
 				</div>
 			</div>
-			{
-				error ? (
-					<div className="loading-error-change">
-						<Message
-							title={`Error cargando ${
-								userContext.activeTab === '/schedule/month' ? 'cronograma' : 'buscador'
-							}`}
-							icon={<FaExclamationTriangle />}
-							body={`No se pudieron cargar ${
-								userContext.activeTab === '/schedule/month' ? 'turnos' : 'datos de buscador'
-							}. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas.`}
-						/>
-					</div>
-				) : loading ? (
-					<div className="spinner-container-change">
-						<Loading type={'closed'} />
-					</div>
-				) : (
-					// userContext.activeTab === '/schedule/month' ? (
-					<Table
-						id={Math.random() * 10000}
-						headersList={[
-							{ key: 0, title: '#' },
-							{ key: 1, title: 'Personal' },
-							{ key: 2, title: 'Pedido' },
-							{ key: 3, title: 'Ofrecido' },
-						]}
-						rowType={'request'}
-						dataList={dataList}
-						newLink={'/newrequest'}
+			{error ? (
+				<div className="loading-error-change">
+					<Message
+						title={`Error cargando ${
+							userContext.activeTab === '/schedule/month' ? 'cronograma' : 'buscador'
+						}`}
+						icon={<FaExclamationTriangle />}
+						body={`No se pudieron cargar ${
+							userContext.activeTab === '/schedule/month' ? 'turnos' : 'datos de buscador'
+						}. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas.`}
 					/>
-				)
-				// )
-				// :
-				// (
-				// 	<Table
-				// 		id={Math.random() * 10000}
-				// 		headersList={[
-				// 			{ key: 0, title: '#' },
-				// 			{ key: 1, title: 'Quien cubre' },
-				// 			{ key: 2, title: 'A cubrir' },
-				// 			{ key: 3, title: 'Quien devuelve' },
-				// 			{ key: 4, title: 'A devolver' },
-				// 			{ key: 5, title: 'Estado' },
-				// 		]}
-				// 		rowType={'change'}
-				// 		dataList={dataList}
-				// 		newLink={'/newchange'}
-				// 	/>
-				// )
-			}
+				</div>
+			) : loading ? (
+				<div className="spinner-container-change">
+					<Loading type={'closed'} />
+				</div>
+			) : (
+				<>
+					{dataList.schedule.map((week) => (
+						<ScheduleWeekTable key={Math.random() * 1000} data={week} />
+					))}
+				</>
+			)}
 		</div>
 	);
 };

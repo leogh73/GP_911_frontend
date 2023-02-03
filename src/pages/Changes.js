@@ -36,14 +36,11 @@ const Changes = ({ type }) => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, type, userContext]);
+	}, [httpRequestHandler, type, userContext.token]);
 
 	useEffect(() => {
 		fetchListItems();
-		return () => {
-			userContext.loadActiveTab(null);
-		};
-	}, [type]);
+	}, [fetchListItems]);
 
 	useEffect(() => {
 		let tabs = document.querySelectorAll('.tab');
