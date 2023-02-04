@@ -97,11 +97,11 @@ const Schedule = ({ type }) => {
 					<Loading type={'closed'} />
 				</div>
 			) : (
-				<>
+				<div style={{ animation: 'bgFadeIn 0.6s ease' }}>
 					{dataList.schedule.map((week) => (
 						<ScheduleWeekTable key={Math.random() * 1000} data={week} />
 					))}
-				</>
+				</div>
 			)}
 		</div>
 	);
