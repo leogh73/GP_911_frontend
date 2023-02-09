@@ -127,7 +127,7 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 				</div>
 			</div>
 			{listData.filter.length ? (
-				<table>
+				<table className="table-change">
 					<thead>
 						<tr>
 							{headersList.map((h) => (

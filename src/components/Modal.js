@@ -50,7 +50,6 @@ const Modal = ({
 			<div style={{ maxWidth: '8.2em' }} onClick={openModal}>
 				{clickComponent}
 			</div>
-
 			<div
 				id={id}
 				className="modal-bg"

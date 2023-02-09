@@ -3,7 +3,7 @@ import { FaExclamationTriangle } from 'react-icons/fa';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
-import ScheduleWeekTable from '../components/ScheduleWeekTable';
+import ScheduleTable from '../components/ScheduleTable';
 import Table from '../components/Table';
 
 import UserContext from '../context/UserContext';
@@ -97,11 +97,20 @@ const Schedule = ({ type }) => {
 					<Loading type={'closed'} />
 				</div>
 			) : (
-				<div style={{ animation: 'bgFadeIn 0.6s ease' }}>
-					{dataList.schedule.map((week) => (
-						<ScheduleWeekTable key={Math.random() * 1000} data={week} />
-					))}
-				</div>
+				<>
+					<div style={{ animation: 'bgFadeIn 0.6s ease' }} className={'table-schedule-week'}>
+						{dataList.splittedSchedule.map((week) => (
+							<ScheduleTable key={Math.random() * 1000} splitted={true} data={week} />
+						))}
+					</div>
+					<div style={{ animation: 'bgFadeIn 0.6s ease' }} className={'table-schedule-full'}>
+						<ScheduleTable
+							key={Math.random() * 1000}
+							splitted={false}
+							data={dataList.fullSchedule}
+						/>
+					</div>
+				</>
 			)}
 		</div>
 	);
