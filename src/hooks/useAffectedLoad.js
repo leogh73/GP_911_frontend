@@ -10,6 +10,7 @@ const useAffectedLoad = (sendResult) => {
 	const { httpRequestHandler } = useHttpConnection();
 
 	const initialState = {
+		type: 'affected',
 		name: '-',
 		affectedData: {
 			date: '-',
@@ -73,7 +74,7 @@ const useAffectedLoad = (sendResult) => {
 		[dispatch],
 	);
 
-	const loadItem = (type, value) => {
+	const loadItem = (value, type) => {
 		type === 'users'
 			? dispatch({
 					type: 'load affected user',
@@ -89,12 +90,9 @@ const useAffectedLoad = (sendResult) => {
 		try {
 			setLoadingSendChange(true);
 			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/changes/new',
+				'http://localhost:5000/api/item/new',
 				'POST',
-				JSON.stringify({
-					coverData: state.coverData,
-					returnData: state.returnData,
-				}),
+				JSON.stringify(state),
 				{
 					authorization: `Bearer ${userContext.token}`,
 					'Content-type': 'application/json',

@@ -10,6 +10,7 @@ const useRequestLoad = (sendResult) => {
 	const { httpRequestHandler } = useHttpConnection();
 
 	const initialState = {
+		type: 'request',
 		name: `${userContext.userData.lastName} ${userContext.userData.firstName}`,
 		requestData: {
 			date: '-',
@@ -64,7 +65,7 @@ const useRequestLoad = (sendResult) => {
 		try {
 			setLoadingSendChange(true);
 			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/changes/new',
+				'http://localhost:5000/api/item/new',
 				'POST',
 				JSON.stringify(state),
 				{

@@ -25,6 +25,7 @@ const AffectedLoad = ({ sendResult }) => {
 			value={{
 				openedMenu,
 				loadOpenedMenu,
+				coverUser: state.name,
 			}}
 		>
 			<div className="new-change">
@@ -34,7 +35,7 @@ const AffectedLoad = ({ sendResult }) => {
 						<div className="user-section">
 							<div className="user-section-content">
 								<SelectList
-									name="affected"
+									name="cover"
 									type="users"
 									icon={<FaUser size={20} />}
 									titleValue="Personal"

@@ -87,19 +87,15 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 		if (
 			(state.totalList.length && sendNewContext.coverUser.length) ||
 			(state.totalList.length && sendNewContext.returnUser.length)
-		)
+		) {
 			filterList();
-	}, [
-		state.totalList.length,
-		sendNewContext.coverUser.length,
-		sendNewContext.returnUser.length,
-		filterList,
-	]);
+		}
+	}, [state.totalList, sendNewContext.coverUser, sendNewContext.returnUser, filterList]);
 
 	const inputHandler = (value) => {
 		let result =
 			type === 'users'
-				? state.filterList.filter((user) => {
+				? state.totalList.filter((user) => {
 						let formattedUser = user.split(' ').map((w) => w.toLowerCase());
 						let containsValue = false;
 						formattedUser.forEach((name) => {
@@ -107,7 +103,7 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 						});
 						return containsValue ? user : null;
 				  })
-				: state.filterList.filter((item) => parseInt(item, 10).toString().startsWith(value));
+				: state.totalList.filter((item) => parseInt(item, 10).toString().startsWith(value));
 		if (!result.length) result = ['No se encontraron resultados.'];
 		dispatch({
 			type: 'filter items',
@@ -120,7 +116,7 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 			type: 'load item',
 			payload: { item },
 		});
-		sendSelectedItem(item, name);
+		sendSelectedItem(item, type);
 	};
 
 	return {

@@ -2,10 +2,10 @@ import React, { useState, useContext } from 'react';
 import Modal from './Modal';
 // import './ScheduleTable.css';
 import UserContext from '../context/UserContext';
+import { FaUserAlt } from 'react-icons/fa';
 
 const ScheduleTable = ({ splitted, data }) => {
 	const [showModal, setShowModal] = useState(false);
-	const [shiftType, setShiftType] = useState('');
 	const [detailData, setDetailData] = useState();
 	const userContext = useContext(UserContext);
 
@@ -18,9 +18,6 @@ const ScheduleTable = ({ splitted, data }) => {
 	};
 
 	const shiftClickHandler = (s) => {
-		if (!s.type) setShiftType('Guardia habitual');
-		if (s.type === 'change') setShiftType('Cambio de guardia');
-		if (s.type === 'affected') setShiftType('Afectado');
 		setDetailData(s.detail);
 		setShowModal(true);
 	};
@@ -102,9 +99,18 @@ const ScheduleTable = ({ splitted, data }) => {
 			{showModal && (
 				<Modal
 					id={Math.random() * 10000}
-					title={shiftType}
+					title={'Detalle de guardia'}
 					body={
-						detailData ? detailData.toString() : 'No se han hecho cambios para el día seleccionado'
+						<>
+							{detailData.map((name) => (
+								<div className="data-container" key={name}>
+									<div className="icon-container">
+										<FaUserAlt />
+									</div>
+									{name}
+								</div>
+							))}
+						</>
 					}
 					closeText={'Cerrar'}
 					closeFunction={() => setShowModal(false)}

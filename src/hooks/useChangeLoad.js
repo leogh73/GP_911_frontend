@@ -30,6 +30,7 @@ const useChangeLoad = (resultData, startData) => {
 				},
 		  }
 		: {
+				type: 'change',
 				coverData: {
 					name: `${userContext.userData.lastName} ${userContext.userData.firstName}`,
 					date: '-',
@@ -163,7 +164,7 @@ const useChangeLoad = (resultData, startData) => {
 					},
 					comment: commentContext.comment,
 			  }
-			: { type: 'change', coverData: state.coverData, returnData: state.returnData };
+			: { coverData: state.coverData, returnData: state.returnData };
 		try {
 			setLoadingSendData(true);
 			let consult = startData

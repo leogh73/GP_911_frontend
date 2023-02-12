@@ -179,7 +179,7 @@ const ChangeLoad = ({ sendResult, startData }) => {
 						title={'Confirmar'}
 						body={
 							startData
-								? '¿Editar cambio? Si modifica el usuario que cubre, sólo ese usuario podrá volver a editarlo.'
+								? '¿Editar cambio? No podrá editarlo nuevamente.'
 								: `¿Enviar nuevo cambio con ${state.returnData.name}?`
 						}
 						closeText={'No'}

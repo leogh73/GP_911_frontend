@@ -96,7 +96,7 @@ const Schedule = ({ type }) => {
 				<div className="spinner-container-change">
 					<Loading type={'closed'} />
 				</div>
-			) : (
+			) : userContext.activeTab === '/schedule/month' ? (
 				<>
 					<div style={{ animation: 'bgFadeIn 0.6s ease' }} className={'table-schedule-week'}>
 						{dataList.splittedSchedule.map((week) => (
@@ -111,6 +111,8 @@ const Schedule = ({ type }) => {
 						/>
 					</div>
 				</>
+			) : (
+				<>{'BUSCADOR'}</>
 			)}
 		</div>
 	);
