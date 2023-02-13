@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react';
+import { Calendar } from 'react-calendar';
 import { FaExclamationTriangle } from 'react-icons/fa';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
@@ -6,10 +7,13 @@ import Message from '../components/Message';
 import ScheduleTable from '../components/ScheduleTable';
 import Table from '../components/Table';
 
+import './Schedule.css';
+
 import UserContext from '../context/UserContext';
 import useHttpConnection from '../hooks/useHttpConnection';
 
 import '../pages/Changes';
+import useSelectDate from '../hooks/useSelectDate';
 
 const Schedule = ({ type }) => {
 	const { httpRequestHandler } = useHttpConnection();
@@ -20,15 +24,34 @@ const Schedule = ({ type }) => {
 	const navigate = useNavigate();
 	const location = useLocation();
 
+	const dateHandler = (date) =>
+		`${date.getDate().toString().padStart(2, 0)}/${(date.getMonth() + 1)
+			.toString()
+			.padStart(2, 0)}/${date.getFullYear()}`;
+
+	let dateToday;
+	if (type === 'search') {
+		let today = new Date(Date.now());
+		dateToday = dateHandler(today);
+	}
+
+	const [selectedDate, setSelectedDate] = useState(dateToday);
+
 	const fetchData = useCallback(async () => {
 		try {
-			let consult = await httpRequestHandler(
-				`http://localhost:5000/api/spreadsheet/${type}`,
-				'GET',
-				null,
-				{ authorization: `Bearer ${userContext.token}` },
-			);
+			let consult =
+				type === 'month'
+					? await httpRequestHandler(`http://localhost:5000/api/spreadsheet/month`, 'GET', null, {
+							authorization: `Bearer ${userContext.token}`,
+					  })
+					: await httpRequestHandler(
+							`http://localhost:5000/api/spreadsheet/search`,
+							'POST',
+							JSON.stringify({ date: selectedDate }),
+							{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'Application/json' },
+					  );
 			if (consult.error) return setError(true);
+			console.log(consult);
 			setDataList(consult);
 		} catch (error) {
 			console.log(error);
@@ -36,11 +59,11 @@ const Schedule = ({ type }) => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, type, userContext.token]);
+	}, [httpRequestHandler, type, selectedDate, userContext.token]);
 
 	useEffect(() => {
 		fetchData();
-	}, [fetchData, type]);
+	}, [fetchData, type, selectedDate]);
 
 	useEffect(() => {
 		let tabs = document.querySelectorAll('.tab');
@@ -92,27 +115,39 @@ const Schedule = ({ type }) => {
 						}. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas.`}
 					/>
 				</div>
-			) : loading ? (
-				<div className="spinner-container-change">
-					<Loading type={'closed'} />
-				</div>
-			) : userContext.activeTab === '/schedule/month' ? (
-				<>
-					<div style={{ animation: 'bgFadeIn 0.6s ease' }} className={'table-schedule-week'}>
-						{dataList.splittedSchedule.map((week) => (
-							<ScheduleTable key={Math.random() * 1000} splitted={true} data={week} />
-						))}
-					</div>
-					<div style={{ animation: 'bgFadeIn 0.6s ease' }} className={'table-schedule-full'}>
-						<ScheduleTable
-							key={Math.random() * 1000}
-							splitted={false}
-							data={dataList.fullSchedule}
-						/>
-					</div>
-				</>
 			) : (
-				<>{'BUSCADOR'}</>
+				<>
+					{type === 'search' && (
+						<div className="schedule-calendar">
+							<Calendar
+								onChange={(date) => {
+									setLoading(true);
+									setSelectedDate(dateHandler(new Date(date)));
+								}}
+							/>
+						</div>
+					)}
+					{loading ? (
+						<div className="spinner-container-change">
+							<Loading type={'closed'} />
+						</div>
+					) : (
+						<>
+							<div style={{ animation: 'bgFadeIn 0.6s ease' }} className={'table-schedule-week'}>
+								{dataList.splittedSchedule.map((week) => (
+									<ScheduleTable key={Math.random() * 1000} splitted={true} data={week} />
+								))}
+							</div>
+							<div style={{ animation: 'bgFadeIn 0.6s ease' }} className={'table-schedule-full'}>
+								<ScheduleTable
+									key={Math.random() * 1000}
+									splitted={false}
+									data={dataList.fullSchedule}
+								/>
+							</div>
+						</>
+					)}
+				</>
 			)}
 		</div>
 	);

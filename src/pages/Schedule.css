@@ -1,0 +1,23 @@
+.schedule-calendar {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin: 20px;
+}
+
+.schedule-calendar .react-calendar {
+	width: 450px;
+}
+
+/* .schedule-calendar .react-calendar__navigation,
+.schedule-calendar .react-calendar__navigation, */
+.schedule-calendar .react-calendar__month-view__weekdays,
+.schedule-calendar .react-calendar__navigation {
+	height: 3em;
+	margin: 0;
+	align-items: center;
+}
+
+.schedule-calendar .react-calendar__month-view__days {
+	height: 15em;
+}
