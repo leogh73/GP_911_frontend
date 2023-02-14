@@ -17,8 +17,17 @@ const Form = ({
 	buttonText,
 	footer,
 }) => {
-	const { inputs, changeHandler, validateForm, formIsValid, loginError, setLoginError, loading } =
-		useForm(pageName, sendUserForm);
+	const {
+		inputs,
+		changeHandler,
+		validateForm,
+		formIsValid,
+		loading,
+		loginError,
+		setLoginError,
+		serverError,
+		setServerError,
+	} = useForm(pageName, sendUserForm);
 
 	// const spinnerBackground =
 	// 	localStorage.getItem('mode') === 'light-mode'
@@ -102,7 +111,17 @@ const Form = ({
 					body={'Usuario y/o contraseña incorrectos.'}
 					closeText={'Cerrar'}
 					closeFunction={() => setLoginError(false)}
-					loginError={loginError}
+					error={loginError}
+				/>
+			)}
+			{serverError && (
+				<Modal
+					id="login-error"
+					title={'Error'}
+					body={'Error de conexión al servidor.'}
+					closeText={'Cerrar'}
+					closeFunction={() => setServerError(false)}
+					error={serverError}
 				/>
 			)}
 		</div>

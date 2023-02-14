@@ -14,7 +14,7 @@ const Modal = ({
 	actionFunction,
 	closeText,
 	closeFunction,
-	loginError,
+	error,
 	comment,
 }) => {
 	const commentContext = useContext(CommentContext);
@@ -58,7 +58,7 @@ const Modal = ({
 				}}
 			>
 				<div className="modal-content">
-					{loginError ? (
+					{error ? (
 						<div
 							style={{
 								height: '210px',

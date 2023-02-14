@@ -12,6 +12,7 @@ const useForm = (pageName, sendUserForm) => {
 	const { httpRequestHandler } = useHttpConnection();
 	const [loading, setLoading] = useState(false);
 	const [loginError, setLoginError] = useState(false);
+	const [serverError, setServerError] = useState(false);
 	const storedUser = loadUser();
 	const [inputs, setInputs] = useState([]);
 	const [schema, setSchema] = useState();
@@ -59,22 +60,20 @@ const useForm = (pageName, sendUserForm) => {
 	}
 
 	const sendFormData = async (data) => {
-		try {
-			setLoading(true);
-			let resultData = await httpRequestHandler(
-				`http://localhost:5000/api/user/${pageName}`,
-				'POST',
-				JSON.stringify(data),
-				{ 'Content-type': 'application/json' },
-			);
-			let validInputs = verifyField(resultData);
-			return { resultData, validInputs };
-		} catch (error) {
-			console.log(error.toString());
-			setLoginError(true);
-		} finally {
-			setLoading(false);
+		setLoading(true);
+		let resultData = await httpRequestHandler(
+			`http://localhost:5000/api/user/${pageName}`,
+			'POST',
+			JSON.stringify(data),
+			{ 'Content-type': 'application/json' },
+		);
+		setLoading(false);
+		if (resultData.error) {
+			setServerError(true);
+			return resultData;
 		}
+		let validInputs = verifyField(resultData);
+		return { resultData, validInputs };
 	};
 
 	const validateData = (validateType, inputIndex, newInputs, value) => {
@@ -167,6 +166,8 @@ const useForm = (pageName, sendUserForm) => {
 		loading,
 		loginError,
 		setLoginError,
+		serverError,
+		setServerError,
 	};
 };
 
