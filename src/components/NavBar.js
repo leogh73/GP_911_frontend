@@ -138,7 +138,7 @@ const NavBar = () => {
 			});
 			let clickedUrl = getActiveLink(location.pathname);
 			let activeLink = document.getElementById(clickedUrl);
-			activeLink.classList.add('clicked');
+			if (!!activeLink) activeLink.classList.add('clicked');
 		}
 	}, [userContext.token, location.pathname]);
 

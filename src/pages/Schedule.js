@@ -49,6 +49,7 @@ const Schedule = ({ type }) => {
 					JSON.stringify({ date: selectedDate }),
 					{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'Application/json' },
 				);
+			console.log(consult);
 			if (consult.error) {
 				setError(true);
 			}

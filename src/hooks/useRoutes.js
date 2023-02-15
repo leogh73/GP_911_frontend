@@ -8,6 +8,7 @@ import NewItem from '../pages/NewItem';
 import Changes from '../pages/Changes';
 import Affected from '../pages/Affected';
 import Schedule from '../pages/Schedule';
+import ChangePassword from '../pages/ChangePassword';
 
 const useRoutes = (token, userData) => {
 	const [activeEditRoute, setActiveEditRoute] = useState(false);
@@ -58,7 +59,8 @@ const useRoutes = (token, userData) => {
 				<Route path="requested" element={<Changes type={'request'} />} />
 				{activeEditRoute && <Route path="edit" element={<ChangeEdit changeData={changeData} />} />}
 			</Route>
-			<Route path="/affected" element={<Affected />} />
+			<Route path="/affected" element={<Affected />} />{' '}
+			<Route path="/changepassword" element={<ChangePassword />} />
 			<Route path="/schedule" element={<Navigate to="/schedule/month" />} />
 			<Route path="/schedule">
 				<Route path="month" element={<Schedule type={'month'} />} />

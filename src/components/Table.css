@@ -313,6 +313,14 @@ tr td.row-data.past {
 	background-color: gray;
 }
 
+tr td.row-data.selected {
+	background-color: #006edc;
+}
+
+tr td.row-data.work-user {
+	background-color: var(--disabled-button);
+}
+
 tr td.row-data.work-user {
 	background-color: var(--disabled-button);
 }

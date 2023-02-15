@@ -10,8 +10,9 @@ const ScheduleTable = ({ splitted, data }) => {
 	const userContext = useContext(UserContext);
 
 	const shiftStatusClass = (s) => {
-		if (s.status === 'shift') return 'shift';
+		if (s.selected) return 'selected';
 		if (s.past) return 'past';
+		if (s.status === 'shift') return 'shift';
 		if (s.status === 'work' && !userContext.userData.superior) return 'work-user';
 		if (!s.past && userContext.userData.superior) return 'table-superior';
 		return '';
