@@ -62,7 +62,7 @@ const Login = () => {
 					<div className="form-footer">
 						<div className="separator" />
 						{/* <div className="form-group text-center"> */}
-						<Link className="text-center" to="forgot-password.html">
+						<Link className="text-center" to="/forgotpassword">
 							¿Olvidó su contraseña?
 						</Link>
 						{/* </div> */}

@@ -29,7 +29,9 @@ form {
 }
 
 .form.login,
-.form.register {
+.form.register,
+.form.change-password,
+.form.forgot-password {
 	padding: 25px;
 }
 

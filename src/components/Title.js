@@ -14,6 +14,7 @@ const Title = ({ text, icon }) => {
 					flexDirection: 'column',
 					alignItems: 'center',
 					justifyContent: 'center',
+					textAlign: 'center',
 				}}
 			>
 				{icon}

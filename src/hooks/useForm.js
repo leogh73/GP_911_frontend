@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import loginInputs from '../inputFields/LoginInputs';
+import passwordInputs from '../inputFields/PasswordInputs';
+import passwordSchema from '../schemas/PasswordForm';
 import loginSchema from '../schemas/LoginForm';
 import registerInputs from '../inputFields/RegisterInputs';
 import registerSchema from '../schemas/RegisterForm';
@@ -28,6 +30,14 @@ const useForm = (pageName, sendUserForm) => {
 			formInputs = loginInputs;
 			schema = loginSchema;
 			formInputs[0].value = storedUser ? storedUser : '';
+		}
+		if (pageName === 'change-password') {
+			formInputs = passwordInputs('change');
+			schema = passwordSchema('change');
+		}
+		if (pageName === 'forgot-password') {
+			formInputs = passwordInputs('forgot');
+			schema = passwordSchema('forgot');
 		}
 		setSchema(schema);
 		setInputs(formInputs);

@@ -315,6 +315,7 @@ tr td.row-data.past {
 
 tr td.row-data.selected {
 	background-color: #006edc;
+	color: white;
 }
 
 tr td.row-data.work-user {
