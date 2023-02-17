@@ -3,13 +3,14 @@ import Joi from 'joi';
 const schemaPassword = (type) =>
 	type === 'change'
 		? Joi.object({
-				oldPassword: Joi.string().min(3).required().messages({
+				currentPassword: Joi.string().min(3).required().messages({
 					'string.min': 'La contraseña debe ser de al menos 3 caracteres.',
 					'string.empty': 'Ingrese su actual contraseña.',
 				}),
-				newPassword: Joi.any().valid(Joi.ref('password')).required().messages({
+				newPassword: Joi.string().invalid(Joi.ref('currentPassword')).min(3).required().messages({
 					'string.min': 'La contraseña debe ser de al menos 3 caracteres.',
 					'string.empty': 'Ingrese una nueva contraseña.',
+					'any.invalid': 'La nueva contraseña es igual a la anterior.',
 				}),
 				repeatNewPassword: Joi.any().valid(Joi.ref('newPassword')).required().messages({
 					'any.only': 'La contraseña no coincide.',
@@ -22,6 +23,7 @@ const schemaPassword = (type) =>
 					.messages({
 						'string.email': 'El correo electrónico ingresado es inválido.',
 						'string.empty': 'Ingrese su correo electrónico.',
+						'any.required': '',
 					}),
 		  });
 

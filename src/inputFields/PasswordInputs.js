@@ -4,8 +4,8 @@ const passwordInputs = (type) => {
 	return type === 'change'
 		? [
 				{
-					key: 7,
-					name: 'oldPassword',
+					key: 1,
+					name: 'currentPassword',
 					optionsList: [],
 					password: true,
 					icon: <FaKey />,
@@ -14,7 +14,7 @@ const passwordInputs = (type) => {
 					placeHolder: 'Contraseña actual',
 				},
 				{
-					key: 7,
+					key: 2,
 					name: 'newPassword',
 					optionsList: [],
 					password: true,
@@ -24,7 +24,7 @@ const passwordInputs = (type) => {
 					placeHolder: 'Nueva contraseña',
 				},
 				{
-					key: 8,
+					key: 3,
 					name: 'repeatNewPassword',
 					optionsList: [],
 					password: true,

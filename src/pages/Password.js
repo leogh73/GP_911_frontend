@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
 import Form from '../components/Form';
 import { FaUserCheck, FaUserCircle, FaUserLock, FaUserTimes } from 'react-icons/fa';
@@ -7,14 +7,16 @@ import { FaUserCheck, FaUserCircle, FaUserLock, FaUserTimes } from 'react-icons/
 const Password = ({ type }) => {
 	const [success, setSuccess] = useState();
 	const [error, setError] = useState();
+	const navigate = useNavigate();
 
-	const registerResult = (result) => {
-		result.userId ? setSuccess(true) : setError(true);
+	const processResult = (result) => {
+		result._id ? setSuccess(true) : setError(true);
 	};
 
 	const goBack = () => {
 		setError(false);
 		setSuccess(false);
+		navigate('/');
 	};
 
 	return error ? (
@@ -23,7 +25,7 @@ const Password = ({ type }) => {
 			icon={<FaUserTimes />}
 			body={`No se pudo completar el proceso de ${
 				type === 'change' ? 'cambio de contraseña.' : 'recuperación contraseña. '
-			} Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas.`}
+			} Intente nuevamente más tarde. Si el problema persiste,o cntacte al administrador. Disculpe las molestias ocasionadas.`}
 			buttonText="VOLVER"
 			onClick={goBack}
 		/>
@@ -41,7 +43,7 @@ const Password = ({ type }) => {
 		/>
 	) : (
 		<Form
-			sendUserForm={registerResult}
+			sendUserForm={processResult}
 			formTitle={type === 'change' ? 'Cambio de contraseña' : 'Recuperación de contraseña'}
 			icon={<FaUserLock />}
 			rememberMe=""

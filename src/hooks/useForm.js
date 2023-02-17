@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import loginInputs from '../inputFields/LoginInputs';
 import passwordInputs from '../inputFields/PasswordInputs';
 import passwordSchema from '../schemas/PasswordForm';
@@ -7,6 +7,7 @@ import registerInputs from '../inputFields/RegisterInputs';
 import registerSchema from '../schemas/RegisterForm';
 import useHttpConnection from './useHttpConnection';
 import useRememberMe from './useRememberMe';
+import UserContext from '../context/UserContext';
 
 const useForm = (pageName, sendUserForm) => {
 	const { loadUser } = useRememberMe();
@@ -15,6 +16,7 @@ const useForm = (pageName, sendUserForm) => {
 	const [loading, setLoading] = useState(false);
 	const [loginError, setLoginError] = useState(false);
 	const [serverError, setServerError] = useState(false);
+	const userContext = useContext(UserContext);
 	const storedUser = loadUser();
 	const [inputs, setInputs] = useState([]);
 	const [schema, setSchema] = useState();
@@ -66,6 +68,18 @@ const useForm = (pageName, sendUserForm) => {
 				password: inputs[1].value,
 			};
 		}
+		if (pageName === 'change-password') {
+			registeredData = {
+				currentPassword: inputs[0].value,
+				newPassword: inputs[1].value,
+				repeatNewPassword: inputs[2].value,
+			};
+		}
+		if (pageName === 'forgot-password') {
+			registeredData = {
+				email: inputs[0].value,
+			};
+		}
 		return registeredData;
 	}
 
@@ -75,10 +89,11 @@ const useForm = (pageName, sendUserForm) => {
 			`http://localhost:5000/api/user/${pageName}`,
 			'POST',
 			JSON.stringify(data),
-			{ 'Content-type': 'application/json' },
+			{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
 		);
 		setLoading(false);
-		if (resultData.error) {
+		console.log(resultData);
+		if (resultData.error && pageName === 'login') {
 			setServerError(true);
 			return resultData;
 		}
@@ -94,6 +109,8 @@ const useForm = (pageName, sendUserForm) => {
 
 		if (joiValidation.error) {
 			formIsValid = false;
+
+			console.log(joiValidation.error.details);
 
 			const searchErrorIndex = (name) =>
 				joiValidation.error.details.findIndex((error) => error.context.label === name);

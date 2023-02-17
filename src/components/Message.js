@@ -7,14 +7,16 @@ import '../pages/Changes';
 const Message = ({ title, icon, body, buttonText, onClick }) => {
 	return (
 		<div
+			className="new-form"
 			style={{
+				padding: '35px',
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
 				justifyContent: 'space-evenly',
 				minHeight: '250px',
 				minWidth: '400px',
-				maxWidth: '850px',
+				maxWidth: '600px',
 				animation: 'bgFadeIn 0.6s ease',
 			}}
 		>
