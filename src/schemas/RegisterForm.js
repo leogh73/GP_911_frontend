@@ -22,7 +22,7 @@ const schemaRegister = Joi.object({
 		'number.min': 'El NI deben ser al menos 6 números.',
 		'number.base': 'Ingrese su NI.',
 	}),
-	section: Joi.string().valid('Monitoreo', 'Teléfono').required().messages({
+	section: Joi.string().valid('Monitoreo', 'Teléfono', 'Despacho').required().messages({
 		'any.only': 'Seleccione una sección.',
 		'string.empty': 'Seleccione una sección.',
 	}),

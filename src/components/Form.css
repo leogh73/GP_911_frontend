@@ -32,7 +32,7 @@ form {
 .form.register,
 .form.change-password,
 .form.forgot-password {
-	padding: 25px;
+	padding: 20px;
 }
 
 .form.register {

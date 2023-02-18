@@ -25,7 +25,7 @@ const useForm = (pageName, sendUserForm) => {
 		let schema;
 		let formInputs = [];
 		if (pageName === 'register') {
-			formInputs = registerInputs;
+			formInputs = registerInputs(userContext.userData.admin);
 			schema = registerSchema;
 		}
 		if (pageName === 'login') {

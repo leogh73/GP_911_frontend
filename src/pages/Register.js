@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Message from '../components/Message';
 import Form from '../components/Form';
-import { FaUserCheck, FaUserCircle, FaUserTimes } from 'react-icons/fa';
+import { FaUserCheck, FaUserCircle, FaUserPlus, FaUserTimes } from 'react-icons/fa';
 
 const Register = () => {
 	const [success, setSuccess] = useState();
@@ -37,18 +37,10 @@ const Register = () => {
 		<Form
 			sendUserForm={registerResult}
 			formTitle="Registro de usuario"
-			icon={<FaUserCircle />}
+			icon={<FaUserPlus />}
 			rememberMe=""
-			buttonText="REGISTRARME"
+			buttonText="REGISTRAR"
 			pageName="register"
-			footer={
-				<div className="form-footer">
-					<div className="separator" />
-					<p className="text-center">
-						¿Ya es usuario? <Link to="/iniciarsesion">Iniciar sesión</Link>
-					</p>
-				</div>
-			}
 		/>
 	);
 };

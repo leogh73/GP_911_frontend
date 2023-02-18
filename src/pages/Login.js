@@ -13,8 +13,8 @@ const Login = () => {
 	const userContext = useContext(UserContext);
 
 	const loginResult = (result, usernameOrPassword) => {
-		const { token, firstName, lastName, guardId, superior } = result;
-		userContext.login(token, firstName, lastName, guardId, superior);
+		const { token, firstName, lastName, guardId, superior, admin } = result;
+		userContext.login(token, firstName, lastName, guardId, superior, admin);
 		rememberUser(usernameOrPassword, rememberMe.current);
 	};
 
@@ -61,16 +61,9 @@ const Login = () => {
 				footer={
 					<div className="form-footer">
 						<div className="separator" />
-						{/* <div className="form-group text-center"> */}
 						<Link className="text-center" to="/forgotpassword">
 							¿Olvidó su contraseña?
 						</Link>
-						{/* </div> */}
-						{/* <div className="form-group">
-						<p className="text-center">
-							¿No es usuario? <Link to="/registro">Regístrese</Link>
-						</p>
-					</div> */}
 					</div>
 				}
 			/>

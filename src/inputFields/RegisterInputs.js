@@ -1,6 +1,6 @@
 import { FaUsers, FaUser, FaIdCard, FaBuilding, FaEnvelope, FaKey } from 'react-icons/fa';
 
-const registerInputs = [
+const inputs = [
 	{
 		key: 0,
 		name: 'name',
@@ -41,16 +41,7 @@ const registerInputs = [
 		value: '',
 		placeHolder: 'NI',
 	},
-	{
-		key: 4,
-		name: 'section',
-		optionsList: ['Teléfonía', 'Monitoreo'],
-		password: false,
-		icon: <FaBuilding />,
-		errorMessage: '',
-		value: '',
-		placeHolder: 'Sección',
-	},
+
 	{
 		key: 5,
 		name: 'guard',
@@ -92,5 +83,19 @@ const registerInputs = [
 		placeHolder: 'Repetir contraseña',
 	},
 ];
+
+const registerInputs = (admin) =>
+	admin
+		? inputs.splice(4, 0, {
+				key: 4,
+				name: 'section',
+				optionsList: ['Teléfonía', 'Monitoreo', 'Despacho'],
+				password: false,
+				icon: <FaBuilding />,
+				errorMessage: '',
+				value: '',
+				placeHolder: 'Sección',
+		  })
+		: inputs;
 
 export default registerInputs;

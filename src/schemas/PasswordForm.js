@@ -10,7 +10,7 @@ const schemaPassword = (type) =>
 				newPassword: Joi.string().invalid(Joi.ref('currentPassword')).min(3).required().messages({
 					'string.min': 'La contraseña debe ser de al menos 3 caracteres.',
 					'string.empty': 'Ingrese una nueva contraseña.',
-					'any.invalid': 'La nueva contraseña es igual a la anterior.',
+					'any.invalid': 'La nueva contraseña no puede ser igual a la anterior.',
 				}),
 				repeatNewPassword: Joi.any().valid(Joi.ref('newPassword')).required().messages({
 					'any.only': 'La contraseña no coincide.',

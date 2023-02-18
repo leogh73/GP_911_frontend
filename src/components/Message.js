@@ -7,9 +7,8 @@ import '../pages/Changes';
 const Message = ({ title, icon, body, buttonText, onClick }) => {
 	return (
 		<div
-			className="new-form"
 			style={{
-				padding: '35px',
+				padding: '20px',
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',

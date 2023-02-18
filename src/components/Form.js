@@ -5,7 +5,8 @@ import Title from './Title';
 import useForm from '../hooks/useForm';
 import './Form.css';
 import Modal from './Modal';
-import Loading from './Loading';
+import UserContext from '../context/UserContext';
+import { useContext } from 'react';
 
 const Form = ({
 	sendUserForm,
@@ -29,10 +30,8 @@ const Form = ({
 		setServerError,
 	} = useForm(pageName, sendUserForm);
 
-	// const spinnerBackground =
-	// 	localStorage.getItem('mode') === 'light-mode'
-	// 		? 'rgba(255, 255, 255, 0.4)'
-	// 		: 'rgba(204, 205, 206, 0.4)';
+	const userContext = useContext(UserContext);
+	const formIndex = !!userContext.userData && userContext.userData.admin ? 5 : 4;
 
 	return (
 		<div className="new-form">
@@ -53,7 +52,7 @@ const Form = ({
 						<div className="inputs-group">
 							{inputs.map(
 								(f, i) =>
-									i <= 4 && (
+									i < formIndex && (
 										<InputField
 											key={f.key}
 											showTitle={inputTitle}
@@ -72,7 +71,7 @@ const Form = ({
 						<div className="inputs-group">
 							{inputs.map(
 								(f, i) =>
-									i >= 5 && (
+									i >= formIndex && (
 										<InputField
 											key={f.key}
 											showTitle={inputTitle}

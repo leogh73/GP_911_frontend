@@ -9,6 +9,7 @@ import Changes from '../pages/Changes';
 import Affected from '../pages/Affected';
 import Schedule from '../pages/Schedule';
 import Password from '../pages/Password';
+import Users from '../pages/Users';
 
 const useRoutes = (token, userData) => {
 	const [activeEditRoute, setActiveEditRoute] = useState(false);
@@ -27,16 +28,24 @@ const useRoutes = (token, userData) => {
 		setActiveTab(type);
 	};
 
+	const adminRoutes = [
+		{ key: '03', path: '/register', element: <Register /> },
+		{
+			key: '04',
+			path: '/users',
+			element: <Navigate to="/users/phoning" />,
+		},
+	];
+
 	const superiorRoutes = [
 		{ key: '01', path: '/register', element: <Register /> },
 		{
 			key: '02',
 			path: '/newaffected',
 			element: <NewItem type={'affected'} key={'newaffected'} />,
-			// element: <ChangeNew type={'affected'} icon={<FaUserClock />} title={'Nuevo afectado'} />,
-			// element: <ChangeNew type={'affected'} icon={<FaUserClock />} title={'Nuevo afectado'} />,
 		},
 	];
+
 	const userRoutes = [
 		{
 			key: '01',
@@ -49,6 +58,8 @@ const useRoutes = (token, userData) => {
 			element: <NewItem type={'request'} key={'newrequest'} />,
 		},
 	];
+
+	if (!!userData && userData.admin) adminRoutes.forEach((route) => userRoutes.push(route));
 
 	const routes = token ? (
 		<Routes>
@@ -73,6 +84,16 @@ const useRoutes = (token, userData) => {
 				: userRoutes.map((route) => (
 						<Route key={route.key} path={route.path} element={route.element} />
 				  ))}
+			{userData.admin && (
+				<Route path="/users">
+					<Route path="phoning" element={<Users type={'change'} />} />
+					<Route path="dispatch" element={<Users type={'request'} />} />{' '}
+					<Route path="monitoring" element={<Users type={'request'} />} />
+					{/* {activeEditRoute && (
+						<Route path="edit" element={<ChangeEdit changeData={changeData} />} />
+					)} */}
+				</Route>
+			)}
 			<Route path="*" element={<NotFound />} />
 		</Routes>
 	) : (

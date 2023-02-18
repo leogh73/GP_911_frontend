@@ -164,7 +164,7 @@ const useChangeLoad = (resultData, startData) => {
 					},
 					comment: commentContext.comment,
 			  }
-			: { coverData: state.coverData, returnData: state.returnData };
+			: { coverData: state.coverData, returnData: state.returnData, type: 'change' };
 		try {
 			setLoadingSendData(true);
 			let consult = startData

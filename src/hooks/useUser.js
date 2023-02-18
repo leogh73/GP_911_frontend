@@ -13,7 +13,7 @@ const useUser = () => {
 
 	// const navigate = useNavigate();
 
-	const storeUser = (firstName, lastName, guardId, superior) => {
+	const storeUser = (firstName, lastName, guardId, superior, admin) => {
 		localStorage.setItem(
 			'userData',
 			JSON.stringify({
@@ -21,6 +21,7 @@ const useUser = () => {
 				lastName,
 				guardId,
 				superior,
+				admin,
 			}),
 		);
 	};
@@ -37,13 +38,13 @@ const useUser = () => {
 	};
 
 	const login = useCallback(
-		(token, firstName, lastName, guardId, superior, expirationTokenTime) => {
+		(token, firstName, lastName, guardId, superior, admin, expirationTokenTime) => {
 			setToken(token);
-			setUserData({ firstName, lastName, guardId, superior });
+			setUserData({ firstName, lastName, guardId, superior, admin });
 			const expirationDateToken =
 				expirationTokenTime || new Date(new Date().getTime() + 1000 * 60 * 59);
 			// setExpirationTokenTime(expirationDateToken);
-			storeUser(firstName, lastName, guardId, superior);
+			storeUser(firstName, lastName, guardId, superior, admin);
 			storeToken(false, token, expirationDateToken);
 		},
 		[],
@@ -103,6 +104,7 @@ const useUser = () => {
 				storedUserData.lastName,
 				storedUserData.guardId,
 				storedUserData.superior,
+				storedUserData.admin,
 				new Date(storedTokenData.expirationDate),
 			);
 		}

@@ -11,6 +11,7 @@ import {
 	FaUserCircle,
 	FaKey,
 	FaSignOutAlt,
+	FaUsers,
 } from 'react-icons/fa';
 import { IoMdClose } from 'react-icons/io';
 import { FiSun, FiMoon } from 'react-icons/fi';
@@ -49,6 +50,14 @@ const NavBar = () => {
 				return '/affected';
 			case '/newaffected':
 				return '/affected';
+			case '/users':
+				return '/users';
+			case '/users/phoning':
+				return '/users';
+			case '/users/dispatch':
+				return '/users';
+			case '/users/monitoring':
+				return '/users';
 			default:
 				return path;
 		}
@@ -167,6 +176,8 @@ const NavBar = () => {
 		}
 	};
 
+	console.log(userContext.userData);
+
 	return (
 		<IconContext.Provider
 			value={{
@@ -222,6 +233,16 @@ const NavBar = () => {
 										<Link to="/register">
 											<FaUserPlus />
 											NUEVO USUARIO
+										</Link>
+									</div>
+								</li>
+							)}
+							{userContext.userData.admin && (
+								<li id={'/users'}>
+									<div className="link-container">
+										<Link to="/users">
+											<FaUsers />
+											USUARIOS
 										</Link>
 									</div>
 								</li>
