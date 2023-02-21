@@ -86,25 +86,32 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 		dispatch({ payload: { type: 'searchInput', list: rowType, value: e.target.value } });
 	};
 
-	return (
-		<div id={id} style={{ animation: 'bgFadeIn 0.6s ease' }}>
-			<div className="changes-filters">
-				{rowType !== 'affected' && !userContext.userData.superior ? (
-					<Button text={'NUEVO CAMBIO'} width={170} onClick={() => navigate(newLink)} />
-				) : rowType === 'affected' && userContext.userData.superior ? (
-					<Button text={'NUEVO CAMBIO'} width={170} onClick={() => navigate(newLink)} />
-				) : null}
-				{!userContext.userData.superior && (
+	const typeContent = () => {
+		let content = {};
+		if (
+			(!userContext.userData.superior && (rowType === 'change' || rowType === 'request')) ||
+			(rowType === 'affected' && userContext.userData.superior) ||
+			(rowType === 'user' && (userContext.userData.superior || userContext.userData.admin))
+		) {
+			content.newButton = (
+				<Button
+					text={`NUEVO ${rowType === 'user' ? 'USUARIO' : 'CAMBIO'}`}
+					width={170}
+					onClick={() => navigate(newLink)}
+				/>
+			);
+			content.radioButtons =
+				rowType === 'affected' && userContext.userData.superior ? null : (
 					<div className="radio-buttons">
 						<div className="changes-filter" value="Todos" name="todos" onClick={radioClickHandler}>
 							<input
 								type="radio"
 								className="changes-radio-icon"
-								value="Todos"
+								value={`${rowType === 'user' ? 'Subalternos' : 'Todos'}`}
 								name={id}
 								defaultChecked={true}
 							/>
-							Todos
+							{`${rowType === 'user' ? 'Subalternos' : 'Todos'}`}
 						</div>
 						<div
 							className="changes-filter"
@@ -112,12 +119,25 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 							name="propios"
 							onClick={radioClickHandler}
 						>
-							<input type="radio" className="changes-radio-icon" value="Propios" name={id} />
-							Propios
+							<input
+								type="radio"
+								className="changes-radio-icon"
+								value={`${rowType === 'user' ? 'Superiores' : 'Propios'}`}
+								name={id}
+							/>
+							{`${rowType === 'user' ? 'Superiores' : 'Propios'}`}
 						</div>
 					</div>
-				)}
+				);
+		}
+		return content;
+	};
 
+	return (
+		<div id={id} style={{ animation: 'bgFadeIn 0.6s ease' }}>
+			<div className="changes-filters">
+				{typeContent().newButton}
+				{typeContent().radioButtons}
 				<div className="changes-search-box">
 					<div className="changes-search-icon">
 						<GrSearch />

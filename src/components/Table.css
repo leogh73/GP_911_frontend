@@ -11,8 +11,8 @@
 
 .changes-filter {
 	/* padding: 5px; */
-	width: 80px;
-	margin: 15px;
+	/* width: 100px; */
+	margin: 10px;
 	display: flex;
 	flex-direction: row;
 	justify-content: flex-start;
@@ -89,7 +89,7 @@ tr td.row-data.shift {
 	cursor: auto;
 }
 
-@media only screen and (max-width: 667px) {
+@media only screen and (max-width: 777px) {
 	td {
 		display: inline-block;
 	}
@@ -98,7 +98,7 @@ tr td.row-data.shift {
 	}
 	.changes-filters {
 		flex-direction: column;
-		margin: 10px;
+		margin-right: 10px;
 	}
 
 	.changes-search-box {

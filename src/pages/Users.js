@@ -10,7 +10,7 @@ import useHttpConnection from '../hooks/useHttpConnection';
 
 import './Changes.css';
 
-const Users = ({ type }) => {
+const Users = ({ section }) => {
 	const { httpRequestHandler } = useHttpConnection();
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
@@ -22,9 +22,9 @@ const Users = ({ type }) => {
 	const fetchListItems = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/item/all',
+				'http://localhost:5000/api/user/allusers',
 				'POST',
-				JSON.stringify({ type }),
+				JSON.stringify({ section }),
 				{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
 			);
 			console.log(consult);
@@ -36,7 +36,7 @@ const Users = ({ type }) => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, type, userContext.token]);
+	}, [httpRequestHandler, section, userContext.token]);
 
 	useEffect(() => {
 		fetchListItems();
@@ -87,8 +87,7 @@ const Users = ({ type }) => {
 			{error ? (
 				<div className="loading-error-change">
 					<Message
-						title={`Error cargando usuarios'
-						}`}
+						title={'Error cargando usuarios'}
 						icon={<FaExclamationTriangle />}
 						body={'No se pudieron cargar usuarios. Intente nuevamente más tarde.'}
 					/>
@@ -101,16 +100,17 @@ const Users = ({ type }) => {
 				<Table
 					id={Math.random() * 10000}
 					headersList={[
-						{ key: 0, title: '#' },
-						{ key: 1, title: 'Quien cubre' },
-						{ key: 2, title: 'A cubrir' },
-						{ key: 3, title: 'Quien devuelve' },
-						{ key: 4, title: 'A devolver' },
-						{ key: 5, title: 'Estado' },
+						{ key: 0, title: 'Nombre de usuario' },
+						{ key: 1, title: 'Apellido' },
+						{ key: 2, title: 'Nombre' },
+						{ key: 3, title: 'NI' },
+						{ key: 4, title: 'Jerarquía' },
+						{ key: 5, title: 'Guardia' },
+						{ key: 6, title: 'Superior' },
 					]}
-					rowType={'change'}
+					rowType={'user'}
 					dataList={dataList}
-					newLink={'/newchange'}
+					newLink={'/register'}
 				/>
 			)}
 		</div>

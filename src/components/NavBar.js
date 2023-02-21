@@ -227,17 +227,7 @@ const NavBar = () => {
 									</Link>
 								</div>
 							</li>
-							{userContext.userData.superior && (
-								<li id={'/register'}>
-									<div className="link-container">
-										<Link to="/register">
-											<FaUserPlus />
-											NUEVO USUARIO
-										</Link>
-									</div>
-								</li>
-							)}
-							{userContext.userData.admin && (
+							{(userContext.userData.admin || userContext.userData.superior) && (
 								<li id={'/users'}>
 									<div className="link-container">
 										<Link to="/users">
