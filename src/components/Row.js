@@ -96,6 +96,39 @@ const Row = ({ type, data, modifyCallback }) => {
 					},
 				]);
 			}
+			case 'user': {
+				return generateRow([
+					{ columnName: 'Apellido', rowData: data.lastName },
+					{
+						columnName: 'Nombre',
+						rowData: data.firstName,
+					},
+					{
+						columnName: 'NI',
+						rowData: data.ni,
+					},
+					{
+						columnName: 'Jerarquía',
+						rowData: data.hierarchy,
+					},
+					{
+						columnName: 'Guardia',
+						rowData: data.guardId ?? '-',
+					},
+					{
+						columnName: 'Usuario',
+						rowData: data.username,
+					},
+					{
+						columnName: 'Correo electrónico',
+						rowData: data.email,
+					},
+					{
+						columnName: 'Opciones',
+						rowData: optionsButtons,
+					},
+				]);
+			}
 
 			default:
 				break;

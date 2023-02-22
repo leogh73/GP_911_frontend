@@ -1,16 +1,17 @@
 import { useReducer, useContext } from 'react';
 import UserContext from '../context/UserContext';
 
-const useListData = (dataList) => {
+const useListData = (dataList, rowType) => {
 	const userContext = useContext(UserContext);
 	const fullName = `${userContext.userData.lastName} ${userContext.userData.firstName}`;
 
 	const [listData, dispatch] = useReducer(reducer, {
 		header: '#',
 		showAll: true,
+		showSuperior: false,
 		fetched: dataList,
-		user: dataList,
-		filter: dataList,
+		user: rowType === 'user' ? dataList.filter((user) => !user.superior) : dataList,
+		filter: rowType === 'user' ? dataList.filter((user) => !user.superior) : dataList,
 		search: '',
 	});
 
@@ -151,19 +152,49 @@ const useListData = (dataList) => {
 					default:
 						return listData;
 				}
+			case 'user':
+				switch (sortBy) {
+					case 'Apellido': {
+						return listData.sort((a, b) => a.lastName.localeCompare(b.lastName));
+					}
+					case 'Nombre': {
+						return listData.sort((a, b) => a.firstName.localeCompare(b.firstName));
+					}
+					case 'NI': {
+						return listData.sort((a, b) => a.ni.toString().localeCompare(b.ni.toString()));
+					}
+					case 'Jerarquía': {
+						return listData.sort((a, b) => a.hierarchy.localeCompare(b.hierarchy));
+					}
+					case 'Guardia': {
+						return listData.sort((a, b) => {
+							a.guardId = a.guardId ?? '-';
+							b.guardId = b.guardId ?? '-';
+							return a.guardId.localeCompare(b.guardId);
+						});
+					}
+					case 'Usuario': {
+						return listData.sort((a, b) => a.username.localeCompare(b.username));
+					}
+					case 'Correo electrónico': {
+						return listData.sort((a, b) => a.email.localeCompare(b.email));
+					}
+				}
 			default:
 				return listData;
 		}
 	}
 
 	function reducer(listData, action) {
-		const filterUserItemsList = () =>
-			action.payload.list === 'change'
-				? listData.fetched.filter(
-						(i) => i.coverData.name === fullName || i.returnData.name === fullName,
-				  )
-				: listData.fetched.filter((i) => i.name === fullName);
-
+		const filterItemList = () => {
+			if (action.payload.list === 'change')
+				return listData.fetched.filter(
+					(i) => i.coverData.name === fullName || i.returnData.name === fullName,
+				);
+			if (action.payload.list === ('request' || 'affected'))
+				return listData.fetched.filter((i) => i.name === fullName);
+			if (action.payload.list === 'user') return listData.fetched.filter((i) => i.superior);
+		};
 		const itemRowData = (item, type) => {
 			const changeItemFormat = (i) => [i.name.split(' '), i.date, i.day, i.shift, i.guardId];
 			const requestAffectedItemFormat = (i) => [i.date, i.shift, i.day, i.guardId];
@@ -190,13 +221,31 @@ const useListData = (dataList) => {
 						item.bookPage,
 					].flat(1);
 				}
+				case 'user': {
+					return [
+						item.lastName,
+						item.firstName,
+						item.ni.toString(),
+						item.hierarchy,
+						item.guardId ?? '-',
+						item.username,
+						item.email,
+					];
+				}
 				default:
 					break;
 			}
 		};
 
-		const inputFilter = (value, user) => {
-			let searchList = user ? filterUserItemsList() : listData.fetched;
+		const inputFilter = (value, userOrSuperior) => {
+			let searchList;
+			if (rowType === 'user') {
+				searchList = userOrSuperior
+					? filterItemList()
+					: listData.fetched.filter((user) => !user.superior);
+			} else {
+				searchList = userOrSuperior ? filterItemList() : listData.fetched;
+			}
 			return searchList.filter((item) => {
 				let formattedRow = itemRowData(item, action.payload.list);
 				let rowValues = formattedRow.map((w) => w.toLowerCase());
@@ -246,13 +295,31 @@ const useListData = (dataList) => {
 					  };
 			}
 			case 'radioButton': {
+				if (action.payload.list === 'user') {
+					if (action.payload.value === 'Superiores' && !listData.showSuperior) {
+						let filteredData = listData.fetched.filter((user) => user.superior);
+						return {
+							...listData,
+							user: filteredData,
+							filter: listData.search.length ? inputFilter(listData.search, true) : filteredData,
+							showSuperior: true,
+						};
+					}
+					if (action.payload.value === 'Subalternos' && listData.showSuperior) {
+						let filteredData = listData.fetched.filter((user) => !user.superior);
+						return {
+							...listData,
+							user: filteredData,
+							filter: listData.search.length ? inputFilter(listData.search, false) : filteredData,
+							showSuperior: false,
+						};
+					}
+				}
 				if (action.payload.value === 'Propios' && listData.showAll) {
 					return {
 						...listData,
-						user: filterUserItemsList(),
-						filter: listData.search.length
-							? inputFilter(listData.search, true)
-							: filterUserItemsList(),
+						user: filterItemList(),
+						filter: listData.search.length ? inputFilter(listData.search, true) : filterItemList(),
 						showAll: false,
 					};
 				}
@@ -271,7 +338,10 @@ const useListData = (dataList) => {
 			case 'searchInput': {
 				return {
 					...listData,
-					filter: inputFilter(action.payload.value, !listData.showAll),
+					filter:
+						action.payload.list === 'user'
+							? inputFilter(action.payload.value, listData.showSuperior)
+							: inputFilter(action.payload.value, !listData.showAll),
 					search: action.payload.value,
 				};
 			}

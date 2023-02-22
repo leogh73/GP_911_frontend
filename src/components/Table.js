@@ -17,7 +17,7 @@ import UserContext from '../context/UserContext';
 const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
-	const { listData, dispatch } = useListData(dataList);
+	const { listData, dispatch } = useListData(dataList, rowType);
 
 	const resultModifyRow = (status, consult) => {
 		if (consult.result && consult.result._id) {
@@ -100,35 +100,41 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 					onClick={() => navigate(newLink)}
 				/>
 			);
-			content.radioButtons =
-				rowType === 'affected' && userContext.userData.superior ? null : (
-					<div className="radio-buttons">
-						<div className="changes-filter" value="Todos" name="todos" onClick={radioClickHandler}>
-							<input
-								type="radio"
-								className="changes-radio-icon"
-								value={`${rowType === 'user' ? 'Subalternos' : 'Todos'}`}
-								name={id}
-								defaultChecked={true}
-							/>
-							{`${rowType === 'user' ? 'Subalternos' : 'Todos'}`}
-						</div>
-						<div
-							className="changes-filter"
-							value="Propios"
-							name="propios"
-							onClick={radioClickHandler}
-						>
-							<input
-								type="radio"
-								className="changes-radio-icon"
-								value={`${rowType === 'user' ? 'Superiores' : 'Propios'}`}
-								name={id}
-							/>
-							{`${rowType === 'user' ? 'Superiores' : 'Propios'}`}
-						</div>
+		}
+		if (!userContext.userData.superior || (rowType === 'user' && userContext.userData.superior)) {
+			content.radioButtons = (
+				<div className="radio-buttons">
+					<div
+						className="changes-filter"
+						value={`${rowType === 'user' ? 'Subalternos' : 'Todos'}`}
+						name="todos"
+						onClick={radioClickHandler}
+					>
+						<input
+							type="radio"
+							className="changes-radio-icon"
+							value={`${rowType === 'user' ? 'Subalternos' : 'Todos'}`}
+							name={id}
+							defaultChecked={true}
+						/>
+						{`${rowType === 'user' ? 'Subalternos' : 'Todos'}`}
 					</div>
-				);
+					<div
+						className="changes-filter"
+						value={`${rowType === 'user' ? 'Superiores' : 'Propios'}`}
+						name="propios"
+						onClick={radioClickHandler}
+					>
+						<input
+							type="radio"
+							className="changes-radio-icon"
+							value={`${rowType === 'user' ? 'Superiores' : 'Propios'}`}
+							name={id}
+						/>
+						{`${rowType === 'user' ? 'Superiores' : 'Propios'}`}
+					</div>
+				</div>
+			);
 		}
 		return content;
 	};

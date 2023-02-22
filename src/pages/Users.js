@@ -27,9 +27,8 @@ const Users = ({ section }) => {
 				JSON.stringify({ section }),
 				{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
 			);
-			console.log(consult);
 			if (consult.error) return setError(true);
-			setDataList(consult);
+			setDataList(consult.allUsers);
 		} catch (error) {
 			console.log(error);
 			setError(true);
@@ -100,13 +99,13 @@ const Users = ({ section }) => {
 				<Table
 					id={Math.random() * 10000}
 					headersList={[
-						{ key: 0, title: 'Nombre de usuario' },
-						{ key: 1, title: 'Apellido' },
-						{ key: 2, title: 'Nombre' },
-						{ key: 3, title: 'NI' },
-						{ key: 4, title: 'Jerarquía' },
-						{ key: 5, title: 'Guardia' },
-						{ key: 6, title: 'Superior' },
+						{ key: 0, title: 'Apellido' },
+						{ key: 1, title: 'Nombre' },
+						{ key: 2, title: 'NI' },
+						{ key: 3, title: 'Jerarquía' },
+						{ key: 4, title: 'Guardia' },
+						{ key: 5, title: 'Usuario' },
+						{ key: 6, title: 'Correo electrónico' },
 					]}
 					rowType={'user'}
 					dataList={dataList}
