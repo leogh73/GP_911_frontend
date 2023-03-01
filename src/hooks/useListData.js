@@ -7,7 +7,7 @@ const useListData = (dataList, rowType) => {
 
 	const [listData, dispatch] = useReducer(reducer, {
 		header: '#',
-		showAll: true,
+		showUser: false,
 		showSuperior: false,
 		fetched: dataList,
 		user: rowType === 'user' ? dataList.filter((user) => !user.superior) : dataList,
@@ -191,7 +191,7 @@ const useListData = (dataList, rowType) => {
 				return listData.fetched.filter(
 					(i) => i.coverData.name === fullName || i.returnData.name === fullName,
 				);
-			if (action.payload.list === ('request' || 'affected'))
+			if (action.payload.list === 'request' || action.payload.list === 'affected')
 				return listData.fetched.filter((i) => i.name === fullName);
 			if (action.payload.list === 'user') return listData.fetched.filter((i) => i.superior);
 		};
@@ -315,22 +315,22 @@ const useListData = (dataList, rowType) => {
 						};
 					}
 				}
-				if (action.payload.value === 'Propios' && listData.showAll) {
+				if (action.payload.value === 'Propios' && !listData.showUser) {
 					return {
 						...listData,
 						user: filterItemList(),
 						filter: listData.search.length ? inputFilter(listData.search, true) : filterItemList(),
-						showAll: false,
+						showUser: true,
 					};
 				}
-				if (action.payload.value === 'Todos' && !listData.showAll) {
+				if (action.payload.value === 'Todos' && listData.showUser) {
 					return {
 						...listData,
 						user: listData.fetched,
 						filter: listData.search.length
 							? inputFilter(listData.search, false)
 							: listData.fetched,
-						showAll: true,
+						showUser: false,
 					};
 				}
 				return listData;
@@ -341,7 +341,7 @@ const useListData = (dataList, rowType) => {
 					filter:
 						action.payload.list === 'user'
 							? inputFilter(action.payload.value, listData.showSuperior)
-							: inputFilter(action.payload.value, !listData.showAll),
+							: inputFilter(action.payload.value, listData.showUser),
 					search: action.payload.value,
 				};
 			}

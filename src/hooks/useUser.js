@@ -13,13 +13,19 @@ const useUser = () => {
 
 	// const navigate = useNavigate();
 
-	const storeUser = (firstName, lastName, guardId, superior, admin) => {
+	const storeUser = (userData) => {
+		const { firstName, lastName, ni, hierarchy, section, guardId, email, superior, admin } =
+			userData;
 		localStorage.setItem(
 			'userData',
 			JSON.stringify({
 				firstName,
 				lastName,
+				ni,
+				hierarchy,
+				section,
 				guardId,
+				email,
 				superior,
 				admin,
 			}),
@@ -37,18 +43,16 @@ const useUser = () => {
 		);
 	};
 
-	const login = useCallback(
-		(token, firstName, lastName, guardId, superior, admin, expirationTokenTime) => {
-			setToken(token);
-			setUserData({ firstName, lastName, guardId, superior, admin });
-			const expirationDateToken =
-				expirationTokenTime || new Date(new Date().getTime() + 1000 * 60 * 59);
-			// setExpirationTokenTime(expirationDateToken);
-			storeUser(firstName, lastName, guardId, superior, admin);
-			storeToken(false, token, expirationDateToken);
-		},
-		[],
-	);
+	const login = useCallback((userData, expirationTokenTime) => {
+		console.log(userData);
+		setToken(userData.token);
+		setUserData(userData);
+		const expirationDateToken =
+			expirationTokenTime || new Date(new Date().getTime() + 1000 * 60 * 59);
+		// setExpirationTokenTime(expirationDateToken);
+		storeUser(userData);
+		storeToken(false, userData.token, expirationDateToken);
+	}, []);
 
 	const logout = (expiredSession) => {
 		setToken(null);
@@ -92,21 +96,28 @@ const useUser = () => {
 	useEffect(() => {
 		const storedUserData = JSON.parse(localStorage.getItem('userData'));
 		const storedTokenData = JSON.parse(localStorage.getItem('userToken'));
+		console.log(storedTokenData);
 		if (
 			storedUserData &&
 			storedTokenData &&
 			storedTokenData.token &&
 			new Date(storedTokenData.expirationDate) > new Date()
 		) {
-			login(
-				storedTokenData.token,
-				storedUserData.firstName,
-				storedUserData.lastName,
-				storedUserData.guardId,
-				storedUserData.superior,
-				storedUserData.admin,
-				new Date(storedTokenData.expirationDate),
-			);
+			const { firstName, lastName, ni, hierarchy, section, guardId, email, superior, admin } =
+				storedUserData;
+			const userData = {
+				token: storedTokenData.token,
+				firstName,
+				lastName,
+				ni,
+				hierarchy,
+				section,
+				guardId,
+				email,
+				superior,
+				admin,
+			};
+			login(userData, new Date(storedTokenData.expirationDate));
 		}
 	}, [login]);
 

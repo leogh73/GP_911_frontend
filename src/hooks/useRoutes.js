@@ -10,23 +10,21 @@ import Affected from '../pages/Affected';
 import Schedule from '../pages/Schedule';
 import Password from '../pages/Password';
 import Users from '../pages/Users';
+import Profile from '../pages/Profile';
 
 const useRoutes = (token, userData) => {
 	const [activeEditRoute, setActiveEditRoute] = useState(false);
 	const [activeTab, setActiveTab] = useState(null);
 	const [changeData, setChangeData] = useState();
+	const [profileData, setProfileData] = useState();
 
-	const loadChangeData = (data) => {
-		setChangeData(data);
-	};
+	const loadChangeData = (data) => setChangeData(data);
 
-	const activateEditionRoute = () => {
-		setActiveEditRoute(true);
-	};
+	const loadProfileData = (data) => setProfileData(data);
 
-	const loadActiveTab = (type) => {
-		setActiveTab(type);
-	};
+	const activateEditionRoute = () => setActiveEditRoute(true);
+
+	const loadActiveTab = (type) => setActiveTab(type);
 
 	const superiorRoutes = [
 		{ key: '01', path: '/register', element: <Register /> },
@@ -75,6 +73,10 @@ const useRoutes = (token, userData) => {
 				<Route path="month" element={<Schedule type={'month'} />} />
 				<Route path="search" element={<Schedule type={'search'} />} />
 			</Route>
+			<Route path="/profile">
+				<Route path="" element={<Profile startData={profileData} />} />
+				{activeEditRoute && <Route path="edit" element={<Profile startData={profileData} />} />}
+			</Route>
 			{userData.superior
 				? superiorRoutes.map((route) => (
 						<Route key={route.key} path={route.path} element={route.element} />
@@ -99,7 +101,14 @@ const useRoutes = (token, userData) => {
 		</Routes>
 	);
 
-	return { routes, activeTab, loadActiveTab, loadChangeData, activateEditionRoute };
+	return {
+		routes,
+		activeTab,
+		loadActiveTab,
+		loadChangeData,
+		loadProfileData,
+		activateEditionRoute,
+	};
 };
 
 export default useRoutes;

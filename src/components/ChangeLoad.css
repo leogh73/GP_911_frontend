@@ -71,6 +71,20 @@
 	border-radius: 10px;
 }
 
+.user-section-profile {
+	font-size: 22px;
+	letter-spacing: 1px;
+	height: 82px;
+	display: flex;
+	flex-direction: row;
+	align-content: center;
+	padding: 5px;
+	/* text-align: left; */
+	/* pointer-events: none !important; */
+	/* height: 2.5rem; */
+	border-radius: 10px;
+}
+
 @media only screen and (max-width: 730px) {
 	.new-change-data {
 		display: flex;
@@ -108,23 +122,6 @@
 .user-section .section-title {
 	font-size: 16px;
 	font-weight: bold;
-}
-
-.user-header .user-name {
-	font-size: 17px;
-	height: 45px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-
-	/* width: 160px; */
-	margin-left: 55px;
-	/* margin-right: 15px; */
-	margin-bottom: 5px;
-	margin-right: 20px;
-	/* font-weight: bold; */
-	text-transform: uppercase;
-	letter-spacing: 1.5px;
 }
 
 .user-change-section {

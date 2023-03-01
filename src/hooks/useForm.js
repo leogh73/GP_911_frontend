@@ -8,6 +8,7 @@ import registerSchema from '../schemas/RegisterForm';
 import useHttpConnection from './useHttpConnection';
 import useRememberMe from './useRememberMe';
 import UserContext from '../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const useForm = (pageName, sendUserForm) => {
 	const { loadUser } = useRememberMe();
@@ -18,6 +19,7 @@ const useForm = (pageName, sendUserForm) => {
 	const [serverError, setServerError] = useState(false);
 	const userContext = useContext(UserContext);
 	const storedUser = loadUser();
+	const navigate = useNavigate();
 	const [inputs, setInputs] = useState([]);
 	const [schema, setSchema] = useState();
 
@@ -27,6 +29,7 @@ const useForm = (pageName, sendUserForm) => {
 		if (pageName === 'register') {
 			formInputs = registerInputs(userContext.userData.admin);
 			schema = registerSchema;
+			console.log(formInputs);
 		}
 		if (pageName === 'login') {
 			formInputs = loginInputs;
@@ -41,6 +44,10 @@ const useForm = (pageName, sendUserForm) => {
 			formInputs = passwordInputs('forgot');
 			schema = passwordSchema('forgot');
 		}
+		// if (pageName === 'profile') {
+		// 	formInputs = registerInputs(userContext.userData.admin).map((input)=>{input.disabled===true});
+		// 	schema = registerSchema;
+		// }
 		setSchema(schema);
 		setInputs(formInputs);
 		return () => {
@@ -92,10 +99,14 @@ const useForm = (pageName, sendUserForm) => {
 			{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
 		);
 		setLoading(false);
-		console.log(resultData);
 		if (resultData.error && pageName === 'login') {
 			setServerError(true);
 			return resultData;
+		}
+		if (resultData.error === 'Token expired') {
+			userContext.logout(true);
+			navigate('/');
+			return;
 		}
 		let validInputs = verifyField(resultData);
 		return { resultData, validInputs };

@@ -37,7 +37,7 @@ const ChangeLoad = ({ sendResult, startData }) => {
 
 	const changeSection = (key, content, icon, title, data) => (
 		<div key={key} className="user-section">
-			<div className="user-section-content">
+			<div className="user-section-content-change">
 				{content ? (
 					content
 				) : (

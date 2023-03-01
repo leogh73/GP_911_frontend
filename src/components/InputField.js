@@ -13,6 +13,7 @@ const InputField = ({
 	value,
 	onChange,
 	placeHolder,
+	disabled,
 }) => {
 	const [showPassword, setShowPassword] = useState(false);
 
@@ -44,6 +45,7 @@ const InputField = ({
 							onChange={onChange}
 							value={value}
 							placeholder={placeHolder}
+							disabled={disabled}
 						/>
 					)}
 					{password ? (

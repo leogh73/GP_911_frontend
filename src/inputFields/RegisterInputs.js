@@ -84,18 +84,19 @@ const inputs = [
 	},
 ];
 
-const registerInputs = (admin) =>
-	admin
-		? inputs.splice(4, 0, {
-				key: 4,
-				name: 'section',
-				optionsList: ['Teléfonía', 'Monitoreo', 'Despacho'],
-				password: false,
-				icon: <FaBuilding />,
-				errorMessage: '',
-				value: '',
-				placeHolder: 'Sección',
-		  })
-		: inputs;
-
+const registerInputs = (admin) => {
+	if (admin && inputs[4].name !== 'section') {
+		inputs.splice(4, 0, {
+			key: 4,
+			name: 'section',
+			optionsList: ['Teléfonía', 'Monitoreo', 'Despacho'],
+			password: false,
+			icon: <FaBuilding />,
+			errorMessage: '',
+			value: '',
+			placeHolder: 'Sección',
+		});
+	}
+	return inputs;
+};
 export default registerInputs;

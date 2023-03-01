@@ -1,6 +1,10 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useContext } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+import UserContext from '../context/UserContext';
 
 const useHttpConnection = () => {
+	const userContext = useContext(UserContext);
+	const navigate = useNavigate();
 	const activeHttpConnections = useRef([]);
 
 	const httpRequestHandler = useCallback(
@@ -23,8 +27,7 @@ const useHttpConnection = () => {
 				);
 				return responseData;
 			} catch (error) {
-				console.log(error);
-				return { error: 'An error ocurred' };
+				return { error };
 			}
 		},
 		[],

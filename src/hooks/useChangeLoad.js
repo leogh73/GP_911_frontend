@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useContext, useReducer } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import CommentContext from '../context/CommentContext';
 import SendNewContext from '../context/SendNewContext';
@@ -9,7 +10,9 @@ const useChangeLoad = (resultData, startData) => {
 	const [loadingSendChange, setLoadingSendData] = useState(false);
 	const [dataIsValid, setDataIsValid] = useState(false);
 	const userContext = useContext(UserContext);
+	const navigate = useNavigate();
 	const commentContext = useContext(CommentContext);
+
 	const { httpRequestHandler } = useHttpConnection();
 
 	const initialState = startData
@@ -180,7 +183,13 @@ const useChangeLoad = (resultData, startData) => {
 						JSON.stringify(body),
 						headers,
 				  );
+
 			setLoadingSendData(false);
+			if (consult.error === 'Token expired') {
+				userContext.logout(true);
+				navigate('/');
+				return;
+			}
 			resultData(consult);
 		} catch (error) {
 			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });

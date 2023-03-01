@@ -4,6 +4,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import Table from '../components/Table';
+import CommentContext from '../context/CommentContext';
+import SectionContext from '../context/SectionContext';
 
 import UserContext from '../context/UserContext';
 import useHttpConnection from '../hooks/useHttpConnection';
@@ -27,7 +29,14 @@ const Users = ({ section }) => {
 				JSON.stringify({ section }),
 				{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
 			);
-			if (consult.error) return setError(true);
+			if (consult.error) {
+				setError(true);
+				if (consult.error === 'Token expired') {
+					userContext.logout(true);
+					navigate('/');
+				}
+				return;
+			}
 			setDataList(consult.allUsers);
 		} catch (error) {
 			console.log(error);
@@ -35,7 +44,7 @@ const Users = ({ section }) => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, section, userContext.token]);
+	}, [httpRequestHandler, section, userContext.token, navigate]);
 
 	useEffect(() => {
 		fetchListItems();
@@ -44,10 +53,8 @@ const Users = ({ section }) => {
 	useEffect(() => {
 		let tabs = document.querySelectorAll('.tab');
 		let element = document.getElementById(location.pathname);
-
 		tabs.forEach((tab) => tab.classList.remove('selected'));
 		if (!element.classList.contains('selected')) element.classList.add('selected');
-		console.log(location.pathname);
 		userContext.loadActiveTab(location.pathname);
 	}, [location.pathname, userContext]);
 
@@ -69,50 +76,56 @@ const Users = ({ section }) => {
 	const dispatchId = '/users/dispatch';
 
 	return (
-		<div className="changes-list">
-			<div className="tabs-container" onClick={tabClickHandler}>
-				<div className="tabs-list">
-					<div className="tab" id={phoningId} index={0}>
-						<Link to={phoningId}>Telefonía</Link>
-					</div>
-					<div className="tab" id={dispatchId} index={1}>
-						<Link to={dispatchId}>Despacho</Link>
-					</div>
-					<div className="tab" id={monitoringId} index={2}>
-						<Link to={monitoringId}>Monitoreo</Link>
+		<SectionContext.Provider
+			value={{
+				section: section,
+			}}
+		>
+			<div className="changes-list">
+				<div className="tabs-container" onClick={tabClickHandler}>
+					<div className="tabs-list">
+						<div className="tab" id={phoningId} index={0}>
+							<Link to={phoningId}>Telefonía</Link>
+						</div>
+						<div className="tab" id={dispatchId} index={1}>
+							<Link to={dispatchId}>Despacho</Link>
+						</div>
+						<div className="tab" id={monitoringId} index={2}>
+							<Link to={monitoringId}>Monitoreo</Link>
+						</div>
 					</div>
 				</div>
-			</div>
-			{error ? (
-				<div className="loading-error-change">
-					<Message
-						title={'Error cargando usuarios'}
-						icon={<FaExclamationTriangle />}
-						body={'No se pudieron cargar usuarios. Intente nuevamente más tarde.'}
+				{error ? (
+					<div className="loading-error-change">
+						<Message
+							title={'Error cargando usuarios'}
+							icon={<FaExclamationTriangle />}
+							body={'No se pudieron cargar usuarios. Intente nuevamente más tarde.'}
+						/>
+					</div>
+				) : loading ? (
+					<div className="spinner-container-change">
+						<Loading type={'closed'} />
+					</div>
+				) : (
+					<Table
+						id={Math.random() * 10000}
+						headersList={[
+							{ key: 0, title: 'Apellido' },
+							{ key: 1, title: 'Nombre' },
+							{ key: 2, title: 'NI' },
+							{ key: 3, title: 'Jerarquía' },
+							{ key: 4, title: 'Guardia' },
+							{ key: 5, title: 'Usuario' },
+							{ key: 6, title: 'Correo electrónico' },
+						]}
+						rowType={'user'}
+						dataList={dataList}
+						newLink={'/register'}
 					/>
-				</div>
-			) : loading ? (
-				<div className="spinner-container-change">
-					<Loading type={'closed'} />
-				</div>
-			) : (
-				<Table
-					id={Math.random() * 10000}
-					headersList={[
-						{ key: 0, title: 'Apellido' },
-						{ key: 1, title: 'Nombre' },
-						{ key: 2, title: 'NI' },
-						{ key: 3, title: 'Jerarquía' },
-						{ key: 4, title: 'Guardia' },
-						{ key: 5, title: 'Usuario' },
-						{ key: 6, title: 'Correo electrónico' },
-					]}
-					rowType={'user'}
-					dataList={dataList}
-					newLink={'/register'}
-				/>
-			)}
-		</div>
+				)}
+			</div>
+		</SectionContext.Provider>
 	);
 };
 

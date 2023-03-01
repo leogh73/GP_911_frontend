@@ -255,7 +255,16 @@ h3 {
 }
 
 h3 svg {
-	margin: 2px;
+	/* margin-top: 0px; */
+	margin-left: -10px;
+	/* margin: -2px; */
+}
+
+.usermenu-separator {
+	/* max-width: 600px; */
+	width: 260px;
+	margin-bottom: 50px;
+	border-bottom: 1px solid #adaeb1;
 }
 
 .user-toggle .user-menu {
@@ -289,33 +298,35 @@ h3 svg {
 	color: var(--nav-secondary-color);
 	font-size: 22px;
 	letter-spacing: 1px;
-	height: 72px;
+	/* height: 45px; */
 	/* display: inline-block; */
 	/* padding-bottom: 20px; */
 	/* justify-content: space-around; */
 	/* line-height: 4.5rem; */
-	padding-bottom: 12px;
-	margin-left: 5px;
+	/* padding-bottom: 12px; */
+	/* margin-left: 5px; */
 	/* padding-left: 15px; */
 	/* text-align: left; */
 	/* pointer-events: none !important; */
 	/* height: 2.5rem; */
-	border-bottom: 0.5px solid rgba(197, 207, 211, 0.57);
+	/* border-bottom: 0.5px solid rgba(197, 207, 211, 0.57); */
 	/* width: 100%; */
 }
 
 .user-header .user-name {
 	font-size: 17px;
-	height: 45px;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-
-	/* width: 160px; */
-	margin-left: 55px;
+	/* height: 25px; */
+	/* display: flex;
+	flex-direction: column; */
+	/* justify-content: flex-end; */
+	/* position: absolute; */
+	/* width: 60%; */
+	width: 180px;
+	margin-left: 40px;
+	/* margin-top: 10px; */
 	/* margin-right: 15px; */
-	margin-bottom: 5px;
-	margin-right: 20px;
+	/* margin-bottom: 5px; */
+	/* margin-right: 25px; */
 	/* font-weight: bold; */
 	text-transform: uppercase;
 	letter-spacing: 1.5px;
@@ -364,7 +375,7 @@ h3 svg {
 	letter-spacing: 1px;
 	padding-left: 23px;
 	padding-right: 15px;
-	padding-top: 12px;
+	/* padding-top: 12px; */
 }
 
 .user-link svg {

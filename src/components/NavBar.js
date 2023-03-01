@@ -176,8 +176,6 @@ const NavBar = () => {
 		}
 	};
 
-	console.log(userContext.userData);
-
 	return (
 		<IconContext.Provider
 			value={{
@@ -247,10 +245,13 @@ const NavBar = () => {
 								<FaUserAlt size={23} />
 							</div>
 							<div className="user-menu">
-								<h3 className="user-header">
-									<FaUserCircle size={32} />
-									<div className="user-name">{`${userContext.userData.firstName} ${userContext.userData.lastName}`}</div>
-								</h3>
+								<Link className="user-link" to="/profile">
+									<h3 className="user-header">
+										<FaUserCircle size={32} />
+										<div className="user-name">{`${userContext.userData.firstName} ${userContext.userData.lastName}`}</div>
+									</h3>
+								</Link>
+								<div className="usermenu-separator"></div>
 								<Link className="user-link" to="/changepassword">
 									<FaKey />
 									Cambiar contraseña

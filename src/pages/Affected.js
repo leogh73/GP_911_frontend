@@ -16,6 +16,7 @@ const Affected = () => {
 	const [error, setError] = useState(false);
 	const [dataList, setDataList] = useState();
 	const userContext = useContext(UserContext);
+	const navigate = useNavigate();
 
 	const fetchListItems = useCallback(async () => {
 		try {
@@ -25,7 +26,14 @@ const Affected = () => {
 				JSON.stringify({ type: 'affected' }),
 				{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
 			);
-			if (consult.error) return setError(true);
+			if (consult.error) {
+				setError(true);
+				if (consult.error === 'Token expired') {
+					userContext.logout(true);
+					navigate('/');
+				}
+				return;
+			}
 			setDataList(consult);
 		} catch (error) {
 			console.log(error);

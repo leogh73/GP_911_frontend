@@ -1,10 +1,13 @@
 import { useReducer, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useSelectDate = (sendDate, name) => {
 	const userContext = useContext(UserContext);
+	const navigate = useNavigate();
+
 	const { httpRequestHandler } = useHttpConnection();
 	const initialState = {
 		fetched: [],
@@ -102,6 +105,13 @@ const useSelectDate = (sendDate, name) => {
 					'Content-type': 'application/json',
 				},
 			);
+
+			if (consult.error === 'Token expired') {
+				userContext.logout(true);
+				navigate('/');
+				return;
+			}
+
 			dispatch({
 				type: 'date guards',
 				payload: { data: consult },

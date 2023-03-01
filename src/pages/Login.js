@@ -13,8 +13,21 @@ const Login = () => {
 	const userContext = useContext(UserContext);
 
 	const loginResult = (result, usernameOrPassword) => {
-		const { token, firstName, lastName, guardId, superior, admin } = result;
-		userContext.login(token, firstName, lastName, guardId, superior, admin);
+		const { token, firstName, lastName, ni, hierarchy, section, guardId, email, superior, admin } =
+			result;
+		const userData = {
+			token,
+			firstName,
+			lastName,
+			ni,
+			hierarchy,
+			section,
+			guardId,
+			email,
+			superior,
+			admin,
+		};
+		userContext.login(userData);
 		rememberUser(usernameOrPassword, rememberMe.current);
 	};
 

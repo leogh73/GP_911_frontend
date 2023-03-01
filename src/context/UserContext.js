@@ -8,6 +8,7 @@ const UserContext = createContext({
 	activeTab: null,
 	loadActiveTab: () => {},
 	loadChangeData: () => {},
+	loadProfileData: () => {},
 	activateEditionRoute: () => {},
 });
 

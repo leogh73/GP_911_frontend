@@ -49,9 +49,13 @@ const Schedule = ({ type }) => {
 					JSON.stringify({ date: selectedDate }),
 					{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'Application/json' },
 				);
-			console.log(consult);
 			if (consult.error) {
 				setError(true);
+				if (consult.error === 'Token expired') {
+					userContext.logout(true);
+					navigate('/');
+				}
+				return;
 			}
 			setDataList(consult);
 		} catch (error) {
