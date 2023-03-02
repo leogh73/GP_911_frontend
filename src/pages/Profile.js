@@ -2,10 +2,11 @@ import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Message from '../components/Message';
 import Form from '../components/Form';
-import { FaUserCheck, FaUserCircle, FaUserPlus, FaUserTimes } from 'react-icons/fa';
+import { FaUsers, FaUser, FaIdCard, FaBuilding, FaEnvelope, FaKey } from 'react-icons/fa';
+import { HiUserCircle } from 'react-icons/hi';
+import { TbHierarchy } from 'react-icons/tb';
 
 import { ToastContainer } from 'react-toastify';
-import { FaUser, FaExchangeAlt, FaEdit } from 'react-icons/fa';
 import { BiCommentDetail } from 'react-icons/bi';
 
 import 'react-calendar/dist/Calendar.css';
@@ -30,23 +31,33 @@ const Profile = ({ startData }) => {
 		setSuccess(false);
 	};
 
-	const { firstName, lastName, ni, hierarchy, section, guardId, email, superior, admin } =
+	const { username, firstName, lastName, ni, hierarchy, section, guardId, email } =
 		userContext.userData;
 
-	const changeSection = (key, content, icon, title, data) => (
+	let userSection;
+	if (section === 'Phoning') userSection = 'Teléfonía';
+	if (section === 'Monitoring') userSection = 'Monitoreo';
+	if (section === 'Dispatch') userSection = 'Despacho';
+
+	const profileData = [
+		{ key: '01', icon: <HiUserCircle size={27} />, title: 'Usuario', data: username },
+		{ key: '02', icon: <FaUser />, title: 'Nombre', data: firstName },
+		{ key: '03', icon: <FaUser />, title: 'Apellido', data: lastName },
+		{ key: '04', icon: <FaIdCard />, title: 'NI', data: ni },
+		{ key: '05', icon: <TbHierarchy size={22} />, title: 'Jerarquía', data: hierarchy },
+		{ key: '06', icon: <FaBuilding />, title: 'Sección', data: userSection },
+		{ key: '07', icon: <FaUsers />, title: 'Guardia', data: guardId },
+		{ key: '08', icon: <FaEnvelope />, title: 'Correo electrónico', data: email },
+	];
+
+	const changeSection = (key, icon, title, data) => (
 		<div key={key} className="user-section">
 			<div className="user-section-profile">
-				{content ? (
-					content
-				) : (
-					<>
-						<div className="section-icon">{icon}</div>
-						<div className="section-text">
-							<div className="section-title">{title}</div>
-							{data}
-						</div>
-					</>
-				)}
+				<div className="section-icon">{icon}</div>
+				<div className="section-text-profile">
+					<div className="section-title">{title}</div>
+					{data}
+				</div>
 			</div>
 		</div>
 	);
@@ -56,34 +67,20 @@ const Profile = ({ startData }) => {
 			<Title icon={<CgProfile />} text={'Perfil'} />
 			<div className="new-change-data">
 				<div className="user-change-section">
-					{changeSection('01', null, <FaUser />, firstName, 'Nombre')}
+					{profileData.map((p, i) => i < 4 && changeSection(p.key, p.icon, p.title, p.data))}
 				</div>
 				<div className="user-change-section">
-					{changeSection(
-						'01',
-						null,
-						<BiCommentDetail />,
-						'Comentario (opcional)',
-						<div className="comment-load">
-							<input
-								name={'comment-load'}
-								id={'03_comment'}
-								// onChange={loadComment}
-								// value={commentContext.comment}
-							/>
-						</div>,
-					)}
+					{profileData.map((p, i) => i >= 4 && changeSection(p.key, p.icon, p.title, p.data))}
 				</div>
-
-				<Button
-					className="button"
-					text={startData ? 'EDITAR' : 'ENVIAR'}
-					width={200}
-					// disabled={!dataIsValid}
-					// loading={loadingSendData}
-					// onClick={() => setShowModal(true)}
-				/>
 			</div>
+			<Button
+				className="button"
+				text={startData ? 'EDITAR' : 'ENVIAR'}
+				width={200}
+				// disabled={!dataIsValid}
+				// loading={loadingSendData}
+				// onClick={() => setShowModal(true)}
+			/>
 		</div>
 	);
 };

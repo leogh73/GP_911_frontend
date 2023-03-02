@@ -52,9 +52,6 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		</div>
 	);
 
-	console.log(sectionContext.section);
-	console.log(userContext.userData.section);
-
 	const optionButtons = () => {
 		if (userContext.userData.superior) {
 			if (type === 'change' && data.status === 'Solicitado')

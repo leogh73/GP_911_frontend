@@ -1,10 +1,6 @@
-import { useState, useCallback, useRef, useEffect, useContext } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-import UserContext from '../context/UserContext';
+import { useCallback, useRef, useEffect } from 'react';
 
 const useHttpConnection = () => {
-	const userContext = useContext(UserContext);
-	const navigate = useNavigate();
 	const activeHttpConnections = useRef([]);
 
 	const httpRequestHandler = useCallback(
@@ -25,6 +21,7 @@ const useHttpConnection = () => {
 				activeHttpConnections.current = activeHttpConnections.current.filter(
 					(reqCtrl) => reqCtrl !== abortConnection,
 				);
+
 				return responseData;
 			} catch (error) {
 				return { error };

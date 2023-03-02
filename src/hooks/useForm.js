@@ -53,7 +53,7 @@ const useForm = (pageName, sendUserForm) => {
 		return () => {
 			formInputs.forEach((field) => (field.value = ''));
 		};
-	}, [pageName, storedUser]);
+	}, [pageName, storedUser, userContext.userData]);
 
 	function registeredData(inputs) {
 		let registeredData = {};

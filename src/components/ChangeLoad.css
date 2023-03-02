@@ -110,6 +110,14 @@
 	padding: 10px;
 }
 
+.section-text-profile {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	font-size: 19px;
+	padding: 10px;
+}
+
 .section-icon {
 	align-items: center;
 	width: 20%;

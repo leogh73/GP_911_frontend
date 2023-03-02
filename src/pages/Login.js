@@ -13,10 +13,22 @@ const Login = () => {
 	const userContext = useContext(UserContext);
 
 	const loginResult = (result, usernameOrPassword) => {
-		const { token, firstName, lastName, ni, hierarchy, section, guardId, email, superior, admin } =
-			result;
+		const {
+			token,
+			username,
+			firstName,
+			lastName,
+			ni,
+			hierarchy,
+			section,
+			guardId,
+			email,
+			superior,
+			admin,
+		} = result;
 		const userData = {
 			token,
+			username,
 			firstName,
 			lastName,
 			ni,

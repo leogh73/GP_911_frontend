@@ -4,7 +4,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import Table from '../components/Table';
-
 import UserContext from '../context/UserContext';
 import useHttpConnection from '../hooks/useHttpConnection';
 
@@ -27,6 +26,7 @@ const Changes = ({ type }) => {
 				JSON.stringify({ type }),
 				{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
 			);
+			console.log(consult);
 			if (consult.error) {
 				setError(true);
 				if (consult.error === 'Token expired') {
@@ -42,10 +42,10 @@ const Changes = ({ type }) => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, type, userContext.token]);
+	}, [httpRequestHandler, type, userContext, navigate]);
 
 	useEffect(() => {
-		fetchListItems();
+		if (!dataList) fetchListItems();
 	}, [fetchListItems]);
 
 	useEffect(() => {
@@ -100,7 +100,7 @@ const Changes = ({ type }) => {
 				<div className="spinner-container-change">
 					<Loading type={'closed'} />
 				</div>
-			) : userContext.activeTab === '/changes/requested' ? (
+			) : type === 'request' ? (
 				<Table
 					id={Math.random() * 10000}
 					headersList={[

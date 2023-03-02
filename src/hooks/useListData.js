@@ -179,6 +179,8 @@ const useListData = (dataList, rowType) => {
 					case 'Correo electrónico': {
 						return listData.sort((a, b) => a.email.localeCompare(b.email));
 					}
+					default:
+						return listData;
 				}
 			default:
 				return listData;

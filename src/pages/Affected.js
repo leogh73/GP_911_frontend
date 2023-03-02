@@ -41,7 +41,7 @@ const Affected = () => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, userContext]);
+	}, [httpRequestHandler, userContext, navigate]);
 
 	useEffect(() => {
 		fetchListItems();

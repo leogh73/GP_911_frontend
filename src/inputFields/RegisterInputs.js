@@ -1,4 +1,6 @@
 import { FaUsers, FaUser, FaIdCard, FaBuilding, FaEnvelope, FaKey } from 'react-icons/fa';
+import { HiUserCircle } from 'react-icons/hi';
+import { TbHierarchy } from 'react-icons/tb';
 
 const inputs = [
 	{
@@ -6,7 +8,7 @@ const inputs = [
 		name: 'name',
 		password: false,
 		optionsList: [],
-		icon: <FaUser />,
+		icon: <HiUserCircle size={27} />,
 		errorMessage: '',
 		value: '',
 		placeHolder: 'Nombre de usuario',
@@ -41,9 +43,19 @@ const inputs = [
 		value: '',
 		placeHolder: 'NI',
 	},
+	{
+		key: 4,
+		name: 'hierarchy',
+		optionsList: [],
+		password: false,
+		icon: <TbHierarchy size={21} />,
+		errorMessage: '',
+		value: '',
+		placeHolder: 'Jerarquía',
+	},
 
 	{
-		key: 5,
+		key: 6,
 		name: 'guard',
 		optionsList: [],
 		password: false,
@@ -53,7 +65,7 @@ const inputs = [
 		placeHolder: 'Guardia',
 	},
 	{
-		key: 6,
+		key: 7,
 		name: 'email',
 		optionsList: [],
 		password: false,
@@ -63,7 +75,7 @@ const inputs = [
 		placeHolder: 'Correo electrónico',
 	},
 	{
-		key: 7,
+		key: 8,
 		name: 'password',
 		optionsList: [],
 		password: true,
@@ -73,7 +85,7 @@ const inputs = [
 		placeHolder: 'Contraseña',
 	},
 	{
-		key: 8,
+		key: 9,
 		name: 'repeatPassword',
 		optionsList: [],
 		password: true,
@@ -87,7 +99,7 @@ const inputs = [
 const registerInputs = (admin) => {
 	if (admin && inputs[4].name !== 'section') {
 		inputs.splice(4, 0, {
-			key: 4,
+			key: 5,
 			name: 'section',
 			optionsList: ['Teléfonía', 'Monitoreo', 'Despacho'],
 			password: false,

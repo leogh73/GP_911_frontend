@@ -64,7 +64,7 @@ const Schedule = ({ type }) => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, selectedDate, type, userContext.token]);
+	}, [httpRequestHandler, selectedDate, type, navigate, userContext]);
 
 	useEffect(() => {
 		fetchData();

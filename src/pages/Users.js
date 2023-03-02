@@ -44,7 +44,7 @@ const Users = ({ section }) => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, section, userContext.token, navigate]);
+	}, [httpRequestHandler, section, userContext, navigate]);
 
 	useEffect(() => {
 		fetchListItems();

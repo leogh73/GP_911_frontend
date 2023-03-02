@@ -14,11 +14,22 @@ const useUser = () => {
 	// const navigate = useNavigate();
 
 	const storeUser = (userData) => {
-		const { firstName, lastName, ni, hierarchy, section, guardId, email, superior, admin } =
-			userData;
+		const {
+			username,
+			firstName,
+			lastName,
+			ni,
+			hierarchy,
+			section,
+			guardId,
+			email,
+			superior,
+			admin,
+		} = userData;
 		localStorage.setItem(
 			'userData',
 			JSON.stringify({
+				username,
 				firstName,
 				lastName,
 				ni,
@@ -44,7 +55,6 @@ const useUser = () => {
 	};
 
 	const login = useCallback((userData, expirationTokenTime) => {
-		console.log(userData);
 		setToken(userData.token);
 		setUserData(userData);
 		const expirationDateToken =
@@ -103,10 +113,21 @@ const useUser = () => {
 			storedTokenData.token &&
 			new Date(storedTokenData.expirationDate) > new Date()
 		) {
-			const { firstName, lastName, ni, hierarchy, section, guardId, email, superior, admin } =
-				storedUserData;
+			const {
+				username,
+				firstName,
+				lastName,
+				ni,
+				hierarchy,
+				section,
+				guardId,
+				email,
+				superior,
+				admin,
+			} = storedUserData;
 			const userData = {
 				token: storedTokenData.token,
+				username,
 				firstName,
 				lastName,
 				ni,
