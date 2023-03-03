@@ -16,6 +16,8 @@ import Title from '../components/Title';
 
 import UserContext from '../context/UserContext';
 import { CgProfile } from 'react-icons/cg';
+import { MdSupervisorAccount } from 'react-icons/md';
+import { GrUserAdmin } from 'react-icons/gr';
 
 const Profile = ({ startData }) => {
 	const [success, setSuccess] = useState();
@@ -31,8 +33,18 @@ const Profile = ({ startData }) => {
 		setSuccess(false);
 	};
 
-	const { username, firstName, lastName, ni, hierarchy, section, guardId, email } =
-		userContext.userData;
+	const {
+		username,
+		firstName,
+		lastName,
+		ni,
+		hierarchy,
+		section,
+		guardId,
+		email,
+		superior,
+		admin,
+	} = userContext.userData;
 
 	let userSection;
 	if (section === 'Phoning') userSection = 'Teléfonía';
@@ -46,18 +58,29 @@ const Profile = ({ startData }) => {
 		{ key: '04', icon: <FaIdCard />, title: 'NI', data: ni },
 		{ key: '05', icon: <TbHierarchy size={22} />, title: 'Jerarquía', data: hierarchy },
 		{ key: '06', icon: <FaBuilding />, title: 'Sección', data: userSection },
-		{ key: '07', icon: <FaUsers />, title: 'Guardia', data: guardId },
+		{ key: '07', icon: <FaUsers size={25} />, title: 'Guardia', data: guardId ?? '-' },
 		{ key: '08', icon: <FaEnvelope />, title: 'Correo electrónico', data: email },
 	];
 
+	if (superior || admin)
+		profileData.push(
+			{
+				key: '09',
+				icon: <MdSupervisorAccount size={28} />,
+				title: 'Superior',
+				data: superior ? 'Si' : 'No',
+			},
+			{ key: '10', icon: <GrUserAdmin />, title: 'Administrador', data: admin ? 'Si' : 'No' },
+		);
+
+	const divIndex = superior || admin ? 5 : 4;
+
 	const changeSection = (key, icon, title, data) => (
-		<div key={key} className="user-section">
-			<div className="user-section-profile">
-				<div className="section-icon">{icon}</div>
-				<div className="section-text-profile">
-					<div className="section-title">{title}</div>
-					{data}
-				</div>
+		<div key={key} className="user-profile-section">
+			<div className="section-icon">{icon}</div>
+			<div className="section-text-profile">
+				<div className="section-title">{title}</div>
+				{data}
 			</div>
 		</div>
 	);
@@ -67,10 +90,14 @@ const Profile = ({ startData }) => {
 			<Title icon={<CgProfile />} text={'Perfil'} />
 			<div className="new-change-data">
 				<div className="user-change-section">
-					{profileData.map((p, i) => i < 4 && changeSection(p.key, p.icon, p.title, p.data))}
+					{profileData.map(
+						(p, i) => i < divIndex && changeSection(p.key, p.icon, p.title, p.data),
+					)}
 				</div>
 				<div className="user-change-section">
-					{profileData.map((p, i) => i >= 4 && changeSection(p.key, p.icon, p.title, p.data))}
+					{profileData.map(
+						(p, i) => i >= divIndex && changeSection(p.key, p.icon, p.title, p.data),
+					)}
 				</div>
 			</div>
 			<Button

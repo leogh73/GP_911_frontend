@@ -228,7 +228,13 @@ const NavBar = () => {
 							{(userContext.userData.admin || userContext.userData.superior) && (
 								<li id={'/users'}>
 									<div className="link-container">
-										<Link to="/users">
+										<Link
+											to={
+												!!userContext.activeTab && userContext.activeTab.startsWith('/users')
+													? userContext.activeTab
+													: '/users'
+											}
+										>
 											<FaUsers />
 											USUARIOS
 										</Link>
