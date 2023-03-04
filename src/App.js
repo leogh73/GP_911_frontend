@@ -14,10 +14,14 @@ import UserContext from './context/UserContext';
 const App = () => {
 	const { userData, token, login, logout } = useUser();
 
-	const { routes, activeTab, loadActiveTab, loadChangeData, activateEditionRoute } = useRoutes(
-		token,
-		userData,
-	);
+	const {
+		routes,
+		activeTab,
+		loadActiveTab,
+		loadChangeData,
+		loadProfileData,
+		activateEditionRoute,
+	} = useRoutes(token, userData);
 
 	return (
 		<UserContext.Provider
@@ -29,6 +33,7 @@ const App = () => {
 				activeTab,
 				loadActiveTab,
 				loadChangeData,
+				loadProfileData,
 				activateEditionRoute,
 			}}
 		>

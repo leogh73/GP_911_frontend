@@ -1,8 +1,18 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
 import Form from '../components/Form';
-import { FaUsers, FaUser, FaIdCard, FaBuilding, FaEnvelope, FaKey } from 'react-icons/fa';
+import {
+	FaUsers,
+	FaUser,
+	FaIdCard,
+	FaBuilding,
+	FaEnvelope,
+	FaKey,
+	FaUserEdit,
+	FaUserCheck,
+	FaUserTimes,
+} from 'react-icons/fa';
 import { HiUserCircle } from 'react-icons/hi';
 import { TbHierarchy } from 'react-icons/tb';
 
@@ -19,19 +29,9 @@ import { CgProfile } from 'react-icons/cg';
 import { MdSupervisorAccount } from 'react-icons/md';
 import { GrUserAdmin } from 'react-icons/gr';
 
-const Profile = ({ startData }) => {
-	const [success, setSuccess] = useState();
-	const [error, setError] = useState();
+const Profile = () => {
 	const userContext = useContext(UserContext);
-
-	const modificationResult = (result) => {
-		result.userId ? setSuccess(true) : setError(true);
-	};
-
-	const goBack = () => {
-		setError(false);
-		setSuccess(false);
-	};
+	const navigate = useNavigate();
 
 	const {
 		username,
@@ -102,11 +102,15 @@ const Profile = ({ startData }) => {
 			</div>
 			<Button
 				className="button"
-				text={startData ? 'EDITAR' : 'ENVIAR'}
+				text={'EDITAR'}
 				width={200}
 				// disabled={!dataIsValid}
 				// loading={loadingSendData}
-				// onClick={() => setShowModal(true)}
+				onClick={() => {
+					// userContext.activateEditionRoute(true);
+					// userContext.loadProfileData(startData);
+					navigate('/profile/edit');
+				}}
 			/>
 		</div>
 	);

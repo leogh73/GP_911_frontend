@@ -11,6 +11,7 @@ import Schedule from '../pages/Schedule';
 import Password from '../pages/Password';
 import Users from '../pages/Users';
 import Profile from '../pages/Profile';
+import ProfileEdit from '../pages/ProfileEdit';
 
 const useRoutes = (token, userData) => {
 	const [activeEditRoute, setActiveEditRoute] = useState(false);
@@ -74,8 +75,8 @@ const useRoutes = (token, userData) => {
 				<Route path="search" element={<Schedule type={'search'} />} />
 			</Route>
 			<Route path="/profile">
-				<Route path="" element={<Profile startData={profileData} />} />
-				{activeEditRoute && <Route path="edit" element={<Profile startData={profileData} />} />}
+				<Route path="" element={<Profile />} />
+				<Route path="edit" element={<ProfileEdit startData={profileData} />} />
 			</Route>
 			{userData.superior
 				? superiorRoutes.map((route) => (
