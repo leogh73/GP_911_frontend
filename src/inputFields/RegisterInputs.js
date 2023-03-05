@@ -1,16 +1,17 @@
+import { useContext } from 'react';
 import { FaUsers, FaUser, FaIdCard, FaBuilding, FaEnvelope, FaKey } from 'react-icons/fa';
 import { HiUserCircle } from 'react-icons/hi';
+import { MdSupervisorAccount } from 'react-icons/md';
 import { TbHierarchy } from 'react-icons/tb';
+import UserContext from '../context/UserContext';
 
-const inputs = [
+let inputs = [
 	{
 		key: 0,
-		name: 'name',
+		name: 'username',
 		password: false,
 		optionsList: [],
 		icon: <HiUserCircle size={27} />,
-		errorMessage: '',
-		value: '',
 		placeHolder: 'Nombre de usuario',
 	},
 	{
@@ -19,8 +20,6 @@ const inputs = [
 		password: false,
 		optionsList: [],
 		icon: <FaUser />,
-		errorMessage: '',
-		value: '',
 		placeHolder: 'Apellido',
 	},
 	{
@@ -30,7 +29,6 @@ const inputs = [
 		password: false,
 		errorMessage: '',
 		icon: <FaUser />,
-		value: '',
 		placeHolder: 'Nombre',
 	},
 	{
@@ -39,8 +37,6 @@ const inputs = [
 		optionsList: [],
 		password: false,
 		icon: <FaIdCard />,
-		errorMessage: '',
-		value: '',
 		placeHolder: 'NI',
 	},
 	{
@@ -49,66 +45,92 @@ const inputs = [
 		optionsList: [],
 		password: false,
 		icon: <TbHierarchy size={21} />,
-		errorMessage: '',
-		value: '',
 		placeHolder: 'Jerarquía',
 	},
-
+	{
+		key: 5,
+		name: 'section',
+		optionsList: ['Teléfonía', 'Monitoreo', 'Despacho'],
+		password: false,
+		icon: <FaBuilding />,
+		placeHolder: 'Sección',
+	},
 	{
 		key: 6,
-		name: 'guard',
+		name: 'guardId',
 		optionsList: [],
 		password: false,
 		icon: <FaUsers />,
-		errorMessage: '',
-		value: '',
 		placeHolder: 'Guardia',
 	},
 	{
 		key: 7,
+		name: 'Superior',
+		optionsList: ['Si', 'No'],
+		password: false,
+		icon: <MdSupervisorAccount size={28} />,
+		placeHolder: 'Superior',
+	},
+	{
+		key: 8,
 		name: 'email',
 		optionsList: [],
 		password: false,
 		icon: <FaEnvelope />,
-		errorMessage: '',
-		value: '',
 		placeHolder: 'Correo electrónico',
 	},
 	{
-		key: 8,
+		key: 9,
 		name: 'password',
 		optionsList: [],
 		password: true,
 		icon: <FaKey />,
-		errorMessage: '',
-		value: '',
 		placeHolder: 'Contraseña',
 	},
 	{
-		key: 9,
+		key: 10,
 		name: 'repeatPassword',
 		optionsList: [],
 		password: true,
 		icon: <FaKey />,
-		errorMessage: '',
-		value: '',
 		placeHolder: 'Repetir contraseña',
 	},
 ];
 
-const registerInputs = (admin) => {
-	if (admin && inputs[4].name !== 'section') {
-		inputs.splice(4, 0, {
-			key: 5,
-			name: 'section',
-			optionsList: ['Teléfonía', 'Monitoreo', 'Despacho'],
-			password: false,
-			icon: <FaBuilding />,
-			errorMessage: '',
-			value: '',
-			placeHolder: 'Sección',
-		});
+const registerInputs = (admin, superior, profile) => {
+	inputs.forEach((input) => {
+		input.disabled = !!profile ? true : false;
+		input.errorMessage = '';
+		input.value = '';
+	});
+
+	inputs[0].value = profile.data.username;
+	inputs[1].value = profile.data.lastName;
+	inputs[2].value = profile.data.firstName;
+	inputs[3].value = profile.data.ni;
+	inputs[4].value = profile.data.hierarchy;
+	inputs[5].value = profile.data.section;
+	inputs[6].value = profile.data.guardId;
+	inputs[7].value = profile.data.superior;
+	inputs[8].value = profile.data.email;
+
+	if (!!profile) {
+		inputs.splice(9, 2);
+		if ((superior && profile.own) || (!superior && profile.own)) {
+			inputs[0].disabled = false;
+			inputs[7].disabled = false;
+			inputs[8].disabled = false;
+		}
+		if (superior && !profile.own) {
+			inputs[5].disabled = false;
+			inputs[6].disabled = false;
+		}
+		console.log(inputs);
 	}
+
+	console.log(inputs);
+
 	return inputs;
 };
+
 export default registerInputs;

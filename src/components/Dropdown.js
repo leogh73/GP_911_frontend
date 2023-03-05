@@ -4,7 +4,16 @@ import './Button.css';
 import './Dropdown.css';
 import SendNewContext from '../context/SendNewContext';
 
-const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, style }) => {
+const DropdownMenu = ({
+	name,
+	icon,
+	value,
+	titleValue,
+	optionsList,
+	onChange,
+	style,
+	disabled,
+}) => {
 	const sendNewContext = useContext(SendNewContext);
 	const [listState, setListState] = useState(optionsList);
 
@@ -66,7 +75,7 @@ const DropdownMenu = ({ name, icon, value, titleValue, optionsList, onChange, st
 							className="dropdown-option"
 							value={option}
 							onClick={(e) => {
-								toggleMenu();
+								if (!disabled) toggleMenu();
 								selectedOption();
 								clickOptionHandler(e);
 							}}

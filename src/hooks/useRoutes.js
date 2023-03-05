@@ -107,6 +107,7 @@ const useRoutes = (token, userData) => {
 		activeTab,
 		loadActiveTab,
 		loadChangeData,
+		profileData,
 		loadProfileData,
 		activateEditionRoute,
 	};

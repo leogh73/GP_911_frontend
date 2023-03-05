@@ -34,7 +34,7 @@ const InputField = ({
 							value={value.length ? `${value}` : `${placeHolder}`}
 							optionsList={optionsList}
 							onChange={onChange}
-							selectable={true}
+							disabled={disabled}
 							style={{ padding: 5, top: 33, fontSize: 16 }}
 						/>
 					) : (

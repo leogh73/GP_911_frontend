@@ -15,6 +15,7 @@ const Form = ({
 	icon,
 	rememberMe,
 	pageName,
+	profileData,
 	buttonText,
 	footer,
 }) => {
@@ -28,7 +29,7 @@ const Form = ({
 		setLoginError,
 		serverError,
 		setServerError,
-	} = useForm(pageName, sendUserForm);
+	} = useForm(pageName, sendUserForm, profileData);
 
 	const userContext = useContext(UserContext);
 	const formIndex = !!userContext.userData && userContext.userData.admin ? 5 : 4;
@@ -64,6 +65,7 @@ const Form = ({
 											value={f.value}
 											onChange={changeHandler}
 											placeHolder={f.placeHolder}
+											disabled={f.disabled}
 										/>
 									),
 							)}
@@ -83,6 +85,7 @@ const Form = ({
 											value={f.value}
 											onChange={changeHandler}
 											placeHolder={f.placeHolder}
+											disabled={f.disabled}
 										/>
 									),
 							)}

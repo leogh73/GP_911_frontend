@@ -10,7 +10,7 @@ import useRememberMe from './useRememberMe';
 import UserContext from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
-const useForm = (pageName, sendUserForm) => {
+const useForm = (pageName, sendUserForm, profileData) => {
 	const { loadUser } = useRememberMe();
 	const [formIsValid, setFormIsValid] = useState(false);
 	const { httpRequestHandler } = useHttpConnection();
@@ -27,9 +27,8 @@ const useForm = (pageName, sendUserForm) => {
 		let schema;
 		let formInputs = [];
 		if (pageName === 'register') {
-			formInputs = registerInputs(userContext.userData.admin);
+			formInputs = registerInputs(userContext.userData.admin, userContext.userData.superior);
 			schema = registerSchema;
-			console.log(formInputs);
 		}
 		if (pageName === 'login') {
 			formInputs = loginInputs;
@@ -44,10 +43,26 @@ const useForm = (pageName, sendUserForm) => {
 			formInputs = passwordInputs('forgot');
 			schema = passwordSchema('forgot');
 		}
-		// if (pageName === 'profile') {
-		// 	formInputs = registerInputs(userContext.userData.admin).map((input)=>{input.disabled===true});
-		// 	schema = registerSchema;
-		// }
+		if (pageName === 'edit-profile') {
+			formInputs = registerInputs(userContext.userData.admin, userContext.userData.superior, {
+				data: profileData ?? userContext.userData,
+				own: !!profileData ? false : true,
+			});
+			console.log(formInputs);
+			// 	formInputs = startInputs.map((input) => {
+			// 		input.disabled = true;
+			// 	});
+			// 	formInputs[0].value = profileData.username;
+			// 	formInputs[1].value = profileData.lastName;
+			// 	formInputs[2].value = profileData.firstName;
+			// 	formInputs[3].value = profileData.ni;
+			// 	formInputs[4].value = profileData.hierarchy;
+			// 	formInputs[5].value = profileData.section;
+			// 	formInputs[6].value = profileData.guardId;
+			// 	formInputs[7].value = profileData.email;
+			// 	formInputs[8].value = profileData.username;
+			schema = registerSchema;
+		}
 		setSchema(schema);
 		setInputs(formInputs);
 		return () => {

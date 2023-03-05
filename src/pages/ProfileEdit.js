@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
 import Form from '../components/Form';
@@ -43,7 +43,12 @@ const ProfileEdit = ({ startData }) => {
 		setError(false);
 		setSuccess(false);
 	};
-	const userData = !!startData ? userContext.loadProfileData(startData) : userContext.userData;
+
+	useEffect(() => {
+		return () => {
+			userContext.loadProfileData(null);
+		};
+	}, [userContext]);
 
 	// console.log(userData);
 
@@ -76,6 +81,7 @@ const ProfileEdit = ({ startData }) => {
 			rememberMe=""
 			buttonText="GUARDAR"
 			pageName="edit-profile"
+			profileData={startData}
 		/>
 	);
 };
