@@ -70,6 +70,7 @@ const Login = () => {
 				formTitle="Iniciar sesión"
 				icon={<FaSignInAlt />}
 				buttonText="INGRESAR"
+				// profileView={false}
 				rememberMe={
 					<div className="remember-me" onClick={rememberMeClickHandler}>
 						<input

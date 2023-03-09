@@ -11,13 +11,15 @@ import Button from './Button';
 
 import './Table.css';
 
-import useListData from '../hooks/useListData';
+import useTableData from '../hooks/useTableData';
 import UserContext from '../context/UserContext';
+import SectionContext from '../context/SectionContext';
 
 const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 	const userContext = useContext(UserContext);
+	const sectionContext = useContext(SectionContext);
 	const navigate = useNavigate();
-	const { listData, dispatch } = useListData(dataList, rowType);
+	const { listData, dispatch } = useTableData(dataList, rowType);
 
 	const resultModifyRow = (status, consult) => {
 		if (consult.result && consult.result._id) {
@@ -91,7 +93,10 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 		if (
 			(!userContext.userData.superior && (rowType === 'change' || rowType === 'request')) ||
 			(rowType === 'affected' && userContext.userData.superior) ||
-			(rowType === 'user' && (userContext.userData.superior || userContext.userData.admin))
+			(rowType === 'user' && userContext.userData.admin) ||
+			(rowType === 'user' &&
+				userContext.userData.superior &&
+				userContext.userData.section === sectionContext.section)
 		) {
 			content.newButton = (
 				<Button

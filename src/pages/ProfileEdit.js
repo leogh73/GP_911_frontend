@@ -80,8 +80,9 @@ const ProfileEdit = ({ startData }) => {
 			icon={<FaUserEdit />}
 			rememberMe=""
 			buttonText="GUARDAR"
-			pageName="edit-profile"
+			pageName="profile-edit"
 			profileData={startData}
+			profileView={true}
 		/>
 	);
 };

@@ -121,7 +121,7 @@ const Users = ({ section }) => {
 						]}
 						rowType={'user'}
 						dataList={dataList}
-						newLink={'/register'}
+						newLink={`/register/${section.toLowerCase()}`}
 					/>
 				)}
 			</div>

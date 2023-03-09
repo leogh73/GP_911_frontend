@@ -10,6 +10,7 @@ const Title = ({ text, icon }) => {
 				style={{
 					fontSize: 'large',
 					paddingTop: '5px',
+					paddingBottom: '5px',
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',

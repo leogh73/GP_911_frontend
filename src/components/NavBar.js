@@ -70,6 +70,8 @@ const NavBar = () => {
 		const userMenu = userContext.token ? document.querySelector('.user-toggle') : null;
 		const navLinksList = document.querySelectorAll('.nav-links li');
 
+		const body = document.querySelector('body');
+
 		const toggleNavBar = () => {
 			navLinks.classList.toggle('nav-active');
 			navLinksList.forEach((link, index) => {
@@ -82,6 +84,7 @@ const NavBar = () => {
 			});
 			burger.classList.toggle('toggle');
 			layout.classList.toggle('body-overlay');
+			body.classList.toggle('body-navbar-overflow');
 		};
 
 		if (userContext.token) {
@@ -100,7 +103,6 @@ const NavBar = () => {
 			});
 		}
 
-		const body = document.querySelector('body');
 		const modeToggle = document.querySelector('.dark-light');
 
 		if (localStorage.getItem('mode') === null) {
@@ -237,6 +239,22 @@ const NavBar = () => {
 										>
 											<FaUsers />
 											USUARIOS
+										</Link>
+									</div>
+								</li>
+							)}
+							{userContext.userData.admin  && (
+								<li id={'/register'}>
+									<div className="link-container">
+										<Link
+											to={
+												!!userContext.activeTab && userContext.activeTab.startsWith('/users')
+													? userContext.activeTab
+													: '/users'
+											}
+										>
+											<FaUsers />
+											Registro
 										</Link>
 									</div>
 								</li>

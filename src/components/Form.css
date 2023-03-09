@@ -30,11 +30,13 @@ form {
 
 .form.login,
 .form.register,
+.form.profile-edit,
 .form.change-password,
 .form.forgot-password {
 	padding: 20px;
 }
 
+.form.profile-edit,
 .form.register {
 	width: 800px;
 }
@@ -48,7 +50,8 @@ form {
 	opacity: 0.4;
 }
 
-.inputs-container.register {
+.inputs-container.register,
+.inputs-container.profile-edit {
 	/* width: 800px; */
 	display: flex;
 	flex-direction: row;
@@ -57,12 +60,14 @@ form {
 }
 
 @media only screen and (max-width: 730px) {
-	.inputs-container.register {
+	.inputs-container.register,
+	.inputs-container.profile-edit {
 		display: flex;
 		flex-direction: column;
 	}
 
-	.form.register {
+	.form.register,
+	.form.profile-edit {
 		width: 430px;
 	}
 }

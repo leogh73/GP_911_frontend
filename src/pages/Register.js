@@ -4,7 +4,7 @@ import Message from '../components/Message';
 import Form from '../components/Form';
 import { FaUserCheck, FaUserCircle, FaUserPlus, FaUserTimes } from 'react-icons/fa';
 
-const Register = () => {
+const Register = ({ section }) => {
 	const [success, setSuccess] = useState();
 	const [error, setError] = useState();
 
@@ -41,6 +41,7 @@ const Register = () => {
 			rememberMe=""
 			buttonText="REGISTRAR"
 			pageName="register"
+			section={section}
 		/>
 	);
 };

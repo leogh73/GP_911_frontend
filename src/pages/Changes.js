@@ -54,7 +54,7 @@ const Changes = ({ type }) => {
 		tabs.forEach((tab) => tab.classList.remove('selected'));
 		if (!element.classList.contains('selected')) element.classList.add('selected');
 		userContext.loadActiveTab(location.pathname);
-	}, [location.pathname]);
+	}, [location.pathname, userContext]);
 
 	const tabClickHandler = (e) => {
 		let elementId = e.target.getAttribute('id');

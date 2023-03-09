@@ -60,24 +60,24 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 						{button(
 							<MdOutlineCheck size={24} />,
 							generateRandomId(),
-							'Confirmar aprobar cambio',
-							`¿Aprobar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
-							() => modifyData(type, data._id, { previous: data.status, new: 'Aprobado' }),
+							'Confirmar autorizar cambio',
+							`¿Autorizar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
+							() => modifyData(type, data._id, { previous: data.status, new: 'Autorizado' }),
 							'No',
 							true,
 						)}
 						{button(
 							<MdOutlineClose size={24} />,
 							generateRandomId(),
-							'Confirmar no aprobar cambio',
-							`¿No aprobar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
-							() => modifyData(type, data._id, { previous: data.status, new: 'No aprobado' }),
+							'Confirmar no autorizar cambio',
+							`¿No autorizar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
+							() => modifyData(type, data._id, { previous: data.status, new: 'No autorizado' }),
 							'No',
 							true,
 						)}
 					</>
 				);
-			if (type === 'change' && data.status === 'Aprobado')
+			if (type === 'change' && data.status === 'Autorizado')
 				return (
 					<>
 						{button(

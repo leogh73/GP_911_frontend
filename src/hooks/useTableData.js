@@ -1,7 +1,7 @@
 import { useReducer, useContext } from 'react';
 import UserContext from '../context/UserContext';
 
-const useListData = (dataList, rowType) => {
+const useTableData = (dataList, rowType) => {
 	const userContext = useContext(UserContext);
 	const fullName = `${userContext.userData.lastName} ${userContext.userData.firstName}`;
 
@@ -355,4 +355,4 @@ const useListData = (dataList, rowType) => {
 	return { listData, dispatch };
 };
 
-export default useListData;
+export default useTableData;

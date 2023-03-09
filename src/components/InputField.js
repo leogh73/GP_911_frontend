@@ -14,6 +14,7 @@ const InputField = ({
 	onChange,
 	placeHolder,
 	disabled,
+	profileView,
 }) => {
 	const [showPassword, setShowPassword] = useState(false);
 
@@ -25,6 +26,7 @@ const InputField = ({
 		<IconContext.Provider
 			value={{ style: { color: 'slategray', backgroundColor: 'none', minWidth: '20px' } }}
 		>
+			{profileView && placeHolder}
 			<div className="input-container">
 				<div className={`input-box  ${errorMessage.length ? 'input-error' : ''}`}>
 					<span name={name}>{icon}</span>
@@ -44,7 +46,7 @@ const InputField = ({
 							className={`${password ? 'border-end-0' : ''}`}
 							onChange={onChange}
 							value={value}
-							placeholder={placeHolder}
+							placeholder={!profileView ? placeHolder : null}
 							disabled={disabled}
 						/>
 					)}

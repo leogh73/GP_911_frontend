@@ -5,7 +5,7 @@ import { MdSupervisorAccount } from 'react-icons/md';
 import { TbHierarchy } from 'react-icons/tb';
 import UserContext from '../context/UserContext';
 
-let inputs = [
+const registerInputs = [
 	{
 		key: 0,
 		name: 'username',
@@ -13,6 +13,9 @@ let inputs = [
 		optionsList: [],
 		icon: <HiUserCircle size={27} />,
 		placeHolder: 'Nombre de usuario',
+		errorMessage: '',
+		value: '',
+		disabled: false,
 	},
 	{
 		key: 1,
@@ -21,6 +24,9 @@ let inputs = [
 		optionsList: [],
 		icon: <FaUser />,
 		placeHolder: 'Apellido',
+		errorMessage: '',
+		value: '',
+		disabled: false,
 	},
 	{
 		key: 2,
@@ -30,6 +36,9 @@ let inputs = [
 		errorMessage: '',
 		icon: <FaUser />,
 		placeHolder: 'Nombre',
+		errorMessage: '',
+		value: '',
+		disabled: false,
 	},
 	{
 		key: 3,
@@ -38,6 +47,9 @@ let inputs = [
 		password: false,
 		icon: <FaIdCard />,
 		placeHolder: 'NI',
+		errorMessage: '',
+		value: '',
+		disabled: false,
 	},
 	{
 		key: 4,
@@ -46,6 +58,9 @@ let inputs = [
 		password: false,
 		icon: <TbHierarchy size={21} />,
 		placeHolder: 'Jerarquía',
+		errorMessage: '',
+		value: '',
+		disabled: false,
 	},
 	{
 		key: 5,
@@ -54,6 +69,9 @@ let inputs = [
 		password: false,
 		icon: <FaBuilding />,
 		placeHolder: 'Sección',
+		errorMessage: '',
+		value: '',
+		disabled: false,
 	},
 	{
 		key: 6,
@@ -62,14 +80,20 @@ let inputs = [
 		password: false,
 		icon: <FaUsers />,
 		placeHolder: 'Guardia',
+		errorMessage: '',
+		value: '',
+		disabled: false,
 	},
 	{
 		key: 7,
-		name: 'Superior',
+		name: 'superior',
 		optionsList: ['Si', 'No'],
 		password: false,
 		icon: <MdSupervisorAccount size={28} />,
 		placeHolder: 'Superior',
+		errorMessage: '',
+		value: '',
+		disabled: false,
 	},
 	{
 		key: 8,
@@ -78,6 +102,9 @@ let inputs = [
 		password: false,
 		icon: <FaEnvelope />,
 		placeHolder: 'Correo electrónico',
+		errorMessage: '',
+		value: '',
+		disabled: false,
 	},
 	{
 		key: 9,
@@ -86,6 +113,9 @@ let inputs = [
 		password: true,
 		icon: <FaKey />,
 		placeHolder: 'Contraseña',
+		errorMessage: '',
+		value: '',
+		disabled: false,
 	},
 	{
 		key: 10,
@@ -94,43 +124,10 @@ let inputs = [
 		password: true,
 		icon: <FaKey />,
 		placeHolder: 'Repetir contraseña',
+		errorMessage: '',
+		value: '',
+		disabled: false,
 	},
 ];
-
-const registerInputs = (admin, superior, profile) => {
-	inputs.forEach((input) => {
-		input.disabled = !!profile ? true : false;
-		input.errorMessage = '';
-		input.value = '';
-	});
-
-	inputs[0].value = profile.data.username;
-	inputs[1].value = profile.data.lastName;
-	inputs[2].value = profile.data.firstName;
-	inputs[3].value = profile.data.ni;
-	inputs[4].value = profile.data.hierarchy;
-	inputs[5].value = profile.data.section;
-	inputs[6].value = profile.data.guardId;
-	inputs[7].value = profile.data.superior;
-	inputs[8].value = profile.data.email;
-
-	if (!!profile) {
-		inputs.splice(9, 2);
-		if ((superior && profile.own) || (!superior && profile.own)) {
-			inputs[0].disabled = false;
-			inputs[7].disabled = false;
-			inputs[8].disabled = false;
-		}
-		if (superior && !profile.own) {
-			inputs[5].disabled = false;
-			inputs[6].disabled = false;
-		}
-		console.log(inputs);
-	}
-
-	console.log(inputs);
-
-	return inputs;
-};
 
 export default registerInputs;
