@@ -9,12 +9,7 @@ import './Dropdown.css';
 
 const SelectList = ({ name, type, icon, titleValue, sendSelectedItem, startData }) => {
 	const sendNewContext = useContext(SendNewContext);
-	const { state, loadingUsers, loadItem, inputHandler } = useSelectList(
-		name,
-		type,
-		sendSelectedItem,
-		startData,
-	);
+	const { state, loadItem, inputHandler } = useSelectList(name, type, sendSelectedItem, startData);
 
 	const toggleMenu = useCallback(() => {
 		document.getElementById(name).querySelector('.dropdown-content').classList.toggle('active');
@@ -39,7 +34,7 @@ const SelectList = ({ name, type, icon, titleValue, sendSelectedItem, startData 
 			<div
 				className="dropdown-button"
 				onClick={() => {
-					if (!loadingUsers) {
+					if (!state.loading) {
 						toggleMenu();
 						sendNewContext.loadOpenedMenu(name);
 					}
@@ -51,7 +46,7 @@ const SelectList = ({ name, type, icon, titleValue, sendSelectedItem, startData 
 						{!!titleValue && <div className="section-title">{titleValue}</div>}
 						{state.selectedItem === '-' ? 'Seleccionar' : state.selectedItem}
 					</div>
-					{loadingUsers ? (
+					{state.loading ? (
 						<Loading type={'opened'} />
 					) : (
 						<div className="dropdown-arrow">

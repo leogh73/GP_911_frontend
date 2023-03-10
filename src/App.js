@@ -14,15 +14,7 @@ import UserContext from './context/UserContext';
 const App = () => {
 	const { userData, token, login, logout } = useUser();
 
-	const {
-		routes,
-		activeTab,
-		loadActiveTab,
-		changeData,
-		loadChangeData,
-		loadProfileData,
-		activateEditionRoute,
-	} = useRoutes(token, userData);
+	const { routes, state, dispatch } = useRoutes(token, userData);
 
 	return (
 		<UserContext.Provider
@@ -31,12 +23,8 @@ const App = () => {
 				token,
 				login,
 				logout,
-				activeTab,
-				loadActiveTab,
-				changeData,
-				loadChangeData,
-				loadProfileData,
-				activateEditionRoute,
+				state,
+				dispatch,
 			}}
 		>
 			<NavBar />

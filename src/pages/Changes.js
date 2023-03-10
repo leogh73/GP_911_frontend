@@ -26,14 +26,12 @@ const Changes = ({ type }) => {
 				JSON.stringify({ type }),
 				{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
 			);
-			console.log(consult);
 			if (consult.error) {
 				setError(true);
 				if (consult.error === 'Token expired') {
 					userContext.logout(true);
-					navigate('/');
+					return navigate('/');
 				}
-				return;
 			}
 			setDataList(consult);
 		} catch (error) {
@@ -53,8 +51,7 @@ const Changes = ({ type }) => {
 		let element = document.getElementById(location.pathname);
 		tabs.forEach((tab) => tab.classList.remove('selected'));
 		if (!element.classList.contains('selected')) element.classList.add('selected');
-		userContext.loadActiveTab(location.pathname);
-	}, [location.pathname, userContext]);
+	}, [location.pathname]);
 
 	const tabClickHandler = (e) => {
 		let elementId = e.target.getAttribute('id');
@@ -62,7 +59,7 @@ const Changes = ({ type }) => {
 		let url = !!elementId ? elementId : elementUrl;
 		if (!!url && url !== location.pathname) {
 			navigate(url);
-			userContext.loadActiveTab(url);
+			userContext.dispatch({ type: 'load active tab', payload: { tab: url } });
 			setDataList(null);
 			setLoading(true);
 			setError(false);
@@ -88,11 +85,11 @@ const Changes = ({ type }) => {
 				<div className="loading-error-change">
 					<Message
 						title={`Error cargando ${
-							userContext.activeTab === '/changes/agreed' ? 'cambios' : 'pedidos'
+							userContext.state.activeTab === '/changes/agreed' ? 'cambios' : 'pedidos'
 						}`}
 						icon={<FaExclamationTriangle />}
 						body={`No se pudieron cargar ${
-							userContext.activeTab === '/changes/agreed' ? 'cambios de guardia' : 'pedidos'
+							userContext.state.activeTab === '/changes/agreed' ? 'cambios de guardia' : 'pedidos'
 						}. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas.`}
 					/>
 				</div>

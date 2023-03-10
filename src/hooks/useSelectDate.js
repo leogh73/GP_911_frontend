@@ -7,17 +7,7 @@ import useHttpConnection from './useHttpConnection';
 const useSelectDate = (sendDate, name) => {
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
-
 	const { httpRequestHandler } = useHttpConnection();
-	const initialState = {
-		fetched: [],
-		data: {
-			date: '-',
-			shift: '-',
-			day: '-',
-			guardId: '-',
-		},
-	};
 
 	function reducer(state, action) {
 		switch (action.type) {
@@ -56,7 +46,15 @@ const useSelectDate = (sendDate, name) => {
 		}
 	}
 
-	const [state, dispatch] = useReducer(reducer, initialState);
+	const [state, dispatch] = useReducer(reducer, {
+		fetched: [],
+		data: {
+			date: '-',
+			shift: '-',
+			day: '-',
+			guardId: '-',
+		},
+	});
 
 	const loadGuardId = (shift) => {
 		if (state.fetched.length) {

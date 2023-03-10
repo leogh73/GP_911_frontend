@@ -11,21 +11,25 @@ import { FaUser, FaUserClock } from 'react-icons/fa';
 import { ImBook } from 'react-icons/im';
 import SelectList from './SelectList';
 import SendNewContext from '../context/SendNewContext';
+import { BiCommentDetail } from 'react-icons/bi';
 
 const AffectedLoad = ({ sendResult }) => {
 	const [openedMenu, setOpenedMenu] = useState('');
 	const [showModal, setShowModal] = useState(false);
-	const { state, loadItem, loadDate, dataIsValid, loadingSendChange, sendNewChange } =
-		useAffectedLoad(sendResult);
+	const { state, dispatch, loadItem, loadDate, sendNewChange } = useAffectedLoad(sendResult);
 
 	const loadOpenedMenu = (id) => setOpenedMenu(id);
+
+	const commentChangeHandler = (e) => {
+		dispatch({ type: 'load comment', payload: { comment: e.target.value } });
+	};
 
 	return (
 		<SendNewContext.Provider
 			value={{
 				openedMenu,
 				loadOpenedMenu,
-				coverUser: state.name,
+				coverUser: state.data.name,
 			}}
 		>
 			<div className="new-change">
@@ -79,20 +83,37 @@ const AffectedLoad = ({ sendResult }) => {
 						/>
 					</div>
 				</div>
-
+				<div key={'01'} className="user-section">
+					<div className="user-section-content">
+						<div className="section-icon">
+							<BiCommentDetail />
+						</div>
+						<div className="section-text">
+							<div className="section-title">{'Comentario (opcional)'}</div>
+							<div className="comment-load">
+								<input
+									name={'comment-load'}
+									id={'03_comment'}
+									onChange={commentChangeHandler}
+									value={state.data.comment}
+								/>
+							</div>
+						</div>
+					</div>
+				</div>
 				<Button
 					className="button"
 					text={'ENVIAR'}
 					width={200}
-					disabled={!dataIsValid}
-					loading={loadingSendChange}
+					disabled={!state.dataIsValid}
+					loading={state.loading}
 					onClick={() => setShowModal(true)}
 				/>
 				{showModal && (
 					<Modal
 						id="change-modal"
 						title="Confirmar"
-						body={`¿Enviar cambios de servicio para ${state.name}?`}
+						body={`¿Enviar cambios de servicio para ${state.data.name}?`}
 						actionFunction={sendNewChange}
 						closeText={'No'}
 						closeFunction={() => setShowModal(false)}

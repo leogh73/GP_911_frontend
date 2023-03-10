@@ -150,7 +150,7 @@ const useTableData = (dataList, rowType) => {
 						return listData.sort((a, b) => a.bookPage - b.bookPage);
 					}
 					default:
-						return listData;
+						break;
 				}
 			case 'user':
 				switch (sortBy) {
@@ -180,7 +180,7 @@ const useTableData = (dataList, rowType) => {
 						return listData.sort((a, b) => a.email.localeCompare(b.email));
 					}
 					default:
-						return listData;
+						break;
 				}
 			default:
 				return listData;
@@ -348,7 +348,7 @@ const useTableData = (dataList, rowType) => {
 				};
 			}
 			default:
-				return { ...listData };
+				return listData;
 		}
 	}
 

@@ -75,17 +75,15 @@ const Schedule = ({ type }) => {
 		let element = document.getElementById(location.pathname);
 		tabs.forEach((tab) => tab.classList.remove('selected'));
 		if (!element.classList.contains('selected')) element.classList.add('selected');
-		userContext.loadActiveTab(location.pathname);
-	}, [location.pathname, userContext]);
+	}, [location.pathname]);
 
 	const tabClickHandler = (e) => {
 		let elementId = e.target.getAttribute('id');
 		let elementUrl = e.target.getAttribute('href');
 		let url = !!elementId ? elementId : elementUrl;
-		console.log(location.pathname);
 		if (!!url && url !== location.pathname) {
 			navigate(url);
-			userContext.loadActiveTab(url);
+			userContext.dispatch({ type: 'load active tab', payload: { tab: url } });
 			if (location.pathname === '/schedule/search') setLoading(true);
 			setError(false);
 			setSelectedDate(null);
@@ -124,11 +122,13 @@ const Schedule = ({ type }) => {
 						<div className="loading-error-change">
 							<Message
 								title={`Error cargando ${
-									userContext.activeTab === '/schedule/month' ? 'cronograma' : 'datos'
+									userContext.state.activeTab === '/schedule/month' ? 'cronograma' : 'datos'
 								}`}
 								icon={<FaExclamationTriangle />}
 								body={`No se pudieron cargar ${
-									userContext.activeTab === '/schedule/month' ? 'turnos' : 'datos de búsqueda'
+									userContext.state.activeTab === '/schedule/month'
+										? 'turnos'
+										: 'datos de búsqueda'
 								}. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas.`}
 							/>
 						</div>
@@ -138,7 +138,7 @@ const Schedule = ({ type }) => {
 						</div>
 					) : (
 						<>
-							{userContext.activeTab !== '/schedule/month' && !selectedDate ? (
+							{userContext.state.activeTab === '/schedule/search' && !selectedDate ? (
 								<div className="loading-error-change">
 									<Message
 										title={'Seleccionar fecha'}

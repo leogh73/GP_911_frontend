@@ -36,7 +36,7 @@ const useForm = (pageName, sendUserForm, profileData) => {
 		return formInputs;
 	};
 
-	const [formState, dispatch] = useReducer(reducer, {
+	const [state, dispatch] = useReducer(reducer, {
 		inputs: formInputs(),
 		formIsValid: false,
 		loading: false,
@@ -44,14 +44,13 @@ const useForm = (pageName, sendUserForm, profileData) => {
 		serverError: false,
 	});
 
-	// useEffect(() => {
-	// 	return () => {
-	// 		formState.inputs.forEach((i) => (i.value = ''));
-	// 	};
-	// }, []);
+	useEffect(() => {
+		return () => {
+			state.inputs.forEach((i) => (i.value = ''));
+		};
+	}, []);
 
 	const registeredData = (inputs) => {
-		console.log(inputs);
 		let registeredData = {};
 		if (pageName === 'register')
 			registeredData = {
@@ -88,33 +87,34 @@ const useForm = (pageName, sendUserForm, profileData) => {
 		return registeredData;
 	};
 
-	const sendFormData = async (event) => {
+	const submitForm = async (event) => {
 		if (!!event) event.preventDefault();
 		let headers = {
 			'Content-type': 'application/json',
 		};
 		if (pageName !== 'login') headers.authorization = `Bearer ${userContext.token}`;
-		dispatch({ payload: { type: 'loading', status: true } });
+		dispatch({ type: 'loading', payload: { status: true } });
 		let resultData = await httpRequestHandler(
 			`http://localhost:5000/api/user/${pageName}`,
 			'POST',
-			JSON.stringify(registeredData(formState.inputs)),
+			JSON.stringify(registeredData(state.inputs)),
 			headers,
 		);
-		dispatch({ payload: { type: 'loading', status: false } });
-		if (resultData.error && pageName === 'login')
-			dispatch({ payload: { type: 'server-error', status: true } });
-		if (resultData.password || resultData.usernameOrEmail)
-			dispatch({ payload: { type: 'login-error', status: true } });
+		dispatch({ type: 'loading', payload: { status: false } });
+		if (resultData.error && pageName === 'login') {
+			return dispatch({ type: 'server error', payload: { status: true } });
+		}
+		if (resultData.password || resultData.usernameOrEmail) {
+			return dispatch({ type: 'login error', payload: { status: true } });
+		}
 		if (resultData.error === 'Token expired') {
 			userContext.userData.logout(true);
-			navigate('/');
-			return;
+			return navigate('/');
 		}
-		return resultData;
+		sendUserForm(resultData, state.inputs[0].value);
 	};
 
-	function reducer(formState, action) {
+	function reducer(state, action) {
 		const validateInput = (name, value) => {
 			let errorMessage = '';
 			if (!value.length) errorMessage = 'Complete el campo.';
@@ -124,45 +124,45 @@ const useForm = (pageName, sendUserForm, profileData) => {
 		};
 
 		const validateForm = (inputs) => {
-			let inputsValidation = inputs
-				.map((i) => (!i.errorMessage.length && i.value.length ? true : false))
-				.filter((i) => i === false);
-			return inputsValidation.length ? false : true;
+			let isValid = true;
+			inputs.forEach((i) => {
+				if (i.errorMessage.length || !i.value.length) isValid = false;
+			});
+			return isValid;
 		};
 
-		switch (action.payload.type) {
+		switch (action.type) {
 			case 'change': {
-				let newInputs = [...formState.inputs];
+				let newInputs = [...state.inputs];
 				let inputIndex = newInputs.findIndex((i) => i.name === action.payload.inputName);
 				newInputs[inputIndex].value = action.payload.value;
 				newInputs[inputIndex].errorMessage = validateInput(
 					action.payload.inputName,
 					action.payload.value,
 				);
-				return { ...formState, inputs: newInputs, formIsValid: validateForm(newInputs) };
+				return { ...state, inputs: newInputs, formIsValid: validateForm(newInputs) };
 			}
 			case 'loading': {
-				return { ...formState, loading: action.payload.status };
+				return { ...state, loading: action.payload.status };
 			}
-			case 'login-error': {
+			case 'login error': {
 				return {
-					...formState,
+					...state,
 					loginError: action.payload.status,
 					formIsValid: false,
 				};
 			}
-			case 'server-error': {
-				return { ...formState, serverError: action.payload.status };
+			case 'server error': {
+				return { ...state, serverError: action.payload.status };
 			}
-
 			default:
 				break;
 		}
 	}
 
 	return {
-		formState,
-		sendFormData,
+		state,
+		submitForm,
 		dispatch,
 	};
 };
@@ -286,7 +286,7 @@ export default useForm;
 // 	let newInputs = [...inputs];
 // 	let userDataResult = validateData('form', null, newInputs, event);
 // 	if (userDataResult) {
-// 		let databaseResult = await sendFormData(registeredData(newInputs));
+// 		let databaseResult = await submitForm(registeredData(newInputs));
 // 		if (databaseResult.validInputs) sendUserForm(databaseResult.resultData, newInputs[0].value);
 // 	}
 // };

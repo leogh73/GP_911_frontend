@@ -195,8 +195,9 @@ const NavBar = () => {
 								<div className="link-container">
 									<Link
 										to={
-											!!userContext.activeTab && userContext.activeTab.startsWith('/schedule')
-												? userContext.activeTab
+											!!userContext.state.activeTab &&
+											userContext.state.activeTab.startsWith('/schedule')
+												? userContext.state.activeTab
 												: '/schedule'
 										}
 									>
@@ -209,8 +210,9 @@ const NavBar = () => {
 								<div className="link-container">
 									<Link
 										to={
-											!!userContext.activeTab && userContext.activeTab.startsWith('/changes')
-												? userContext.activeTab
+											!!userContext.state.activeTab &&
+											userContext.state.activeTab.startsWith('/changes')
+												? userContext.state.activeTab
 												: '/changes'
 										}
 									>
@@ -232,8 +234,9 @@ const NavBar = () => {
 									<div className="link-container">
 										<Link
 											to={
-												!!userContext.activeTab && userContext.activeTab.startsWith('/users')
-													? userContext.activeTab
+												!!userContext.state.activeTab &&
+												userContext.state.activeTab.startsWith('/users')
+													? userContext.state.activeTab
 													: '/users'
 											}
 										>
@@ -243,13 +246,14 @@ const NavBar = () => {
 									</div>
 								</li>
 							)}
-							{userContext.userData.admin  && (
+							{userContext.userData.admin && (
 								<li id={'/register'}>
 									<div className="link-container">
 										<Link
 											to={
-												!!userContext.activeTab && userContext.activeTab.startsWith('/users')
-													? userContext.activeTab
+												!!userContext.state.activeTab &&
+												userContext.state.activeTab.startsWith('/users')
+													? userContext.state.activeTab
 													: '/users'
 											}
 										>

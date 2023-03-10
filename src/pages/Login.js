@@ -12,34 +12,8 @@ const Login = () => {
 	const rememberMe = useRef(loadUser() ? true : false);
 	const userContext = useContext(UserContext);
 
-	const loginResult = (result, usernameOrPassword) => {
-		const {
-			token,
-			username,
-			firstName,
-			lastName,
-			ni,
-			hierarchy,
-			section,
-			guardId,
-			email,
-			superior,
-			admin,
-		} = result;
-		const userData = {
-			token,
-			username,
-			firstName,
-			lastName,
-			ni,
-			hierarchy,
-			section,
-			guardId,
-			email,
-			superior,
-			admin,
-		};
-		userContext.login(userData);
+	const userLogin = (resultData, usernameOrPassword) => {
+		userContext.login(resultData);
 		rememberUser(usernameOrPassword, rememberMe.current);
 	};
 
@@ -65,7 +39,7 @@ const Login = () => {
 	) : (
 		<>
 			<Form
-				sendUserForm={loginResult}
+				sendUserForm={userLogin}
 				pageName="login"
 				formTitle="Iniciar sesión"
 				icon={<FaSignInAlt />}

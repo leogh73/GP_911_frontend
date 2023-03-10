@@ -7,95 +7,95 @@ import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useChangeLoad = (resultData, startData) => {
-	const [loadingSendChange, setLoadingSendData] = useState(false);
-	const [dataIsValid, setDataIsValid] = useState(false);
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 	const commentContext = useContext(CommentContext);
-
 	const { httpRequestHandler } = useHttpConnection();
-
-	const initialState = startData
-		? {
-				coverData: {
-					name: startData.coverData.name,
-					date: startData.coverData.date,
-					shift: startData.coverData.shift,
-					day: startData.coverData.day,
-					guardId: startData.coverData.guardId,
-				},
-				returnData: {
-					name: startData.returnData.name,
-					date: startData.returnData.date,
-					shift: startData.returnData.shift,
-					day: startData.returnData.day,
-					guardId: startData.returnData.guardId,
-				},
-		  }
-		: {
-				type: 'change',
-				coverData: {
-					name: `${userContext.userData.lastName} ${userContext.userData.firstName}`,
-					date: '-',
-					shift: '-',
-					day: '-',
-					guardId: '-',
-				},
-				returnData: {
-					name: '-',
-					date: '-',
-					shift: '-',
-					day: '-',
-					guardId: '-',
-				},
-		  };
 
 	function reducer(state, action) {
 		switch (action.type) {
 			case 'load cover data':
 				return {
 					...state,
-					coverData: {
-						...state.coverData,
-						date: action.payload.data.date,
-						day: action.payload.data.day,
-						shift: action.payload.data.shift,
-						guardId: action.payload.data.guardId,
+					data: {
+						...state.data,
+						coverData: {
+							...state.data.coverData,
+							date: action.payload.data.date,
+							day: action.payload.data.day,
+							shift: action.payload.data.shift,
+							guardId: action.payload.data.guardId,
+						},
 					},
 				};
 			case 'load return data':
 				return {
 					...state,
-					returnData: {
-						...state.returnData,
-						date: action.payload.data.date,
-						day: action.payload.data.day,
-						shift: action.payload.data.shift,
-						guardId: action.payload.data.guardId,
+					data: {
+						...state.data,
+						returnData: {
+							...state.data.returnData,
+							date: action.payload.data.date,
+							day: action.payload.data.day,
+							shift: action.payload.data.shift,
+							guardId: action.payload.data.guardId,
+						},
 					},
 				};
 			case 'load cover user':
 				return {
 					...state,
-					coverData: {
-						...state.coverData,
-						name: action.payload.user,
+					data: {
+						...state.data,
+						coverData: {
+							...state.data.coverData,
+							name: action.payload.user,
+						},
 					},
 				};
 			case 'load return user':
 				return {
 					...state,
-					returnData: {
-						...state.returnData,
-						name: action.payload.user,
+					data: {
+						...state.data,
+						returnData: {
+							...state.returnData,
+							name: action.payload.user,
+						},
 					},
 				};
+			case 'loading': {
+				return { ...state, loading: action.payload.status };
+			}
+			case 'data is valid': {
+				return { ...state, dataIsValid: action.payload.status };
+			}
 			default:
 				break;
 		}
 	}
 
-	const [state, dispatch] = useReducer(reducer, initialState);
+	const [state, dispatch] = useReducer(reducer, {
+		type: 'change',
+		data: {
+			coverData: {
+				name: `${userContext.userData.lastName} ${userContext.userData.firstName}`,
+				date: !!startData ? startData.coverData.name : '-',
+				shift: !!startData ? startData.coverData.shift : '-',
+				day: !!startData ? startData.coverData.day : '-',
+				guardId: !!startData ? startData.coverData.guardId : '-',
+			},
+			returnData: {
+				name: !!startData ? startData.returnData.name : '-',
+				date: !!startData ? startData.returnData.date : '-',
+				shift: !!startData ? startData.returnData.shift : '-',
+				day: !!startData ? startData.returnData.day : '-',
+				guardId: !!startData ? startData.returnData.guardId : '-',
+			},
+		},
+		loading: false,
+		dataIsValid: false,
+	});
 
 	const loadDate = useCallback(
 		(data, section) => {
@@ -126,27 +126,27 @@ const useChangeLoad = (resultData, startData) => {
 
 	const sendDataCallback = useCallback(() => {
 		let formData = [
-			Object.entries(state.coverData).map((data) => data[1]),
-			Object.entries(state.returnData).map((data) => data[1]),
+			Object.entries(state.data.coverData).map((data) => data[1]),
+			Object.entries(state.data.returnData).map((data) => data[1]),
 		].flat(1);
-		let formCheck = formData
-			.map((data) => (data !== '-' ? true : false))
-			.filter((result) => !!result).length;
-		let isValid = formCheck === 10 ? true : false;
+		let isValid = true;
+		formData.forEach((data) => {
+			if (data === '-') isValid = false;
+		});
 		if (
 			(!!startData &&
-				startData.coverData.name === state.coverData.name &&
-				startData.returnData.name === state.returnData.name) ||
-			(!!startData && state.coverData.name === state.returnData.name)
+				startData.coverData.name === state.data.coverData.name &&
+				startData.returnData.name === state.data.returnData.name) ||
+			(!!startData && state.data.coverData.name === state.data.returnData.name)
 		) {
 			isValid = false;
 		}
-		setDataIsValid(isValid);
-	}, [state, startData]);
+		dispatch({ type: 'data is valid', payload: { status: isValid } });
+	}, [state.data, startData]);
 
 	useEffect(() => {
 		sendDataCallback();
-	}, [state, sendDataCallback]);
+	}, [state.data, sendDataCallback]);
 
 	const sendChangeData = async () => {
 		let headers = {
@@ -158,18 +158,23 @@ const useChangeLoad = (resultData, startData) => {
 					changeId: startData._id,
 					coverName: {
 						previous: startData.coverData.name,
-						new: state.coverData.name !== startData.coverData.name ? state.coverData.name : null,
+						new:
+							state.data.coverData.name !== startData.coverData.name
+								? state.data.coverData.name
+								: null,
 					},
 					returnName: {
 						previous: startData.returnData.name,
 						new:
-							state.returnData.name !== startData.returnData.name ? state.returnData.name : null,
+							state.data.returnData.name !== startData.returnData.name
+								? state.data.returnData.name
+								: null,
 					},
 					comment: commentContext.comment,
 			  }
-			: { coverData: state.coverData, returnData: state.returnData, type: 'change' };
+			: { coverData: state.data.coverData, returnData: state.data.returnData, type: 'change' };
 		try {
-			setLoadingSendData(true);
+			dispatch({ type: 'loading', payload: { status: true } });
 			let consult = startData
 				? await httpRequestHandler(
 						'http://localhost:5000/api/item/edit',
@@ -183,8 +188,7 @@ const useChangeLoad = (resultData, startData) => {
 						JSON.stringify(body),
 						headers,
 				  );
-
-			setLoadingSendData(false);
+			dispatch({ type: 'loading', payload: { status: false } });
 			if (consult.error === 'Token expired') {
 				userContext.logout(true);
 				navigate('/');
@@ -201,8 +205,8 @@ const useChangeLoad = (resultData, startData) => {
 		state,
 		loadDate,
 		loadUser,
-		dataIsValid,
-		loadingSendChange,
+		// dataIsValid,
+		// loadingSendChange,
 		sendChangeData,
 	};
 };

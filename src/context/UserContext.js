@@ -5,10 +5,8 @@ const UserContext = createContext({
 	token: null,
 	login: () => {},
 	logout: () => {},
-	activeTab: null,
-	loadActiveTab: () => {},
-	loadChangeData: () => {},
-	activateEditionRoute: () => {},
+	state: {},
+	dispatch: () => {},
 });
 
 export default UserContext;

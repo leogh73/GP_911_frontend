@@ -1,8 +1,8 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import NotFound from '../pages/NotFound';
-import { useState } from 'react';
+import { useReducer, useState } from 'react';
 import ChangeEdit from '../pages/ChangeEdit';
 import NewItem from '../pages/NewItem';
 import Changes from '../pages/Changes';
@@ -14,18 +14,42 @@ import Profile from '../pages/Profile';
 import ProfileEdit from '../pages/ProfileEdit';
 
 const useRoutes = (token, userData) => {
-	const [activeEditRoute, setActiveEditRoute] = useState(false);
-	const [activeTab, setActiveTab] = useState(null);
-	const [changeData, setChangeData] = useState();
-	const [profileData, setProfileData] = useState();
+	const location = useLocation();
+	const [state, dispatch] = useReducer(reducer, {
+		activeEditRoute: false,
+		activeTab: location.pathname,
+		changeData: {},
+		profileData: {},
+	});
 
-	const loadChangeData = (data) => setChangeData(data);
-
-	const loadProfileData = (data) => setProfileData(data);
-
-	const activateEditionRoute = () => setActiveEditRoute(true);
-
-	const loadActiveTab = (type) => setActiveTab(type);
+	function reducer(state, action) {
+		switch (action.type) {
+			case 'toggle edit route':
+				return {
+					...state,
+					activeEditRoute: action.payload.status,
+				};
+			case 'load active tab':
+				return {
+					...state,
+					activeTab: action.payload.tab,
+				};
+			case 'load change data':
+				return {
+					...state,
+					changeData: action.payload.change,
+					activeEditRoute: action.payload.editRoute,
+				};
+			case 'load profile data':
+				return {
+					...state,
+					profileData: action.payload.profile,
+					activeEditRoute: action.payload.editRoute,
+				};
+			default:
+				break;
+		}
+	}
 
 	const superiorRoutes = [
 		{ key: '01', path: '/register', element: <Register /> },
@@ -65,7 +89,9 @@ const useRoutes = (token, userData) => {
 			<Route path="/changes">
 				<Route path="agreed" element={<Changes type={'change'} />} />
 				<Route path="requested" element={<Changes type={'request'} />} />
-				{activeEditRoute && <Route path="edit" element={<ChangeEdit changeData={changeData} />} />}
+				{state.activeEditRoute && (
+					<Route path="edit" element={<ChangeEdit changeData={state.changeData} />} />
+				)}
 			</Route>
 			<Route path="/affected" element={<Affected />} />
 			<Route path="/changepassword" element={<Password type={'change'} />} />
@@ -76,7 +102,7 @@ const useRoutes = (token, userData) => {
 			</Route>
 			<Route path="/profile">
 				<Route path="" element={<Profile />} />
-				<Route path="edit" element={<ProfileEdit startData={profileData} />} />
+				<Route path="edit" element={<ProfileEdit startData={state.profileData} />} />
 			</Route>
 			{userData.superior
 				? superiorRoutes.map((route) => (
@@ -124,12 +150,8 @@ const useRoutes = (token, userData) => {
 
 	return {
 		routes,
-		activeTab,
-		loadActiveTab,
-		loadChangeData,
-		profileData,
-		loadProfileData,
-		activateEditionRoute,
+		state,
+		dispatch,
 	};
 };
 

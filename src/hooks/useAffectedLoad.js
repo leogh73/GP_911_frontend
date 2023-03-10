@@ -5,61 +5,89 @@ import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useAffectedLoad = (sendResult) => {
-	const [loadingSendChange, setLoadingSendChange] = useState(false);
-	const [dataIsValid, setDataIsValid] = useState(false);
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 	const { httpRequestHandler } = useHttpConnection();
-
-	const initialState = {
-		type: 'affected',
-		name: '-',
-		affectedData: {
-			date: '-',
-			shift: '-',
-			day: '-',
-			guardId: '-',
-		},
-		disaffectedData: {
-			date: '-',
-			shift: '-',
-			day: '-',
-			guardId: '-',
-		},
-		bookPage: '',
-	};
 
 	function reducer(state, action) {
 		switch (action.type) {
 			case 'load affected data':
 				return {
 					...state,
-					affectedData: action.payload.data,
+					data: {
+						...state.data,
+						affectedData: action.payload.data,
+					},
 				};
 			case 'load disaffected data': {
 				return {
 					...state,
-					disaffectedData: action.payload.data,
+					data: {
+						...state.data,
+						disaffectedData: action.payload.data,
+					},
 				};
 			}
 			case 'load affected user': {
 				return {
 					...state,
-					name: action.payload.user,
+					data: {
+						...state.data,
+						name: action.payload.user,
+					},
 				};
 			}
 			case 'load book page': {
 				return {
 					...state,
-					bookPage: action.payload.page,
+					data: {
+						...state.data,
+						bookPage: action.payload.page,
+					},
 				};
+			}
+			case 'load comment': {
+				return {
+					...state,
+					data: {
+						...state.data,
+						comment: action.payload.comment,
+					},
+				};
+			}
+			case 'loading': {
+				return { ...state, loading: action.payload.status };
+			}
+			case 'data is valid': {
+				return { ...state, dataIsValid: action.payload.status };
 			}
 			default:
 				break;
 		}
 	}
 
-	const [state, dispatch] = useReducer(reducer, initialState);
+	const [state, dispatch] = useReducer(reducer, {
+		data: {
+			type: 'affected',
+			name: '-',
+			affectedData: {
+				date: '-',
+				shift: '-',
+				day: '-',
+				guardId: '-',
+			},
+			disaffectedData: {
+				date: '-',
+				shift: '-',
+				day: '-',
+				guardId: '-',
+			},
+			bookPage: '-',
+			comment: '',
+		},
+		loading: false,
+		dataIsValid: false,
+	});
 
 	const loadDate = useCallback(
 		(data, section) => {
@@ -77,7 +105,7 @@ const useAffectedLoad = (sendResult) => {
 	);
 
 	const loadItem = (value, type) => {
-		type === 'users'
+		type === 'cover'
 			? dispatch({
 					type: 'load affected user',
 					payload: { user: value },
@@ -90,17 +118,17 @@ const useAffectedLoad = (sendResult) => {
 
 	const sendNewChange = async () => {
 		try {
-			setLoadingSendChange(true);
+			dispatch({ type: 'loading', payload: { status: true } });
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/item/new',
 				'POST',
-				JSON.stringify(state),
+				JSON.stringify(state.data),
 				{
 					authorization: `Bearer ${userContext.token}`,
 					'Content-type': 'application/json',
 				},
 			);
-			setLoadingSendChange(false);
+			dispatch({ type: 'loading', payload: { status: false } });
 			if (consult.error === 'Token expired') {
 				userContext.logout(true);
 				navigate('/');
@@ -115,28 +143,29 @@ const useAffectedLoad = (sendResult) => {
 
 	const sendDataCallback = useCallback(() => {
 		let formData = [
-			state.name,
-			Object.entries(state.affectedData).map((data) => data[1]),
-			Object.entries(state.disaffectedData).map((data) => data[1]),
-			state.bookPage,
+			state.data.name,
+			Object.entries(state.data.affectedData).map((data) => data[1]),
+			Object.entries(state.data.disaffectedData).map((data) => data[1]),
+			state.data.bookPage,
 		].flat(1);
-		let formCheck = formData
-			.map((data) => (data !== '-' ? true : false))
-			.filter((result) => !!result).length;
-		let isValid = formCheck === 10 ? true : false;
-		setDataIsValid(isValid);
-	}, [state]);
+		console.log(formData);
+		let isValid = true;
+		formData.forEach((data) => {
+			if (data === '-') isValid = false;
+		});
+		console.log(isValid);
+		dispatch({ type: 'data is valid', payload: { status: isValid } });
+	}, [state.data]);
 
 	useEffect(() => {
 		sendDataCallback();
-	}, [state, sendDataCallback]);
+	}, [state.data, sendDataCallback]);
 
 	return {
 		state,
+		dispatch,
 		loadItem,
 		loadDate,
-		dataIsValid,
-		loadingSendChange,
 		sendNewChange,
 	};
 };

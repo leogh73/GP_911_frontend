@@ -27,14 +27,15 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 	const generateRandomId = () => (Math.random() + 1).toString(36).substring(4).replace(/\d+/g, '');
 
 	const editChangePage = () => {
-		userContext.loadChangeData(data);
-		userContext.activateEditionRoute(true);
+		userContext.dispatch({ type: 'load change data', payload: { change: data, editRoute: true } });
 		navigate('/changes/edit');
 	};
 
 	const editProfilePage = () => {
-		userContext.loadProfileData(data);
-		userContext.activateEditionRoute(true);
+		userContext.dispatch({
+			type: 'load profile data',
+			payload: { change: data, editRoute: true },
+		});
 		navigate('/profile/edit');
 	};
 
@@ -98,7 +99,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							<MdDeleteForever size={24} />,
 							generateRandomId(),
 							'Confirmar eliminar cambio',
-							`¿Anular cambio de servicio para ${data.name}?`,
+							`¿Eliminar cambio de servicio para ${data.name}?`,
 							() => modifyData(type, data._id, null),
 							'No',
 							false,

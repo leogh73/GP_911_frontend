@@ -55,8 +55,7 @@ const Users = ({ section }) => {
 		let element = document.getElementById(location.pathname);
 		tabs.forEach((tab) => tab.classList.remove('selected'));
 		if (!element.classList.contains('selected')) element.classList.add('selected');
-		userContext.loadActiveTab(location.pathname);
-	}, [location.pathname, userContext]);
+	}, [location.pathname]);
 
 	const tabClickHandler = (e) => {
 		let elementId = e.target.getAttribute('id');
@@ -64,7 +63,7 @@ const Users = ({ section }) => {
 		let url = !!elementId ? elementId : elementUrl;
 		if (!!url && url !== location.pathname) {
 			navigate(url);
-			userContext.loadActiveTab(url);
+			userContext.dispatch({ type: 'load active tab', payload: { tab: url } });
 			setDataList(null);
 			setLoading(true);
 			setError(false);

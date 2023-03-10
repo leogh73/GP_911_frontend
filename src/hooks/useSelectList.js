@@ -5,16 +5,9 @@ import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useSelectList = (name, type, sendSelectedItem, startData) => {
-	const [loadingUsers, setLoadingUsers] = useState(false);
 	const userContext = useContext(UserContext);
 	const sendNewContext = useContext(SendNewContext);
 	const { httpRequestHandler } = useHttpConnection();
-
-	const initialState = {
-		totalList: [],
-		filterList: [],
-		selectedItem: startData ? startData.name : '-',
-	};
 
 	function reducer(state, action) {
 		switch (action.type) {
@@ -22,6 +15,7 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 				return {
 					...state,
 					totalList: action.payload.items,
+					loading: false,
 				};
 			case 'filter items':
 				return {
@@ -33,18 +27,26 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 					...state,
 					selectedItem: action.payload.item,
 				};
+			case 'loading': {
+				return { ...state, loading: action.payload.status };
+			}
 			default:
-				break;
+				return state;
 		}
 	}
 
-	const [state, dispatch] = useReducer(reducer, initialState);
+	const [state, dispatch] = useReducer(reducer, {
+		totalList: [],
+		filterList: [],
+		selectedItem: startData ? startData.name : '-',
+		loading: false,
+	});
 
 	const loadStartData = useCallback(async () => {
 		let data = [];
+		dispatch({ type: 'loading', payload: { status: true } });
 		if (type === 'users') {
 			try {
-				setLoadingUsers(true);
 				data = await httpRequestHandler(
 					'http://localhost:5000/api/spreadsheet/users',
 					'GET',
@@ -55,9 +57,6 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 				);
 			} catch (error) {
 				toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
-				console.log(error);
-			} finally {
-				setLoadingUsers(false);
 			}
 		} else {
 			for (let i = 1; i <= 200; i++) data.push(i.toString().padStart(3, 0));
@@ -116,12 +115,11 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 			type: 'load item',
 			payload: { item },
 		});
-		sendSelectedItem(item, type);
+		sendSelectedItem(item, name);
 	};
 
 	return {
 		state,
-		loadingUsers,
 		loadItem,
 		inputHandler,
 	};

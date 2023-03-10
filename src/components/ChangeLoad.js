@@ -22,8 +22,7 @@ const ChangeLoad = ({ sendResult, startData }) => {
 	const commentContext = useContext(CommentContext);
 	const [openedMenu, setOpenedMenu] = useState('');
 	const [showModal, setShowModal] = useState(false);
-	const { state, loadDate, loadUser, dataIsValid, loadingSendData, sendChangeData } =
-		useChangeLoad(sendResult, startData);
+	const { state, loadDate, loadUser, sendChangeData } = useChangeLoad(sendResult, startData);
 	const creator =
 		!!startData &&
 		startData.coverData.name ===
@@ -115,8 +114,8 @@ const ChangeLoad = ({ sendResult, startData }) => {
 			value={{
 				openedMenu,
 				loadOpenedMenu,
-				coverUser: state.coverData.name.length ? state.coverData.name : null,
-				returnUser: state.returnData.name.length ? state.returnData.name : null,
+				coverUser: state.data.coverData.name ?? null,
+				returnUser: state.data.returnData.name ?? null,
 			}}
 		>
 			<div className="new-change">
@@ -169,8 +168,8 @@ const ChangeLoad = ({ sendResult, startData }) => {
 					className="button"
 					text={startData ? 'EDITAR' : 'ENVIAR'}
 					width={200}
-					disabled={!dataIsValid}
-					loading={loadingSendData}
+					disabled={!state.dataIsValid}
+					loading={state.loading}
 					onClick={() => setShowModal(true)}
 				/>
 				{showModal && (
@@ -179,8 +178,8 @@ const ChangeLoad = ({ sendResult, startData }) => {
 						title={'Confirmar'}
 						body={
 							startData
-								? '¿Editar cambio? No podrá editarlo nuevamente.'
-								: `¿Enviar nuevo cambio con ${state.returnData.name}?`
+								? '¿Guardar cambios? Si no está más su nombre, no podrá editarlo nuevamente.'
+								: `¿Enviar nuevo cambio con ${state.data.returnData.name}?`
 						}
 						closeText={'No'}
 						closeFunction={() => setShowModal(false)}

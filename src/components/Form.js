@@ -20,20 +20,19 @@ const Form = ({
 	profileData,
 	profileView,
 }) => {
-	const { formState, sendFormData, dispatch } = useForm(pageName, sendUserForm, profileData);
+	const { state, submitForm, dispatch } = useForm(pageName, sendUserForm, profileData);
 
 	// const userContext = useContext(UserContext);
 	const formIndex = pageName === 'register' ? 6 : 5;
 
-	const submitHandler = () => {};
-
 	const changeHandler = (e) => {
-		dispatch({ payload: { type: 'change', inputName: e.target.name, value: e.target.value } });
+		dispatch({ type: 'change', payload: { inputName: e.target.name, value: e.target.value } });
 	};
 
 	const closeErrorModal = (type) => {
 		dispatch({
-			payload: { type: type === 'login' ? 'login-error' : 'server-error', status: false },
+			type: type === 'login' ? 'login error' : 'server error',
+			payload: { status: false },
 		});
 	};
 
@@ -51,10 +50,10 @@ const Form = ({
 					spinner={<Loading />}
 				> */}
 				<Title text={formTitle} icon={icon} />
-				<form action="" method="" name="register" onSubmit={sendFormData}>
+				<form action="" method="" name="register" onSubmit={submitForm}>
 					<div className={`inputs-container ${pageName}`}>
 						<div className="inputs-group">
-							{formState.inputs.map(
+							{state.inputs.map(
 								(f, i) =>
 									i < formIndex && (
 										<InputField
@@ -74,9 +73,9 @@ const Form = ({
 									),
 							)}
 						</div>
-						{formState.inputs.length > 4 && (
-							<div className="formState.inputs-group">
-								{formState.inputs.map(
+						{state.inputs.length > 4 && (
+							<div className="inputs-group">
+								{state.inputs.map(
 									(f, i) =>
 										i >= formIndex && (
 											<InputField
@@ -104,8 +103,8 @@ const Form = ({
 							className="button"
 							text={buttonText}
 							width={220}
-							disabled={!formState.formIsValid}
-							loading={formState.loading}
+							disabled={!state.formIsValid}
+							loading={state.loading}
 						/>
 					</div>
 					{footer}
@@ -113,24 +112,24 @@ const Form = ({
 				{/* </LoadingOverlay> */}
 			</div>
 			{/* {loading && <Loading type={'closed'} />} */}
-			{formState.loginError && (
+			{state.loginError && (
 				<Modal
 					id="login-error"
 					title={'Error'}
 					body={'Usuario y/o contraseña incorrectos.'}
 					closeText={'Cerrar'}
 					closeFunction={() => closeErrorModal('login')}
-					error={formState.loginError}
+					error={state.loginError}
 				/>
 			)}
-			{formState.serverError && (
+			{state.serverError && (
 				<Modal
 					id="login-error"
 					title={'Error'}
 					body={'Error de conexión al servidor.'}
 					closeText={'Cerrar'}
 					closeFunction={() => closeErrorModal('server')}
-					error={formState.serverError}
+					error={state.serverError}
 				/>
 			)}
 		</div>
