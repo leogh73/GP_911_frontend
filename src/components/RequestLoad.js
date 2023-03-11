@@ -9,14 +9,18 @@ import Button from './Button';
 import { GoRequestChanges } from 'react-icons/go';
 import SelectDate from './SelectDate';
 import SendNewContext from '../context/SendNewContext';
+import { BiCommentDetail } from 'react-icons/bi';
 
 const RequestLoad = ({ sendResult }) => {
 	const [openedMenu, setOpenedMenu] = useState('');
 	const [showModal, setShowModal] = useState(false);
-	const { state, loadDate, dataIsValid, loadingSendChange, sendNewChange } =
-		useRequestLoad(sendResult);
+	const { state, dispatch, loadDate, sendNewChange } = useRequestLoad(sendResult);
 
 	const loadOpenedMenu = (id) => setOpenedMenu(id);
+
+	const commentChangeHandler = (e) => {
+		dispatch({ type: 'load comment', payload: { comment: e.target.value } });
+	};
 
 	return (
 		<SendNewContext.Provider
@@ -38,24 +42,47 @@ const RequestLoad = ({ sendResult }) => {
 					<div className="user-change-section">
 						<SelectDate
 							name="offer"
-							titles={['Fecha ofrecida', 'Horario ofrecido', 'Día ofrecido', 'Guardia ofrecida']}
+							titles={[
+								'Fecha ofrecida (opcional)',
+								'Horario ofrecido (opcional)',
+								'Día ofrecido (opcional)',
+								'Guardia ofrecida (opcional)',
+							]}
 							sendSelectedData={loadDate}
 						/>
+					</div>
+				</div>
+				<div key={'01'} className="user-section">
+					<div className="user-section-content">
+						<div className="section-icon">
+							<BiCommentDetail />
+						</div>
+						<div className="section-text">
+							<div className="section-title">{'Comentario (opcional)'}</div>
+							<div className="comment-load">
+								<input
+									name={'comment-load'}
+									id={'03_comment'}
+									onChange={commentChangeHandler}
+									value={state.data.comment}
+								/>
+							</div>
+						</div>
 					</div>
 				</div>
 				<Button
 					className="button"
 					text={'ENVIAR'}
 					width={200}
-					disabled={!dataIsValid}
-					loading={loadingSendChange}
+					disabled={!state.dataIsValid}
+					loading={state.loading}
 					onClick={() => setShowModal(true)}
 				/>
 				{showModal && (
 					<Modal
 						id="change-modal"
 						title="Confirmar nuevo pedido"
-						body={`¿Enviar nuevo pedido para el ${state.requestData.date}?`}
+						body={`¿Enviar nuevo pedido para el ${state.data.requestData.date}?`}
 						closeText={'No'}
 						closeFunction={() => setShowModal(false)}
 						actionFunction={sendNewChange}

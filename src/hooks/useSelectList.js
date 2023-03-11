@@ -11,22 +11,25 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 
 	function reducer(state, action) {
 		switch (action.type) {
-			case 'load start data':
+			case 'load start data': {
 				return {
 					...state,
 					totalList: action.payload.items,
 					loading: false,
 				};
-			case 'filter items':
+			}
+			case 'filter items': {
 				return {
 					...state,
 					filterList: action.payload.items,
 				};
-			case 'load item':
+			}
+			case 'load item': {
 				return {
 					...state,
 					selectedItem: action.payload.item,
 				};
+			}
 			case 'loading': {
 				return { ...state, loading: action.payload.status };
 			}

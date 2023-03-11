@@ -174,7 +174,8 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 									</div>
 								</th>
 							))}
-							<th>Opciones</th>
+							{((!userContext.userData.superior && rowType !== 'affected') ||
+								(userContext.userData.superior && rowType !== 'request')) && <th>Opciones</th>}
 						</tr>
 					</thead>
 					<tbody>

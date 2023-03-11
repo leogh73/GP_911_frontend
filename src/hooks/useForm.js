@@ -9,6 +9,8 @@ import useHttpConnection from './useHttpConnection';
 import useRememberMe from './useRememberMe';
 import UserContext from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { FaBuilding } from 'react-icons/fa';
+import { MdSupervisorAccount } from 'react-icons/md';
 
 const useForm = (pageName, sendUserForm, profileData) => {
 	const { loadUser } = useRememberMe();
@@ -17,9 +19,46 @@ const useForm = (pageName, sendUserForm, profileData) => {
 	const storedUser = loadUser();
 	const navigate = useNavigate();
 
+	const userData = profileData ?? userContext.userData;
+	const ownProfile = !!profileData ? false : true;
+
+	const userSection = () => {
+		let userSection = 'Sección: ';
+		if (userData.section === 'Phoning') userSection = userSection + 'Teléfonía';
+		if (userData.section === 'Monitoring') userSection = userSection + 'Monitoreo';
+		if (userData.section === 'Dispatch') userSection = userSection + 'Despacho';
+		return userSection;
+	};
+
 	const formInputs = () => {
 		let formInputs;
-		if (pageName === 'register') formInputs = registerInputs;
+		if (pageName === 'register') {
+			formInputs = registerInputs;
+			if (userData.superior) {
+				formInputs[5] = {
+					key: 5,
+					name: 'section',
+					optionsList: [],
+					password: false,
+					icon: <FaBuilding />,
+					placeHolder: 'Sección',
+					errorMessage: '',
+					value: userSection(),
+					disabled: true,
+				};
+				formInputs[7] = {
+					key: 7,
+					name: 'superior',
+					optionsList: [],
+					password: false,
+					icon: <MdSupervisorAccount size={28} />,
+					placeHolder: 'Superior',
+					errorMessage: '',
+					value: 'Superior: No',
+					disabled: true,
+				};
+			}
+		}
 		if (pageName === 'login') {
 			formInputs = loginInputs;
 			formInputs[0].value = storedUser ?? formInputs[0].value;
@@ -46,9 +85,9 @@ const useForm = (pageName, sendUserForm, profileData) => {
 
 	useEffect(() => {
 		return () => {
-			state.inputs.forEach((i) => (i.value = ''));
+			if (state.formIsValid) state.inputs.forEach((i) => (i.value = ''));
 		};
-	}, []);
+	}, [state.formIsValid, state.inputs]);
 
 	const registeredData = (inputs) => {
 		let registeredData = {};
@@ -117,9 +156,16 @@ const useForm = (pageName, sendUserForm, profileData) => {
 	function reducer(state, action) {
 		const validateInput = (name, value) => {
 			let errorMessage = '';
-			if (!value.length) errorMessage = 'Complete el campo.';
-			if (name === 'password' && value.length < 3)
+			if (!value.length) {
+				errorMessage = 'Complete el campo.';
+			}
+			if (name === 'password' && value.length < 3) {
 				errorMessage = 'La contraseña debe ser de al menos 3 caracteres.';
+			}
+			if (name === 'ni' && !!value) {
+				let ni = +value;
+				if (isNaN(ni) || (!isNaN(ni) && value.length < 3)) errorMessage = 'El NI es inválido';
+			}
 			return errorMessage;
 		};
 

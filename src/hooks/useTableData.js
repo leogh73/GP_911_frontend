@@ -21,8 +21,9 @@ const useTableData = (dataList, rowType) => {
 		switch (listType) {
 			case 'change': {
 				switch (sortBy) {
-					case '#':
+					case '#': {
 						return sortByPriority();
+					}
 					case 'A cubrir': {
 						return listData.sort(
 							(a, b) =>
@@ -104,7 +105,6 @@ const useTableData = (dataList, rowType) => {
 								),
 						);
 					}
-
 					default:
 						return listData;
 				}
@@ -152,6 +152,7 @@ const useTableData = (dataList, rowType) => {
 					default:
 						break;
 				}
+				break;
 			case 'user':
 				switch (sortBy) {
 					case 'Apellido': {
@@ -182,6 +183,7 @@ const useTableData = (dataList, rowType) => {
 					default:
 						break;
 				}
+				break;
 			default:
 				return listData;
 		}

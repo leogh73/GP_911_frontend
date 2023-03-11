@@ -5,48 +5,71 @@ import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useRequestLoad = (sendResult) => {
-	const [loadingSendChange, setLoadingSendChange] = useState(false);
-	const [dataIsValid, setDataIsValid] = useState(false);
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 	const { httpRequestHandler } = useHttpConnection();
 
-	const initialState = {
-		type: 'request',
-		name: `${userContext.userData.lastName} ${userContext.userData.firstName}`,
-		requestData: {
-			date: '-',
-			shift: '-',
-			day: '-',
-			guardId: '-',
-		},
-		offerData: {
-			date: '-',
-			shift: '-',
-			day: '-',
-			guardId: '-',
-		},
-	};
-
 	function reducer(state, action) {
 		switch (action.type) {
-			case 'load request data':
+			case 'load request data': {
 				return {
 					...state,
-					requestData: action.payload.data,
+					data: {
+						...state.data,
+						requestData: action.payload.data,
+					},
 				};
+			}
 			case 'load offer data': {
 				return {
 					...state,
-					offerData: action.payload.data,
+					data: {
+						...state.data,
+						offerData: action.payload.data,
+					},
 				};
+			}
+			case 'load comment': {
+				return {
+					...state,
+					data: {
+						...state.data,
+						comment: action.payload.comment,
+					},
+				};
+			}
+			case 'loading': {
+				return { ...state, loading: action.payload.status };
+			}
+			case 'data is valid': {
+				return { ...state, dataIsValid: action.payload.status };
 			}
 			default:
 				break;
 		}
 	}
 
-	const [state, dispatch] = useReducer(reducer, initialState);
+	const [state, dispatch] = useReducer(reducer, {
+		data: {
+			type: 'request',
+			name: `${userContext.userData.lastName} ${userContext.userData.firstName}`,
+			requestData: {
+				date: '-',
+				shift: '-',
+				day: '-',
+				guardId: '-',
+			},
+			offerData: {
+				date: '-',
+				shift: '-',
+				day: '-',
+				guardId: '-',
+			},
+			comment: '-',
+		},
+		loading: false,
+		dataIsValid: false,
+	});
 
 	const loadDate = useCallback(
 		(data, section) => {
@@ -65,17 +88,17 @@ const useRequestLoad = (sendResult) => {
 
 	const sendNewChange = async () => {
 		try {
-			setLoadingSendChange(true);
+			dispatch({ type: 'loading', payload: { status: true } });
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/item/new',
 				'POST',
-				JSON.stringify(state),
+				JSON.stringify(state.data),
 				{
 					authorization: `Bearer ${userContext.token}`,
 					'Content-type': 'application/json',
 				},
 			);
-			setLoadingSendChange(false);
+			dispatch({ type: 'loading', payload: { status: false } });
 			if (consult.error) {
 				if (consult.error === 'Token expired') {
 					userContext.logout(true);
@@ -91,26 +114,22 @@ const useRequestLoad = (sendResult) => {
 	};
 
 	const sendDataCallback = useCallback(() => {
-		let formData = [
-			Object.entries(state.requestData).map((data) => data[1]),
-			Object.entries(state.offerData).map((data) => data[1]),
-		].flat(1);
-		let formCheck = formData
-			.map((data) => (data !== '-' ? true : false))
-			.filter((result) => !!result).length;
-		let isValid = formCheck === 8 ? true : false;
-		setDataIsValid(isValid);
-	}, [state]);
+		let formData = [Object.entries(state.data.requestData).map((data) => data[1])].flat(1);
+		let isValid = true;
+		formData.forEach((data) => {
+			if (data === '-') isValid = false;
+		});
+		dispatch({ type: 'data is valid', payload: { status: isValid } });
+	}, [state.data]);
 
 	useEffect(() => {
 		sendDataCallback();
-	}, [state, sendDataCallback]);
+	}, [state.data, sendDataCallback]);
 
 	return {
 		state,
+		dispatch,
 		loadDate,
-		dataIsValid,
-		loadingSendChange,
 		sendNewChange,
 	};
 };

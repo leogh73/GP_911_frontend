@@ -105,6 +105,7 @@ const Changes = ({ type }) => {
 						{ key: 1, title: 'Personal' },
 						{ key: 2, title: 'Pedido' },
 						{ key: 3, title: 'Ofrecido' },
+						{ key: 4, title: 'Comentario' },
 					]}
 					rowType={'request'}
 					dataList={dataList}

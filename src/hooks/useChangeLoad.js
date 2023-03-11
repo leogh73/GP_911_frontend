@@ -14,7 +14,7 @@ const useChangeLoad = (resultData, startData) => {
 
 	function reducer(state, action) {
 		switch (action.type) {
-			case 'load cover data':
+			case 'load cover data': {
 				return {
 					...state,
 					data: {
@@ -28,7 +28,8 @@ const useChangeLoad = (resultData, startData) => {
 						},
 					},
 				};
-			case 'load return data':
+			}
+			case 'load return data': {
 				return {
 					...state,
 					data: {
@@ -42,7 +43,8 @@ const useChangeLoad = (resultData, startData) => {
 						},
 					},
 				};
-			case 'load cover user':
+			}
+			case 'load cover user': {
 				return {
 					...state,
 					data: {
@@ -53,7 +55,8 @@ const useChangeLoad = (resultData, startData) => {
 						},
 					},
 				};
-			case 'load return user':
+			}
+			case 'load return user': {
 				return {
 					...state,
 					data: {
@@ -64,6 +67,7 @@ const useChangeLoad = (resultData, startData) => {
 						},
 					},
 				};
+			}
 			case 'loading': {
 				return { ...state, loading: action.payload.status };
 			}

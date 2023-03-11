@@ -33,7 +33,6 @@ const registerInputs = [
 		name: 'firstName',
 		optionsList: [],
 		password: false,
-		errorMessage: '',
 		icon: <FaUser />,
 		placeHolder: 'Nombre',
 		errorMessage: '',

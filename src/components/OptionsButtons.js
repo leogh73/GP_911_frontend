@@ -155,6 +155,26 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					)}
 				</>
 			);
+		if (
+			type === 'change' &&
+			(fullName === data.coverData.name || fullName === data.returnData.name) &&
+			data.status === 'Autorizado'
+		)
+			return (
+				<>
+					{button(
+						<IoMdClose size={28} />,
+						generateRandomId(),
+						'Confirmar cancelar cambio',
+						`¿Cancelar cambio con ${
+							fullName === data.coverData.name ? data.returnData.name : data.coverData.name
+						}?`,
+						() => modifyData(type, data._id, { previous: data.status, new: 'Cancelado' }),
+						'No',
+						true,
+					)}
+				</>
+			);
 		if (type === 'change' && fullName === data.coverData.name && data.status === 'Cancelado')
 			return (
 				<>

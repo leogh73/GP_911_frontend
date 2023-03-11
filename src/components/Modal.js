@@ -29,7 +29,7 @@ const Modal = ({
 	const closeModal = () => {
 		setTimeout(() => {
 			if (closeFunction) closeFunction();
-			document.getElementById(id).classList.remove('active');
+			document.getElementById(id)?.classList.remove('active');
 			commentContext.loadComment('');
 		}, 300);
 		document.getElementById(id).querySelector('.modal-content').style.animation =
@@ -102,7 +102,14 @@ const Modal = ({
 							<div className="modal-footer">
 								{actionFunction != null && (
 									<div className="modal-btn">
-										<Button width={120} text="Si" onClick={actionFunction} />
+										<Button
+											width={120}
+											text="Si"
+											onClick={() => {
+												actionFunction();
+												closeModal();
+											}}
+										/>
 									</div>
 								)}
 								<div className="modal-btn">

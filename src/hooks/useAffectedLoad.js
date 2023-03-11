@@ -11,7 +11,7 @@ const useAffectedLoad = (sendResult) => {
 
 	function reducer(state, action) {
 		switch (action.type) {
-			case 'load affected data':
+			case 'load affected data': {
 				return {
 					...state,
 					data: {
@@ -19,6 +19,7 @@ const useAffectedLoad = (sendResult) => {
 						affectedData: action.payload.data,
 					},
 				};
+			}
 			case 'load disaffected data': {
 				return {
 					...state,

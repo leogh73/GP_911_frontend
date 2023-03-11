@@ -11,7 +11,7 @@ const useSelectDate = (sendDate, name) => {
 
 	function reducer(state, action) {
 		switch (action.type) {
-			case 'selected date':
+			case 'selected date': {
 				return {
 					...state,
 					data: {
@@ -20,12 +20,14 @@ const useSelectDate = (sendDate, name) => {
 						day: action.payload.date.selectedDay,
 					},
 				};
-			case 'date guards':
+			}
+			case 'date guards': {
 				return {
 					...state,
 					fetched: action.payload.data,
 				};
-			case 'shift time':
+			}
+			case 'shift time': {
 				return {
 					...state,
 					data: {
@@ -33,7 +35,8 @@ const useSelectDate = (sendDate, name) => {
 						shift: action.payload.data,
 					},
 				};
-			case 'shift guard':
+			}
+			case 'shift guard': {
 				return {
 					...state,
 					data: {
@@ -41,6 +44,7 @@ const useSelectDate = (sendDate, name) => {
 						guardId: action.payload.data.guardId,
 					},
 				};
+			}
 			default:
 				break;
 		}

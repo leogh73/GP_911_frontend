@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import UserContext from '../context/UserContext';
 import CommentContext from '../context/CommentContext';
 import OptionsButtons from './OptionsButtons';
 
 const Row = ({ type, data, modifyCallback }) => {
+	const userContext = useContext(UserContext);
 	const [commentString, setCommentString] = useState('');
 	const changeText = (s) => `${s.date} - ${s.shift} - ${s.day} - Guardia ${s.guardId}`;
 
@@ -51,7 +53,7 @@ const Row = ({ type, data, modifyCallback }) => {
 				]);
 			}
 			case 'request': {
-				return generateRow([
+				let rowData = [
 					{
 						columnName: '#',
 						rowData: data.priorityId,
@@ -63,16 +65,22 @@ const Row = ({ type, data, modifyCallback }) => {
 					},
 					{
 						columnName: 'Ofrecido',
-						rowData: changeText(data.offerData),
+						rowData: data.offerData.date === '-' ? null : changeText(data.offerData),
 					},
 					{
+						columnName: 'Comentario',
+						rowData: data.comment === '-' ? null : data.comment,
+					},
+				];
+				if (!userContext.userData.superior)
+					rowData.push({
 						columnName: 'Opciones',
 						rowData: optionsButtons,
-					},
-				]);
+					});
+				return generateRow(rowData);
 			}
 			case 'affected': {
-				return generateRow([
+				let rowData = [
 					{
 						columnName: '#',
 						rowData: data.priorityId,
@@ -87,14 +95,20 @@ const Row = ({ type, data, modifyCallback }) => {
 						rowData: changeText(data.disaffectedData),
 					},
 					{
+						columnName: 'Comentario',
+						rowData: data.comment,
+					},
+					{
 						columnName: 'Foja del Libro de Guardia',
 						rowData: data.bookPage,
 					},
-					{
+				];
+				if (userContext.userData.superior)
+					rowData.push({
 						columnName: 'Opciones',
 						rowData: optionsButtons,
-					},
-				]);
+					});
+				return generateRow(rowData);
 			}
 			case 'user': {
 				return generateRow([
