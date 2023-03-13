@@ -22,7 +22,7 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 	const userData = profileData ?? userContext.userData;
 	const ownProfile = !!profileData ? false : true;
 
-	const userSection = (section) => {
+	const userSection = () => {
 		let userSection = 'Sección: ';
 		if (section === 'Phoning') userSection = userSection + 'Teléfonía';
 		if (section === 'Monitoring') userSection = userSection + 'Monitoreo';
@@ -78,7 +78,7 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 				firstName: inputs[2].value,
 				ni: inputs[3].value,
 				hierarchy: inputs[4].value,
-				section: section,
+				section: userSection(),
 				guardId: inputs[6].value,
 				superior: superior,
 				email: inputs[8].value,
@@ -144,9 +144,7 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			if (!value.length) {
 				errorMessage = 'Complete el campo.';
 			}
-			if (name === 'password' && value.length < 3) {
-				errorMessage = 'La contraseña deben ser al menos 3 caracteres.';
-			}
+
 			if (name === 'ni') {
 				if ((!!value && isNaN(+value)) || (!isNaN(+value) && value.length < 3)) {
 					errorMessage = 'El NI es inválido';
@@ -166,6 +164,22 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 				if (value.length === 1 && isNaN(+value) && value === value.toLowerCase()) {
 					errorMessage = 'La guarda debe ser una letra mayúscula o un número de un dígito.';
 				}
+			}
+			if (
+				name === 'email' &&
+				!value.match(/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/)
+			) {
+				errorMessage = 'El correo electrónico ingresado es inválido.';
+			}
+			if (name === 'password' && value.length && value.length < 3) {
+				errorMessage = 'La contraseña deben ser al menos 3 caracteres.';
+			}
+			if (
+				name === 'repeatPassword' &&
+				value.length &&
+				value !== state.inputs[state.inputs.findIndex((i) => i.name === 'password')].value
+			) {
+				errorMessage = 'La contraseña no coincide.';
 			}
 			return errorMessage;
 		};
