@@ -121,21 +121,38 @@ const useRoutes = (token, userData) => {
 			{userData.superior && (
 				<Route path="/register">
 					{userData.section === 'Phoning' && (
-						<Route path="phoning" element={<Register section={'Phoning'} />} />
+						<Route
+							path="phoning"
+							key="phone-register"
+							element={<Register section={'Phoning'} />}
+						/>
 					)}
 					{userData.section === 'Dispatch' && (
-						<Route path="dispatch" element={<Register section={'Dispatch'} />} />
+						<Route
+							path="dispatch"
+							element={<Register key="dispatch-register" section={'Dispatch'} />}
+						/>
 					)}
 					{userData.section === 'Monitoring' && (
-						<Route path="monitoring" element={<Register section={'Monitoring'} />} />
+						<Route
+							path="monitoring"
+							key="monitoring-register"
+							element={<Register section={'Monitoring'} />}
+						/>
 					)}
 				</Route>
 			)}
 			{userData.admin && (
 				<Route path="/register">
-					<Route path="phoning" element={<Register section={'Phoning'} />} />
-					<Route path="dispatch" element={<Register section={'Dispatch'} />} />
-					<Route path="monitoring" element={<Register section={'Monitoring'} />} />
+					<Route path="phoning" element={<Register key="phone-register" section={'Phoning'} />} />
+					<Route
+						path="dispatch"
+						element={<Register key="dispatch-register" section={'Dispatch'} />}
+					/>
+					<Route
+						path="monitoring"
+						element={<Register key="monitoring-register" section={'Monitoring'} />}
+					/>
 				</Route>
 			)}
 			<Route path="*" element={<NotFound />} />

@@ -17,16 +17,23 @@ const Form = ({
 	pageName,
 	buttonText,
 	footer,
+	section,
 	profileData,
 	profileView,
 }) => {
-	const { state, submitForm, dispatch } = useForm(pageName, sendUserForm, profileData);
+	const { state, submitForm, dispatch } = useForm(pageName, sendUserForm, profileData, section);
 
 	// const userContext = useContext(UserContext);
-	const formIndex = pageName === 'register' ? 6 : 5;
+	const formIndex = 5;
 
 	const changeHandler = (e) => {
-		dispatch({ type: 'change', payload: { inputName: e.target.name, value: e.target.value } });
+		dispatch({
+			type: 'change',
+			payload: {
+				inputName: e.target.name ?? e.target.getAttribute('name'),
+				value: e.target.value ?? e.target.getAttribute('value'),
+			},
+		});
 	};
 
 	const closeErrorModal = (type) => {

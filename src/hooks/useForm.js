@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 import { FaBuilding } from 'react-icons/fa';
 import { MdSupervisorAccount } from 'react-icons/md';
 
-const useForm = (pageName, sendUserForm, profileData) => {
+const useForm = (pageName, sendUserForm, profileData, section) => {
 	const { loadUser } = useRememberMe();
 	const { httpRequestHandler } = useHttpConnection();
 	const userContext = useContext(UserContext);
@@ -22,42 +22,20 @@ const useForm = (pageName, sendUserForm, profileData) => {
 	const userData = profileData ?? userContext.userData;
 	const ownProfile = !!profileData ? false : true;
 
-	const userSection = () => {
+	const userSection = (section) => {
 		let userSection = 'Sección: ';
-		if (userData.section === 'Phoning') userSection = userSection + 'Teléfonía';
-		if (userData.section === 'Monitoring') userSection = userSection + 'Monitoreo';
-		if (userData.section === 'Dispatch') userSection = userSection + 'Despacho';
+		if (section === 'Phoning') userSection = userSection + 'Teléfonía';
+		if (section === 'Monitoring') userSection = userSection + 'Monitoreo';
+		if (section === 'Dispatch') userSection = userSection + 'Despacho';
 		return userSection;
 	};
 
 	const formInputs = () => {
 		let formInputs;
 		if (pageName === 'register') {
-			formInputs = registerInputs;
-			if (userData.superior) {
-				formInputs[5] = {
-					key: 5,
-					name: 'section',
-					optionsList: [],
-					password: false,
-					icon: <FaBuilding />,
-					placeHolder: 'Sección',
-					errorMessage: '',
-					value: userSection(),
-					disabled: true,
-				};
-				formInputs[7] = {
-					key: 7,
-					name: 'superior',
-					optionsList: [],
-					password: false,
-					icon: <MdSupervisorAccount size={28} />,
-					placeHolder: 'Superior',
-					errorMessage: '',
-					value: 'Superior: No',
-					disabled: true,
-				};
-			}
+			formInputs = [...registerInputs];
+			formInputs.splice(5, 1);
+			if (!userData.admin) formInputs.splice(6, 1);
 		}
 		if (pageName === 'login') {
 			formInputs = loginInputs;
@@ -75,6 +53,12 @@ const useForm = (pageName, sendUserForm, profileData) => {
 		return formInputs;
 	};
 
+	// useEffect(() => {
+	// 	return () => {
+	// 		formInputs
+	// 	}
+	// }, [])
+
 	const [state, dispatch] = useReducer(reducer, {
 		inputs: formInputs(),
 		formIsValid: false,
@@ -83,28 +67,25 @@ const useForm = (pageName, sendUserForm, profileData) => {
 		serverError: false,
 	});
 
-	useEffect(() => {
-		return () => {
-			if (state.formIsValid) state.inputs.forEach((i) => (i.value = ''));
-		};
-	}, [state.formIsValid, state.inputs]);
-
 	const registeredData = (inputs) => {
 		let registeredData = {};
-		if (pageName === 'register')
+		if (pageName === 'register') {
+			let superior = inputs[7].value;
+			if (!userData.admin) superior = 'No';
 			registeredData = {
 				username: inputs[0].value,
 				lastName: inputs[1].value,
 				firstName: inputs[2].value,
 				ni: inputs[3].value,
 				hierarchy: inputs[4].value,
-				section: inputs[5].value,
+				section: section,
 				guardId: inputs[6].value,
-				superior: inputs[7].value,
+				superior: superior,
 				email: inputs[8].value,
 				password: inputs[9].value,
 				repeatPassword: inputs[10].value,
 			};
+		}
 		if (pageName === 'login') {
 			registeredData = {
 				usernameOrEmail: inputs[0].value,
@@ -150,6 +131,10 @@ const useForm = (pageName, sendUserForm, profileData) => {
 			userContext.userData.logout(true);
 			return navigate('/');
 		}
+		state.inputs.forEach((i) => {
+			i.value = '';
+			i.errorMessage = '';
+		});
 		sendUserForm(resultData, state.inputs[0].value);
 	};
 
@@ -160,11 +145,27 @@ const useForm = (pageName, sendUserForm, profileData) => {
 				errorMessage = 'Complete el campo.';
 			}
 			if (name === 'password' && value.length < 3) {
-				errorMessage = 'La contraseña debe ser de al menos 3 caracteres.';
+				errorMessage = 'La contraseña deben ser al menos 3 caracteres.';
 			}
-			if (name === 'ni' && !!value) {
-				let ni = +value;
-				if (isNaN(ni) || (!isNaN(ni) && value.length < 3)) errorMessage = 'El NI es inválido';
+			if (name === 'ni') {
+				if ((!!value && isNaN(+value)) || (!isNaN(+value) && value.length < 3)) {
+					errorMessage = 'El NI es inválido';
+				}
+			}
+			if (name === 'hierarchy') {
+				let splittedValue = value.split(' ');
+				splittedValue.forEach((v) => {
+					if (!!v && v[0] === v[0].toLowerCase())
+						errorMessage = 'La jerarquía debe ser escrita con mayúsculas.';
+				});
+			}
+			if (name === 'guardId') {
+				if (value.length > 1) {
+					errorMessage = 'La guardia ingresada es incorrecta.';
+				}
+				if (value.length === 1 && isNaN(+value) && value === value.toLowerCase()) {
+					errorMessage = 'La guarda debe ser una letra mayúscula o un número de un dígito.';
+				}
 			}
 			return errorMessage;
 		};
