@@ -22,19 +22,19 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 	const userData = profileData ?? userContext.userData;
 	const ownProfile = !!profileData ? false : true;
 
-	const userSection = () => {
-		let userSection = 'Sección: ';
-		if (section === 'Phoning') userSection = userSection + 'Teléfonía';
-		if (section === 'Monitoring') userSection = userSection + 'Monitoreo';
-		if (section === 'Dispatch') userSection = userSection + 'Despacho';
-		return userSection;
-	};
+	// const userSection = () => {
+	// 	let userSection = 'Sección: ';
+	// 	if (section === 'Phoning') userSection = userSection + 'Teléfonía';
+	// 	if (section === 'Monitoring') userSection = userSection + 'Monitoreo';
+	// 	if (section === 'Dispatch') userSection = userSection + 'Despacho';
+	// 	return userSection;
+	// };
 
 	const formInputs = () => {
 		let formInputs;
 		if (pageName === 'register') {
-			formInputs = [...registerInputs];
-			formInputs.splice(5, 1);
+			formInputs = registerInputs;
+			// formInputs.splice(5, 1);
 			if (!userData.admin) formInputs.splice(6, 1);
 		}
 		if (pageName === 'login') {
@@ -64,26 +64,25 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		formIsValid: false,
 		loading: false,
 		loginError: false,
+		registerError: false,
 		serverError: false,
 	});
 
 	const registeredData = (inputs) => {
 		let registeredData = {};
 		if (pageName === 'register') {
-			let superior = inputs[7].value;
-			if (!userData.admin) superior = 'No';
 			registeredData = {
 				username: inputs[0].value,
 				lastName: inputs[1].value,
 				firstName: inputs[2].value,
 				ni: inputs[3].value,
 				hierarchy: inputs[4].value,
-				section: userSection(),
-				guardId: inputs[6].value,
-				superior: superior,
-				email: inputs[8].value,
-				password: inputs[9].value,
-				repeatPassword: inputs[10].value,
+				section,
+				guardId: inputs[5].value,
+				superior: userData.admin ? inputs[6].value : 'No',
+				email: inputs[7].value,
+				password: inputs[8].value,
+				repeatPassword: inputs[9].value,
 			};
 		}
 		if (pageName === 'login') {
@@ -120,12 +119,16 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			JSON.stringify(registeredData(state.inputs)),
 			headers,
 		);
+		console.log(resultData);
 		dispatch({ type: 'loading', payload: { status: false } });
-		if (resultData.error && pageName === 'login') {
+		if (resultData.error === 'server') {
 			return dispatch({ type: 'server error', payload: { status: true } });
 		}
-		if (resultData.password || resultData.usernameOrEmail) {
+		if (pageName === 'login' && resultData.error) {
 			return dispatch({ type: 'login error', payload: { status: true } });
+		}
+		if (pageName === 'register' && resultData.error) {
+			return dispatch({ type: 'register error', payload: { status: true } });
 		}
 		if (resultData.error === 'Token expired') {
 			userContext.userData.logout(true);
@@ -144,17 +147,27 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			if (!value.length) {
 				errorMessage = 'Complete el campo.';
 			}
-
 			if (name === 'ni') {
 				if ((!!value && isNaN(+value)) || (!isNaN(+value) && value.length < 3)) {
 					errorMessage = 'El NI es inválido';
 				}
 			}
-			if (name === 'hierarchy') {
+			if (name === 'firstName' || name === 'lastName' || name === 'hierarchy') {
 				let splittedValue = value.split(' ');
 				splittedValue.forEach((v) => {
-					if (!!v && v[0] === v[0].toLowerCase())
-						errorMessage = 'La jerarquía debe ser escrita con mayúsculas.';
+					if (v.length === 1 && v === v.toLowerCase()) {
+						if (name === 'firstName') errorMessage = 'El nombre debe comenzar con mayúsculas.';
+						if (name === 'lastName') errorMessage = 'El apellido debe comenzar con mayúsculas.';
+						if (name === 'hierarchy') errorMessage = 'La jerarquía debe comenzar con mayúsculas.';
+					}
+					if (
+						(v.length === 1 && v === v.toUpperCase()) ||
+						(v.length && v[0] === v[0].toUpperCase() && v.length < 3)
+					) {
+						if (name === 'firstName') errorMessage = 'El nombre es inválido';
+						if (name === 'lastName') errorMessage = 'El apellido es inválido.';
+						if (name === 'hierarchy') errorMessage = 'La jerarquía es inválida.';
+					}
 				});
 			}
 			if (name === 'guardId') {
@@ -210,6 +223,13 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 				return {
 					...state,
 					loginError: action.payload.status,
+					formIsValid: false,
+				};
+			}
+			case 'register error': {
+				return {
+					...state,
+					registerError: action.payload.status,
 					formIsValid: false,
 				};
 			}

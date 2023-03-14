@@ -176,6 +176,10 @@ const NavBar = () => {
 			let activeLink = document.getElementById(clickedUrl);
 			activeLink.classList.add('clicked');
 		}
+		// userContext.dispatch({
+		// 	type: 'load active tab',
+		// 	payload: { tab: `/users/${section.toLowerCase()}` },
+		// });
 	};
 
 	return (

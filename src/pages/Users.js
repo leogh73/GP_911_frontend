@@ -43,6 +43,11 @@ const Users = ({ section }) => {
 			setError(true);
 		} finally {
 			setLoading(false);
+			// if (section === 'phoning')
+			// 	userContext.dispatch({
+			// 		type: 'load active tab',
+			// 		payload: { tab: `/users/phoning` },
+			// 	});
 		}
 	}, [httpRequestHandler, section, userContext, navigate]);
 
@@ -54,7 +59,7 @@ const Users = ({ section }) => {
 		let tabs = document.querySelectorAll('.tab');
 		let element = document.getElementById(location.pathname);
 		tabs.forEach((tab) => tab.classList.remove('selected'));
-		if (!element.classList.contains('selected')) element.classList.add('selected');
+		if (!element?.classList.contains('selected')) element.classList.add('selected');
 	}, [location.pathname]);
 
 	const tabClickHandler = (e) => {

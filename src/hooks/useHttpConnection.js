@@ -24,7 +24,7 @@ const useHttpConnection = () => {
 
 				return responseData;
 			} catch (error) {
-				return { error };
+				return { error: 'server' };
 			}
 		},
 		[],

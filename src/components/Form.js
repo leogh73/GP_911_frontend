@@ -37,8 +37,12 @@ const Form = ({
 	};
 
 	const closeErrorModal = (type) => {
+		let dispatchType;
+		if (type === 'login') dispatchType = 'login error';
+		if (type === 'register') dispatchType = 'register error';
+		if (type === 'server') dispatchType = 'server error';
 		dispatch({
-			type: type === 'login' ? 'login error' : 'server error',
+			type: dispatchType,
 			payload: { status: false },
 		});
 	};
@@ -127,6 +131,16 @@ const Form = ({
 					closeText={'Cerrar'}
 					closeFunction={() => closeErrorModal('login')}
 					error={state.loginError}
+				/>
+			)}
+			{state.registerError && (
+				<Modal
+					id="login-error"
+					title={'Error'}
+					body={'El usuario ya estaría registrado. Verifique los datos ingresados.'}
+					closeText={'Cerrar'}
+					closeFunction={() => closeErrorModal('register')}
+					error={state.registerError}
 				/>
 			)}
 			{state.serverError && (
