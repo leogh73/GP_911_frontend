@@ -119,8 +119,8 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			JSON.stringify(registeredData(state.inputs)),
 			headers,
 		);
-		console.log(resultData);
 		dispatch({ type: 'loading', payload: { status: false } });
+		console.log(resultData);
 		if (resultData.error === 'server') {
 			return dispatch({ type: 'server error', payload: { status: true } });
 		}
@@ -180,17 +180,38 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			}
 			if (
 				name === 'email' &&
-				!value.match(/^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/)
+				value.length &&
+				!value.match(/^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/)
 			) {
 				errorMessage = 'El correo electrónico ingresado es inválido.';
 			}
-			if (name === 'password' && value.length && value.length < 3) {
-				errorMessage = 'La contraseña deben ser al menos 3 caracteres.';
+			if (name === 'password' || name === 'newPassword' || name === 'currentPassword') {
+				if (value.length && value.length < 3)
+					errorMessage = 'La contraseña deben ser al menos 3 caracteres.';
 			}
 			if (
-				name === 'repeatPassword' &&
-				value.length &&
-				value !== state.inputs[state.inputs.findIndex((i) => i.name === 'password')].value
+				name === 'newPassword' &&
+				value.length === state.inputs[1].value.length &&
+				value === state.inputs[0].value
+			) {
+				errorMessage = 'La nueva contraseña no puede ser igual a la actual.';
+			}
+			if (
+				name === 'newPassword' &&
+				state.inputs[2].value.length &&
+				value !== state.inputs[2].value
+			) {
+				errorMessage = 'La nueva contraseña no coincide.';
+			}
+			if (
+				(name === 'password' &&
+					state.inputs[state.inputs.findIndex((i) => i.name === 'repeatPassword')].value.length &&
+					value !==
+						state.inputs[state.inputs.findIndex((i) => i.name === 'repeatPassword')].value) ||
+				(name === 'repeatPassword' &&
+					value.length &&
+					value !== state.inputs[state.inputs.findIndex((i) => i.name === 'password')].value) ||
+				(name === 'repeatNewPassword' && value.length && value !== state.inputs[1].value)
 			) {
 				errorMessage = 'La contraseña no coincide.';
 			}

@@ -83,8 +83,7 @@ const Schedule = ({ type }) => {
 		let url = !!elementId ? elementId : elementUrl;
 		if (!!url && url !== location.pathname) {
 			navigate(url);
-			userContext.dispatch({ type: 'load active tab', payload: { tab: url } });
-			if (location.pathname === '/schedule/search') setLoading(true);
+			setLoading(true);
 			setError(false);
 			setSelectedDate(null);
 		}

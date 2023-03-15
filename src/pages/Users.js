@@ -68,7 +68,6 @@ const Users = ({ section }) => {
 		let url = !!elementId ? elementId : elementUrl;
 		if (!!url && url !== location.pathname) {
 			navigate(url);
-			userContext.dispatch({ type: 'load active tab', payload: { tab: url } });
 			setDataList(null);
 			setLoading(true);
 			setError(false);

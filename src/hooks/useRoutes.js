@@ -17,7 +17,6 @@ const useRoutes = (token, userData) => {
 	const location = useLocation();
 	const [state, dispatch] = useReducer(reducer, {
 		activeEditRoute: false,
-		activeTab: location.pathname,
 		changeData: {},
 		profileData: {},
 	});
@@ -28,11 +27,6 @@ const useRoutes = (token, userData) => {
 				return {
 					...state,
 					activeEditRoute: action.payload.status,
-				};
-			case 'load active tab':
-				return {
-					...state,
-					activeTab: action.payload.tab,
 				};
 			case 'load change data':
 				return {

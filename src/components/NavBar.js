@@ -199,10 +199,7 @@ const NavBar = () => {
 								<div className="link-container">
 									<Link
 										to={
-											!!userContext.state.activeTab &&
-											userContext.state.activeTab.startsWith('/schedule')
-												? userContext.state.activeTab
-												: '/schedule'
+											location.pathname.startsWith('/schedule') ? location.pathname : '/schedule'
 										}
 									>
 										<FaRegCalendarAlt />
@@ -213,12 +210,7 @@ const NavBar = () => {
 							<li id={'/changes'}>
 								<div className="link-container">
 									<Link
-										to={
-											!!userContext.state.activeTab &&
-											userContext.state.activeTab.startsWith('/changes')
-												? userContext.state.activeTab
-												: '/changes'
-										}
+										to={location.pathname.startsWith('/changes') ? location.pathname : '/changes'}
 									>
 										<FaList />
 										CAMBIOS
@@ -237,12 +229,7 @@ const NavBar = () => {
 								<li id={'/users'}>
 									<div className="link-container">
 										<Link
-											to={
-												!!userContext.state.activeTab &&
-												userContext.state.activeTab.startsWith('/users')
-													? userContext.state.activeTab
-													: '/users'
-											}
+											to={location.pathname.startsWith('/users') ? location.pathname : '/users'}
 										>
 											<FaUsers />
 											USUARIOS
@@ -250,7 +237,7 @@ const NavBar = () => {
 									</div>
 								</li>
 							)}
-							{userContext.userData.admin && (
+							{/* {userContext.userData.admin && (
 								<li id={'/register'}>
 									<div className="link-container">
 										<Link
@@ -266,7 +253,7 @@ const NavBar = () => {
 										</Link>
 									</div>
 								</li>
-							)}
+							)} */}
 						</ul>
 						{modeButton()}
 						<div className="user-toggle">
