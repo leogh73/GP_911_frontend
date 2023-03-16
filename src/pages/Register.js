@@ -12,10 +12,6 @@ const Register = ({ section }) => {
 
 	const registerResult = (result) => {
 		navigate(`/users/${section.toLowerCase()}`);
-		userContext.dispatch({
-			type: 'load active tab',
-			payload: { tab: `/users/${section.toLowerCase()}` },
-		});
 		result.userId
 			? toast('Personal registrado correctamente.', { type: 'success' })
 			: toast('No se pudo completar el proceso de registro.', { type: 'error' });

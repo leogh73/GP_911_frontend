@@ -83,8 +83,10 @@ const useChangeLoad = (resultData, startData) => {
 		type: 'change',
 		data: {
 			coverData: {
-				name: `${userContext.userData.lastName} ${userContext.userData.firstName}`,
-				date: !!startData ? startData.coverData.name : '-',
+				name: !!startData
+					? startData.coverData.name
+					: `${userContext.userData.lastName} ${userContext.userData.firstName}`,
+				date: !!startData ? startData.coverData.date : '-',
 				shift: !!startData ? startData.coverData.shift : '-',
 				day: !!startData ? startData.coverData.day : '-',
 				guardId: !!startData ? startData.coverData.guardId : '-',

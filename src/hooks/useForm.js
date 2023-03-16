@@ -205,7 +205,7 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			}
 			if (
 				(name === 'password' &&
-					state.inputs[state.inputs.findIndex((i) => i.name === 'repeatPassword')].value.length &&
+					state.inputs[state.inputs.findIndex((i) => i.name === 'repeatPassword')]?.value.length &&
 					value !==
 						state.inputs[state.inputs.findIndex((i) => i.name === 'repeatPassword')].value) ||
 				(name === 'repeatPassword' &&
@@ -219,6 +219,18 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		};
 
 		const validateForm = (inputs) => {
+			if (pageName === 'register') {
+				let guardIndex = state.inputs.findIndex((i) => i.name === 'guardId');
+				if (state.inputs[state.inputs.findIndex((i) => i.name === 'superior')].value === 'Si') {
+					state.inputs[guardIndex].value = '-';
+					state.inputs[guardIndex].errorMessage = '';
+					state.inputs[guardIndex].disabled = true;
+				} else {
+					state.inputs[guardIndex].value =
+						state.inputs[guardIndex].value === '-' ? '' : state.inputs[guardIndex].value;
+					state.inputs[guardIndex].disabled = false;
+				}
+			}
 			let isValid = true;
 			inputs.forEach((i) => {
 				if (i.errorMessage.length || !i.value.length) isValid = false;

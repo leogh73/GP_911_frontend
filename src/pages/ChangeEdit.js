@@ -24,7 +24,7 @@ const ChangeEdit = ({ changeData }) => {
 				loadComment: setCommentString,
 			}}
 		>
-			<ChangeLoad sendResult={resultEditChange} startData={changeData} />;
+			<ChangeLoad sendResult={resultEditChange} startData={changeData} />
 		</CommentContext.Provider>
 	);
 };

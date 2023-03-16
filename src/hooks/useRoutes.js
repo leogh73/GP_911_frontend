@@ -108,7 +108,7 @@ const useRoutes = (token, userData) => {
 			{(userData.superior || userData.admin) && (
 				<Route path="/users">
 					<Route path="phoning" element={<Users section={'Phoning'} />} />
-					<Route path="dispatch" element={<Users section={'Dispatch'} />} />{' '}
+					<Route path="dispatch" element={<Users section={'Dispatch'} />} />
 					<Route path="monitoring" element={<Users section={'Monitoring'} />} />
 				</Route>
 			)}
