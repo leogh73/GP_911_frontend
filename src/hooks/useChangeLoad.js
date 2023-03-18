@@ -62,7 +62,7 @@ const useChangeLoad = (resultData, startData) => {
 					data: {
 						...state.data,
 						returnData: {
-							...state.returnData,
+							...state.data.returnData,
 							name: action.payload.user,
 						},
 					},
@@ -83,20 +83,20 @@ const useChangeLoad = (resultData, startData) => {
 		type: 'change',
 		data: {
 			coverData: {
-				name: !!startData
-					? startData.coverData.name
-					: `${userContext.userData.lastName} ${userContext.userData.firstName}`,
-				date: !!startData ? startData.coverData.date : '-',
-				shift: !!startData ? startData.coverData.shift : '-',
-				day: !!startData ? startData.coverData.day : '-',
-				guardId: !!startData ? startData.coverData.guardId : '-',
+				name:
+					startData?.coverData.name ??
+					`${userContext.userData.lastName} ${userContext.userData.firstName}`,
+				date: startData?.coverData.date ?? '-',
+				shift: startData?.coverData.shift ?? '-',
+				day: startData?.coverData.day ?? '-',
+				guardId: startData?.coverData.guardId ?? '-',
 			},
 			returnData: {
-				name: !!startData ? startData.returnData.name : '-',
-				date: !!startData ? startData.returnData.date : '-',
-				shift: !!startData ? startData.returnData.shift : '-',
-				day: !!startData ? startData.returnData.day : '-',
-				guardId: !!startData ? startData.returnData.guardId : '-',
+				name: startData?.returnData.name ?? '-',
+				date: startData?.returnData.date ?? '-',
+				shift: startData?.returnData.shift ?? '-',
+				day: startData?.returnData.day ?? '-',
+				guardId: startData?.returnData.guardId ?? '-',
 			},
 		},
 		loading: false,
@@ -139,6 +139,7 @@ const useChangeLoad = (resultData, startData) => {
 		formData.forEach((data) => {
 			if (data === '-') isValid = false;
 		});
+
 		if (
 			(!!startData &&
 				startData.coverData.name === state.data.coverData.name &&

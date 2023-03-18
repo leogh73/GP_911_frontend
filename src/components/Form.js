@@ -47,6 +47,12 @@ const Form = ({
 		});
 	};
 
+	useEffect(() => {
+		return () => {
+			state.inputs.forEach((i) => (i.value = ''));
+		};
+	}, []);
+
 	return (
 		<div className="new-form">
 			<div className={`form ${pageName}`}>

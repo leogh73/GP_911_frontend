@@ -34,9 +34,9 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 	const editProfilePage = () => {
 		userContext.dispatch({
 			type: 'load profile data',
-			payload: { change: data, editRoute: true },
+			payload: { profile: data, editRoute: true },
 		});
-		navigate('/profile/edit');
+		navigate('/profile/edit-user');
 	};
 
 	const button = (icon, idModal, title, body, actionFunction, closeText, comment) => (

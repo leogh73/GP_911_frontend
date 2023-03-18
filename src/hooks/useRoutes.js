@@ -96,7 +96,10 @@ const useRoutes = (token, userData) => {
 			</Route>
 			<Route path="/profile">
 				<Route path="" element={<Profile />} />
-				<Route path="edit" element={<ProfileEdit startData={state.profileData} />} />
+				<Route path="edit" element={<ProfileEdit startData={userData} />} />
+				{state.activeEditRoute && (
+					<Route path="edit-user" element={<ProfileEdit startData={state.profileData} />} />
+				)}
 			</Route>
 			{userData.superior
 				? superiorRoutes.map((route) => (

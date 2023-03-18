@@ -19,23 +19,32 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 	const storedUser = loadUser();
 	const navigate = useNavigate();
 
-	const userData = profileData ?? userContext.userData;
+	const userData = !!profileData ? profileData : userContext.userData;
 	const ownProfile = !!profileData ? false : true;
 
-	// const userSection = () => {
-	// 	let userSection = 'Sección: ';
-	// 	if (section === 'Phoning') userSection = userSection + 'Teléfonía';
-	// 	if (section === 'Monitoring') userSection = userSection + 'Monitoreo';
-	// 	if (section === 'Dispatch') userSection = userSection + 'Despacho';
-	// 	return userSection;
-	// };
+	// console.log(profileData);
+
+	const userSection = (s) => {
+		let userSection;
+		if (s === 'Phoning') userSection = 'Teléfonía';
+		if (s === 'Monitoring') userSection = 'Monitoreo';
+		if (s === 'Dispatch') userSection = 'Despacho';
+		return userSection;
+	};
 
 	const formInputs = () => {
+		// console.log(userData);
 		let formInputs;
 		if (pageName === 'register') {
-			formInputs = registerInputs;
-			// formInputs.splice(5, 1);
-			if (!userData.admin) formInputs.splice(6, 1);
+			formInputs = [...registerInputs];
+			// formInputs[5].value = userSection(section);
+			// formInputs[5].optionsList = [];
+			// formInputs[5].disabled = true;
+			console.log('LOAD REGISTER!');
+			formInputs.splice(5, 1);
+			if (!userContext.userData.admin) {
+				formInputs.splice(6, 1);
+			}
 		}
 		if (pageName === 'login') {
 			formInputs = loginInputs;
@@ -48,7 +57,27 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			formInputs = passwordInputs('forgot');
 		}
 		if (pageName === 'profile-edit') {
-			// formInputs = requestedInputs(registerInputs);
+			formInputs = registerInputs;
+			formInputs.splice(9, 2);
+			formInputs[0].value = userData.username;
+			formInputs[1].value = userData.lastName;
+			formInputs[2].value = userData.firstName;
+			formInputs[3].value = userData.ni;
+			formInputs[4].value = userData.hierarchy;
+			formInputs[5].value = userSection(userData.section);
+			formInputs[6].value = !!userData.guardId ? userData.guardId : '-';
+			formInputs[7].value = userData.superior === 'true' ? 'Si' : 'No';
+			formInputs[8].value = userData.email;
+			if (userContext.userData.superior && !ownProfile) {
+				formInputs[3].disabled = true;
+				formInputs[4].disabled = true;
+				formInputs[5].optionsList = [];
+				formInputs[5].disabled = true;
+				formInputs[7].disabled = true;
+				formInputs[7].optionsList = [];
+				formInputs[8].disabled = true;
+				// formInputs.splice(7, 1);
+			}
 		}
 		return formInputs;
 	};
@@ -71,6 +100,7 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 	const registeredData = (inputs) => {
 		let registeredData = {};
 		if (pageName === 'register') {
+			console.log(inputs);
 			registeredData = {
 				username: inputs[0].value,
 				lastName: inputs[1].value,
@@ -79,11 +109,19 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 				hierarchy: inputs[4].value,
 				section,
 				guardId: inputs[5].value,
-				superior: userData.admin ? inputs[6].value : 'No',
-				email: inputs[7].value,
-				password: inputs[8].value,
-				repeatPassword: inputs[9].value,
 			};
+			if (userContext.userData.admin) {
+				registeredData.superior = inputs[6].value;
+				registeredData.email = inputs[7].value;
+				registeredData.password = inputs[8].value;
+				registeredData.repeatPassword = inputs[9].value;
+			}
+			if (!userContext.userData.admin) {
+				registeredData.superior = 'No';
+				registeredData.email = inputs[6].value;
+				registeredData.password = inputs[7].value;
+				registeredData.repeatPassword = inputs[8].value;
+			}
 		}
 		if (pageName === 'login') {
 			registeredData = {
@@ -98,11 +136,19 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 				repeatNewPassword: inputs[2].value,
 			};
 		}
+		if (pageName === 'profile-edit') {
+			registeredData = {
+				newUserName: inputs[0].value !== userData.username ? inputs[0].value : null,
+				newLastName: inputs[1].value !== userData.lastName ? inputs[1].value : null,
+				newFirstName: inputs[2].value !== userData.firstName ? inputs[2].value : null,newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
+			};
+		}
 		if (pageName === 'forgot-password') {
 			registeredData = {
 				email: inputs[0].value,
 			};
 		}
+
 		return registeredData;
 	};
 
@@ -219,29 +265,45 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		};
 
 		const validateForm = (inputs) => {
-			if (pageName === 'register') {
+			if (pageName === 'register' && userContext.userData.admin) {
 				let guardIndex = state.inputs.findIndex((i) => i.name === 'guardId');
 				if (state.inputs[state.inputs.findIndex((i) => i.name === 'superior')].value === 'Si') {
 					state.inputs[guardIndex].value = '-';
 					state.inputs[guardIndex].errorMessage = '';
 					state.inputs[guardIndex].disabled = true;
-				} else {
-					state.inputs[guardIndex].value =
-						state.inputs[guardIndex].value === '-' ? '' : state.inputs[guardIndex].value;
+				}
+				if (state.inputs[state.inputs.findIndex((i) => i.name === 'superior')].value === 'No') {
+					state.inputs[guardIndex].value = '';
 					state.inputs[guardIndex].disabled = false;
+				}
+			}
+			if (pageName === 'change-password') {
+				if (
+					state.inputs[1].value.length &&
+					state.inputs[2].value.length &&
+					state.inputs[1].value === state.inputs[2].value
+				) {
+					state.inputs[1].errorMessage = '';
+					state.inputs[2].errorMessage = '';
 				}
 			}
 			let isValid = true;
 			inputs.forEach((i) => {
+				// console.log(i.value.length);
 				if (i.errorMessage.length || !i.value.length) isValid = false;
 			});
+			// console.log(inputs);
 			return isValid;
 		};
 
 		switch (action.type) {
 			case 'change': {
 				let newInputs = [...state.inputs];
+				console.log(newInputs);
 				let inputIndex = newInputs.findIndex((i) => i.name === action.payload.inputName);
+				console.log(action.payload.inputName);
+				console.log(inputIndex);
+
 				newInputs[inputIndex].value = action.payload.value;
 				newInputs[inputIndex].errorMessage = validateInput(
 					action.payload.inputName,
@@ -282,125 +344,3 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 };
 
 export default useForm;
-
-// function registeredData(inputs) {
-// 	let registeredData = {};
-// 	if (pageName === 'register')
-// 		registeredData = {
-// 			username: inputs[0].value,
-// 			lastName: inputs[1].value,
-// 			firstName: inputs[2].value,
-// 			ni: inputs[3].value,
-// 			hierarchy: inputs[4].value,
-// 			section: inputs[5].value,
-// 			guardId: inputs[6].value,
-// 			superior: inputs[7].value,
-// 			email: inputs[8].value,
-// 			password: inputs[9].value,
-// 			repeatPassword: inputs[10].value,
-// 		};
-// 	if (pageName === 'login') {
-// 		registeredData = {
-// 			usernameOrEmail: inputs[0].value,
-// 			password: inputs[1].value,
-// 		};
-// 	}
-// 	if (pageName === 'change-password') {
-// 		registeredData = {
-// 			currentPassword: inputs[0].value,
-// 			newPassword: inputs[1].value,
-// 			repeatNewPassword: inputs[2].value,
-// 		};
-// 	}
-// 	if (pageName === 'forgot-password') {
-// 		registeredData = {
-// 			email: inputs[0].value,
-// 		};
-// 	}
-// 	return registeredData;
-// }
-
-// const validateData = (validateType, inputIndex, newInputs, value) => {
-// 	let joiValidation = schema.validate(registeredData(newInputs), {
-// 		abortEarly: false,
-// 	});
-// 	let formIsValid = true;
-// 	console.log(joiValidation);
-
-// 	if (joiValidation.error) {
-// 		formIsValid = false;
-
-// 		const searchErrorIndex = (name) =>
-// 			joiValidation.error.details.findIndex((error) => error.context.label === name);
-
-// 		if (validateType === 'input') {
-// 			let errorIndex = searchErrorIndex(newInputs[inputIndex].name);
-// 			if (errorIndex !== -1)
-// 				newInputs[inputIndex].errorMessage = joiValidation.error.details[errorIndex].message;
-// 			if (newInputs[inputIndex].name === 'repetirContraseña' && !value)
-// 				newInputs[inputIndex].errorMessage = 'Repita su contraseña.';
-// 		}
-
-// 		if (validateType === 'form') {
-// 			newInputs.forEach((input) => {
-// 				let errorIndex = searchErrorIndex(input.name);
-// 				if (errorIndex !== -1)
-// 					input.errorMessage = joiValidation.error.details[errorIndex].message;
-// 				if (input.name === 'repeatPassword' && !input.value)
-// 					input.errorMessage = ['Repita su contraseña.'];
-// 			});
-// 		}
-// 	}
-
-// 	setInputs(newInputs);
-// 	setFormIsValid(formIsValid);
-
-// 	return formIsValid;
-// };
-
-// const verifyField = (validateInputs) => {
-// 	let newInputs = [...inputs];
-// 	let verification = true;
-// 	if (pageName === 'register') {
-// 		if (validateInputs.username) {
-// 			newInputs[0].errorMessage = 'El nombre de usuario ya está registrado.';
-// 		}
-// 		if (validateInputs.email) {
-// 			newInputs[6].errorMessage = 'El correo electrónico ya está registrado.';
-// 		}
-// 		verification = false;
-// 	}
-// 	if (pageName === 'login') {
-// 		if (validateInputs.usernameOrEmail || validateInputs.password) verification = false;
-// 		setLoginError(true);
-// 	}
-
-// 	setFormIsValid(verification);
-// 	setInputs(newInputs);
-// 	return verification;
-// };
-
-// const changeHandler = async (event) => {
-// 	let inputIndex =
-// 		event.target.getAttribute('name') === 'section'
-// 			? inputs.findIndex((f) => f.name === event.target.getAttribute('name'))
-// 			: inputs.findIndex((f) => f.name === event.target.name);
-// 	let newInputs = [...inputs];
-// 	newInputs[inputIndex].errorMessage = '';
-// 	event.target.getAttribute('name') === 'section'
-// 		? (newInputs[inputIndex].value = event.target.getAttribute('value'))
-// 		: (newInputs[inputIndex].value = event.target.value);
-// 	console.log(inputIndex);
-// 	console.log(event.target.value);
-// 	validateData('input', inputIndex, newInputs, event.target.value);
-// };
-
-// const validateForm = async (event) => {
-// 	if (!!event) event.preventDefault();
-// 	let newInputs = [...inputs];
-// 	let userDataResult = validateData('form', null, newInputs, event);
-// 	if (userDataResult) {
-// 		let databaseResult = await submitForm(registeredData(newInputs));
-// 		if (databaseResult.validInputs) sendUserForm(databaseResult.resultData, newInputs[0].value);
-// 	}
-// };
