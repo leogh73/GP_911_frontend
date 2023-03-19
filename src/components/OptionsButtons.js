@@ -107,10 +107,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					</>
 				);
 		}
-		if (
-			(type === 'user' && userContext.userData.admin) ||
-			(userContext.userData.superior && userContext.userData.section === sectionContext.section)
-		) {
+		if (type === 'user' && userContext.userData.admin) {
 			return (
 				<>
 					<div className="option-container">

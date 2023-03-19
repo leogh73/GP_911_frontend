@@ -64,7 +64,7 @@ const registerInputs = [
 	{
 		key: 5,
 		name: 'section',
-		optionsList: ['Teléfonía', 'Monitoreo', 'Despacho'],
+		optionsList: ['Telefonía', 'Monitoreo', 'Despacho'],
 		password: false,
 		icon: <FaBuilding />,
 		placeHolder: 'Sección',

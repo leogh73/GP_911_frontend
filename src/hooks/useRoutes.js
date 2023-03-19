@@ -46,9 +46,18 @@ const useRoutes = (token, userData) => {
 	}
 
 	const superiorRoutes = [
-		{ key: '01', path: '/register', element: <Register /> },
+		,
 		{
-			key: '02',
+			key: '03',
+			path: '/newaffected',
+			element: <NewItem type={'affected'} key={'newaffected'} />,
+		},
+	];
+
+	const adminRoutes = [
+		,
+		{
+			key: '01',
 			path: '/users',
 			element: <Navigate to="/users/phoning" />,
 		},
@@ -67,14 +76,12 @@ const useRoutes = (token, userData) => {
 		},
 	];
 
-	if (!!userData && userData.admin) superiorRoutes.forEach((route) => userRoutes.push(route));
+	if (!!userData && userData.admin) adminRoutes.forEach((route) => userRoutes.push(route));
 
-	if (!!userData && userData.superior)
-		superiorRoutes.push({
-			key: '03',
-			path: '/newaffected',
-			element: <NewItem type={'affected'} key={'newaffected'} />,
-		});
+	// if (!!userData && userData.superior)
+	// 	superiorToues.forEach({
+	// 		user
+	// 	});
 
 	const routes = token ? (
 		<Routes>
@@ -108,35 +115,11 @@ const useRoutes = (token, userData) => {
 				: userRoutes.map((route) => (
 						<Route key={route.key} path={route.path} element={route.element} />
 				  ))}
-			{(userData.superior || userData.admin) && (
+			{userData.admin && (
 				<Route path="/users">
 					<Route path="phoning" element={<Users section={'Phoning'} />} />
 					<Route path="dispatch" element={<Users section={'Dispatch'} />} />
 					<Route path="monitoring" element={<Users section={'Monitoring'} />} />
-				</Route>
-			)}
-			{userData.superior && (
-				<Route path="/register">
-					{userData.section === 'Phoning' && (
-						<Route
-							path="phoning"
-							key="phone-register"
-							element={<Register section={'Phoning'} />}
-						/>
-					)}
-					{userData.section === 'Dispatch' && (
-						<Route
-							path="dispatch"
-							element={<Register key="dispatch-register" section={'Dispatch'} />}
-						/>
-					)}
-					{userData.section === 'Monitoring' && (
-						<Route
-							path="monitoring"
-							key="monitoring-register"
-							element={<Register section={'Monitoring'} />}
-						/>
-					)}
 				</Route>
 			)}
 			{userData.admin && (

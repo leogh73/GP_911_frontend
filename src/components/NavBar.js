@@ -225,7 +225,7 @@ const NavBar = () => {
 									</Link>
 								</div>
 							</li>
-							{(userContext.userData.admin || userContext.userData.superior) && (
+							{userContext.userData.admin && (
 								<li id={'/users'}>
 									<div className="link-container">
 										<Link
@@ -237,23 +237,6 @@ const NavBar = () => {
 									</div>
 								</li>
 							)}
-							{/* {userContext.userData.admin && (
-								<li id={'/register'}>
-									<div className="link-container">
-										<Link
-											to={
-												!!userContext.state.activeTab &&
-												userContext.state.activeTab.startsWith('/users')
-													? userContext.state.activeTab
-													: '/users'
-											}
-										>
-											<FaUsers />
-											Registro
-										</Link>
-									</div>
-								</li>
-							)} */}
 						</ul>
 						{modeButton()}
 						<div className="user-toggle">

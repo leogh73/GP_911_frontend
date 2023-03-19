@@ -26,7 +26,7 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 
 	const userSection = (s) => {
 		let userSection;
-		if (s === 'Phoning') userSection = 'Teléfonía';
+		if (s === 'Phoning') userSection = 'Telefonía';
 		if (s === 'Monitoring') userSection = 'Monitoreo';
 		if (s === 'Dispatch') userSection = 'Despacho';
 		return userSection;
@@ -66,18 +66,18 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			formInputs[4].value = userData.hierarchy;
 			formInputs[5].value = userSection(userData.section);
 			formInputs[6].value = !!userData.guardId ? userData.guardId : '-';
-			formInputs[7].value = userData.superior === 'true' ? 'Si' : 'No';
+			formInputs[7].value = userData.superior ? 'Si' : 'No';
 			formInputs[8].value = userData.email;
-			if (userContext.userData.superior && !ownProfile) {
-				formInputs[3].disabled = true;
-				formInputs[4].disabled = true;
-				formInputs[5].optionsList = [];
-				formInputs[5].disabled = true;
-				formInputs[7].disabled = true;
-				formInputs[7].optionsList = [];
-				formInputs[8].disabled = true;
-				// formInputs.splice(7, 1);
-			}
+			// if (userContext.userData.admin && !ownProfile) {
+			// formInputs[3].disabled = true;
+			// formInputs[4].disabled = true;
+			// formInputs[5].optionsList = [];
+			// formInputs[5].disabled = true;
+			// formInputs[7].disabled = true;
+			// formInputs[7].optionsList = [];
+			// formInputs[8].disabled = true;
+			// formInputs.splice(7, 1);
+			// }
 		}
 		return formInputs;
 	};
@@ -109,19 +109,11 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 				hierarchy: inputs[4].value,
 				section,
 				guardId: inputs[5].value,
+				superior: inputs[6].value,
+				email: inputs[7].value,
+				password: inputs[8].value,
+				repeatPassword: inputs[9].value,
 			};
-			if (userContext.userData.admin) {
-				registeredData.superior = inputs[6].value;
-				registeredData.email = inputs[7].value;
-				registeredData.password = inputs[8].value;
-				registeredData.repeatPassword = inputs[9].value;
-			}
-			if (!userContext.userData.admin) {
-				registeredData.superior = 'No';
-				registeredData.email = inputs[6].value;
-				registeredData.password = inputs[7].value;
-				registeredData.repeatPassword = inputs[8].value;
-			}
 		}
 		if (pageName === 'login') {
 			registeredData = {
@@ -140,7 +132,15 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			registeredData = {
 				newUserName: inputs[0].value !== userData.username ? inputs[0].value : null,
 				newLastName: inputs[1].value !== userData.lastName ? inputs[1].value : null,
-				newFirstName: inputs[2].value !== userData.firstName ? inputs[2].value : null,newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
+				newFirstName: inputs[2].value !== userData.firstName ? inputs[2].value : null,
+				newNi: inputs[2].value !== userData.ni ? inputs[3].value : null,
+				newHierarchy: inputs[2].value !== userData.hierarchy ? inputs[4].value : null,
+				newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
+				newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
+				newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
+				newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
+				newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
+				newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
 			};
 		}
 		if (pageName === 'forgot-password') {
@@ -289,21 +289,31 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			}
 			let isValid = true;
 			inputs.forEach((i) => {
-				// console.log(i.value.length);
-				if (i.errorMessage.length || !i.value.length) isValid = false;
+				console.log(i.value.toString().length);
+				if (i.errorMessage.length || !i.value.toString().length) isValid = false;
 			});
-			// console.log(inputs);
+			if (pageName === 'profile-edit') {
+				let superior = userData.superior ? 'Si' : 'No';
+				if (
+					state.inputs[0].value === userData.username &&
+					state.inputs[1].value === userData.lastName &&
+					state.inputs[2].value === userData.firstName &&
+					state.inputs[3].value === userData.ni &&
+					state.inputs[4].value === userData.hierarchy &&
+					state.inputs[5].value === userSection(userData.section) &&
+					state.inputs[6].value === userData.guardId &&
+					state.inputs[7].value === superior &&
+					state.inputs[8].value === userData.email
+				)
+					isValid = false;
+			}
 			return isValid;
 		};
 
 		switch (action.type) {
 			case 'change': {
 				let newInputs = [...state.inputs];
-				console.log(newInputs);
 				let inputIndex = newInputs.findIndex((i) => i.name === action.payload.inputName);
-				console.log(action.payload.inputName);
-				console.log(inputIndex);
-
 				newInputs[inputIndex].value = action.payload.value;
 				newInputs[inputIndex].errorMessage = validateInput(
 					action.payload.inputName,
