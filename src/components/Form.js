@@ -72,7 +72,7 @@ const Form = ({
 						<div className="inputs-group">
 							{state.inputs.map(
 								(f, i) =>
-									i < formIndex && (
+									i < 5 && (
 										<InputField
 											key={f.key}
 											showTitle={inputTitle}
@@ -94,7 +94,7 @@ const Form = ({
 							<div className="inputs-group">
 								{state.inputs.map(
 									(f, i) =>
-										i >= formIndex && (
+										i >= 5 && (
 											<InputField
 												key={f.key}
 												showTitle={inputTitle}

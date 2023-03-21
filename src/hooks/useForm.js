@@ -37,14 +37,7 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		let formInputs;
 		if (pageName === 'register') {
 			formInputs = [...registerInputs];
-			// formInputs[5].value = userSection(section);
-			// formInputs[5].optionsList = [];
-			// formInputs[5].disabled = true;
-			console.log('LOAD REGISTER!');
 			formInputs.splice(5, 1);
-			if (!userContext.userData.admin) {
-				formInputs.splice(6, 1);
-			}
 		}
 		if (pageName === 'login') {
 			formInputs = loginInputs;
@@ -57,36 +50,15 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			formInputs = passwordInputs('forgot');
 		}
 		if (pageName === 'profile-edit') {
-			formInputs = registerInputs;
+			formInputs = [...registerInputs];
 			formInputs.splice(9, 2);
-			formInputs[0].value = userData.username;
-			formInputs[1].value = userData.lastName;
-			formInputs[2].value = userData.firstName;
-			formInputs[3].value = userData.ni;
-			formInputs[4].value = userData.hierarchy;
-			formInputs[5].value = userSection(userData.section);
-			formInputs[6].value = !!userData.guardId ? userData.guardId : '-';
-			formInputs[7].value = userData.superior ? 'Si' : 'No';
-			formInputs[8].value = userData.email;
-			// if (userContext.userData.admin && !ownProfile) {
-			// formInputs[3].disabled = true;
-			// formInputs[4].disabled = true;
-			// formInputs[5].optionsList = [];
-			// formInputs[5].disabled = true;
-			// formInputs[7].disabled = true;
-			// formInputs[7].optionsList = [];
-			// formInputs[8].disabled = true;
-			// formInputs.splice(7, 1);
-			// }
 		}
 		return formInputs;
 	};
 
-	// useEffect(() => {
-	// 	return () => {
-	// 		formInputs
-	// 	}
-	// }, [])
+	useEffect(() => {
+		if (pageName === 'profile-edit') dispatch({ type: 'load profile-edit' });
+	}, [pageName]);
 
 	const [state, dispatch] = useReducer(reducer, {
 		inputs: formInputs(),
@@ -133,14 +105,12 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 				newUserName: inputs[0].value !== userData.username ? inputs[0].value : null,
 				newLastName: inputs[1].value !== userData.lastName ? inputs[1].value : null,
 				newFirstName: inputs[2].value !== userData.firstName ? inputs[2].value : null,
-				newNi: inputs[2].value !== userData.ni ? inputs[3].value : null,
-				newHierarchy: inputs[2].value !== userData.hierarchy ? inputs[4].value : null,
-				newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
-				newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
-				newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
-				newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
-				newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
-				newGuardId: inputs[2].value !== userData.firstName ? inputs[2].value : null,
+				newNi: inputs[3].value !== userData.ni ? inputs[3].value : null,
+				newHierarchy: inputs[4].value !== userData.hierarchy ? inputs[4].value : null,
+				newGuardId: inputs[5].value !== userData.guardId ? inputs[5].value : null,
+				newSection: inputs[6].value !== userData.guardId ? inputs[6].value : null,
+				newSuperior: inputs[7].value !== userData.superior ? inputs[7].value : null,
+				newEmail: inputs[8].value !== userData.email ? inputs[8].value : null,
 			};
 		}
 		if (pageName === 'forgot-password') {
@@ -148,6 +118,7 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 				email: inputs[0].value,
 			};
 		}
+		console.log(registeredData);
 
 		return registeredData;
 	};
@@ -265,26 +236,28 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		};
 
 		const validateForm = (inputs) => {
-			if (pageName === 'register' && userContext.userData.admin) {
-				let guardIndex = state.inputs.findIndex((i) => i.name === 'guardId');
-				if (state.inputs[state.inputs.findIndex((i) => i.name === 'superior')].value === 'Si') {
-					state.inputs[guardIndex].value = '-';
-					state.inputs[guardIndex].errorMessage = '';
-					state.inputs[guardIndex].disabled = true;
+			console.log(inputs);
+			let guardIndex = inputs.findIndex((i) => i.name === 'guardId');
+			if (pageName === 'register' || pageName === 'profile-edit') {
+				if (inputs[inputs.findIndex((i) => i.name === 'superior')].value === 'Si') {
+					inputs[guardIndex].value = '-';
+					inputs[guardIndex].errorMessage = '';
+					inputs[guardIndex].disabled = true;
 				}
-				if (state.inputs[state.inputs.findIndex((i) => i.name === 'superior')].value === 'No') {
-					state.inputs[guardIndex].value = '';
-					state.inputs[guardIndex].disabled = false;
+				if (inputs[state.inputs.findIndex((i) => i.name === 'superior')].value === 'No') {
+					inputs[guardIndex].value =
+						inputs[guardIndex].value === '-' ? '' : inputs[guardIndex].value;
+					inputs[guardIndex].disabled = false;
 				}
 			}
 			if (pageName === 'change-password') {
 				if (
-					state.inputs[1].value.length &&
-					state.inputs[2].value.length &&
-					state.inputs[1].value === state.inputs[2].value
+					inputs[1].value.length &&
+					inputs[2].value.length &&
+					inputs[1].value === state.inputs[2].value
 				) {
-					state.inputs[1].errorMessage = '';
-					state.inputs[2].errorMessage = '';
+					inputs[1].errorMessage = '';
+					inputs[2].errorMessage = '';
 				}
 			}
 			let isValid = true;
@@ -295,15 +268,15 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			if (pageName === 'profile-edit') {
 				let superior = userData.superior ? 'Si' : 'No';
 				if (
-					state.inputs[0].value === userData.username &&
-					state.inputs[1].value === userData.lastName &&
-					state.inputs[2].value === userData.firstName &&
-					state.inputs[3].value === userData.ni &&
-					state.inputs[4].value === userData.hierarchy &&
-					state.inputs[5].value === userSection(userData.section) &&
-					state.inputs[6].value === userData.guardId &&
-					state.inputs[7].value === superior &&
-					state.inputs[8].value === userData.email
+					inputs[0].value === userData.username &&
+					inputs[1].value === userData.lastName &&
+					inputs[2].value === userData.firstName &&
+					inputs[3].value === userData.ni &&
+					inputs[4].value === userData.hierarchy &&
+					inputs[5].value === userSection(userData.section) &&
+					inputs[6].value === userData.guardId &&
+					inputs[7].value === superior &&
+					inputs[8].value === userData.email
 				)
 					isValid = false;
 			}
@@ -320,6 +293,19 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 					action.payload.value,
 				);
 				return { ...state, inputs: newInputs, formIsValid: validateForm(newInputs) };
+			}
+			case 'load profile-edit': {
+				let newInputs = [...state.inputs];
+				newInputs[0].value = userData.username;
+				newInputs[1].value = userData.lastName;
+				newInputs[2].value = userData.firstName;
+				newInputs[3].value = userData.ni;
+				newInputs[4].value = userData.hierarchy;
+				newInputs[5].value = userSection(userData.section);
+				newInputs[6].value = !!userData.guardId ? userData.guardId : '-';
+				newInputs[7].value = userData.superior ? 'Si' : 'No';
+				newInputs[8].value = userData.email;
+				return { ...state, inputs: newInputs };
 			}
 			case 'loading': {
 				return { ...state, loading: action.payload.status };
