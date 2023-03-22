@@ -7,6 +7,7 @@ import './Form.css';
 import Modal from './Modal';
 import UserContext from '../context/UserContext';
 import { useContext, useEffect } from 'react';
+import { BiCommentDetail } from 'react-icons/bi';
 
 const Form = ({
 	sendUserForm,
@@ -22,7 +23,6 @@ const Form = ({
 	profileView,
 }) => {
 	const { state, submitForm, dispatch } = useForm(pageName, sendUserForm, profileData, section);
-
 	// const userContext = useContext(UserContext);
 	const formIndex = 5;
 
@@ -46,12 +46,6 @@ const Form = ({
 			payload: { status: false },
 		});
 	};
-
-	useEffect(() => {
-		return () => {
-			state.inputs.forEach((i) => (i.value = ''));
-		};
-	}, []);
 
 	return (
 		<div className="new-form">
@@ -129,6 +123,7 @@ const Form = ({
 				{/* </LoadingOverlay> */}
 			</div>
 			{/* {loading && <Loading type={'closed'} />} */}
+
 			{state.loginError && (
 				<Modal
 					id="login-error"

@@ -226,6 +226,16 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		}
 	};
 
+	const changelogButton = button(
+		<MdHistory size={30} />,
+		generateRandomId(),
+		'Historial de edición',
+		<Changelog log={data.changelog} />,
+		null,
+		'Cerrar',
+		false,
+	);
+
 	return (
 		<IconContext.Provider
 			value={{
@@ -234,16 +244,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		>
 			<div className="option-buttons">
 				{optionButtons()}
-				{type === 'change' &&
-					button(
-						<MdHistory size={30} />,
-						generateRandomId(),
-						'Historial de edición',
-						<Changelog log={data.changelog} />,
-						null,
-						'Cerrar',
-						false,
-					)}
+				{(type === 'change' || type === 'user') && changelogButton}
 			</div>
 		</IconContext.Provider>
 	);

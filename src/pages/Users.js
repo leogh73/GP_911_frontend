@@ -37,6 +37,7 @@ const Users = ({ section }) => {
 				}
 				return;
 			}
+			console.log(consult.allUsers);
 			setDataList(consult.allUsers);
 		} catch (error) {
 			console.log(error);

@@ -15,6 +15,7 @@ const useUser = () => {
 
 	const storeUser = (userData) => {
 		const {
+			userId,
 			username,
 			firstName,
 			lastName,
@@ -29,6 +30,7 @@ const useUser = () => {
 		localStorage.setItem(
 			'userData',
 			JSON.stringify({
+				userId,
 				username,
 				firstName,
 				lastName,
@@ -106,7 +108,7 @@ const useUser = () => {
 	useEffect(() => {
 		const storedUserData = JSON.parse(localStorage.getItem('userData'));
 		const storedTokenData = JSON.parse(localStorage.getItem('userToken'));
-		console.log(storedTokenData);
+		// console.log(storedTokenData);
 		if (
 			storedUserData &&
 			storedTokenData &&
@@ -114,6 +116,7 @@ const useUser = () => {
 			new Date(storedTokenData.expirationDate) > new Date()
 		) {
 			const {
+				userId,
 				username,
 				firstName,
 				lastName,
@@ -127,6 +130,7 @@ const useUser = () => {
 			} = storedUserData;
 			const userData = {
 				token: storedTokenData.token,
+				userId,
 				username,
 				firstName,
 				lastName,

@@ -46,7 +46,6 @@ const useRoutes = (token, userData) => {
 	}
 
 	const superiorRoutes = [
-		,
 		{
 			key: '03',
 			path: '/newaffected',
@@ -55,7 +54,6 @@ const useRoutes = (token, userData) => {
 	];
 
 	const adminRoutes = [
-		,
 		{
 			key: '01',
 			path: '/users',

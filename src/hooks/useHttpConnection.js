@@ -16,6 +16,8 @@ const useHttpConnection = () => {
 					signal: abortConnection.signal,
 				});
 
+				console.log(response);
+
 				const responseData = await response.json();
 
 				activeHttpConnections.current = activeHttpConnections.current.filter(

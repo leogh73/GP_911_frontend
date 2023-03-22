@@ -11,6 +11,7 @@ import UserContext from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { FaBuilding } from 'react-icons/fa';
 import { MdSupervisorAccount } from 'react-icons/md';
+import { BiCommentDetail } from 'react-icons/bi';
 
 const useForm = (pageName, sendUserForm, profileData, section) => {
 	const { loadUser } = useRememberMe();
@@ -22,7 +23,100 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 	const userData = !!profileData ? profileData : userContext.userData;
 	const ownProfile = !!profileData ? false : true;
 
-	// console.log(profileData);
+	const [state, dispatch] = useReducer(reducer, {
+		inputs: [],
+		formIsValid: false,
+		loading: false,
+		loginError: false,
+		registerError: false,
+		serverError: false,
+	});
+
+	useEffect(() => {
+		dispatch({ type: 'load start inputs' });
+	}, []);
+
+	const registeredData = () => {
+		let registeredData = {};
+		if (pageName === 'register') {
+			registeredData = {
+				username: state.inputs[0].value,
+				lastName: state.inputs[1].value,
+				firstName: state.inputs[2].value,
+				ni: state.inputs[3].value,
+				hierarchy: state.inputs[4].value,
+				section,
+				guardId: state.inputs[5].value,
+				superior: state.inputs[6].value,
+				email: state.inputs[7].value,
+				password: state.inputs[8].value,
+				repeatPassword: state.inputs[9].value,
+			};
+		}
+		if (pageName === 'login') {
+			registeredData = {
+				usernameOrEmail: state.inputs[0].value,
+				password: state.inputs[1].value,
+			};
+		}
+		if (pageName === 'change-password') {
+			registeredData = {
+				currentPassword: state.inputs[0].value,
+				newPassword: state.inputs[1].value,
+				repeatNewPassword: state.inputs[2].value,
+			};
+		}
+		if (pageName === 'profile-edit') {
+			let superior = profileData.superior ? 'Si' : 'No';
+			registeredData = {
+				userId: profileData._id,
+				username: {
+					previous: profileData.username,
+					new: state.inputs[0].value !== userData.username ? state.inputs[0].value : null,
+				},
+				lastName: {
+					previous: profileData.lastName,
+					new: state.inputs[1].value !== userData.lastName ? state.inputs[1].value : null,
+				},
+				firstName: {
+					previous: profileData.firstName,
+					new: state.inputs[2].value !== userData.firstName ? state.inputs[2].value : null,
+				},
+				ni: {
+					previous: profileData.ni,
+					new: state.inputs[3].value !== userData.ni ? state.inputs[3].value : null,
+				},
+				hierarchy: {
+					previous: profileData.hierarchy,
+					new: state.inputs[4].value !== userData.hierarchy ? state.inputs[4].value : null,
+				},
+				section: {
+					previous: userSection(profileData.section),
+					new: state.inputs[5].value !== userData.guardId ? state.inputs[5].value : null,
+				},
+				guardId: {
+					previous: profileData.guardId,
+					new: state.inputs[6].value !== userData.guardId ? state.inputs[6].value : null,
+				},
+				superior: {
+					previous: profileData.superior ? 'Si' : 'No',
+					new: state.inputs[7].value !== superior ? state.inputs[7].value : null,
+				},
+				email: {
+					previous: profileData.email,
+					new: state.inputs[8].value !== userData.email ? state.inputs[8].value : null,
+				},
+				comment: state.inputs[9].value,
+			};
+		}
+		if (pageName === 'forgot-password') {
+			registeredData = {
+				email: state.inputs[0].value,
+			};
+		}
+
+		return registeredData;
+	};
 
 	const userSection = (s) => {
 		let userSection;
@@ -32,99 +126,10 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		return userSection;
 	};
 
-	const formInputs = () => {
-		// console.log(userData);
-		let formInputs;
-		if (pageName === 'register') {
-			formInputs = [...registerInputs];
-			formInputs.splice(5, 1);
-		}
-		if (pageName === 'login') {
-			formInputs = loginInputs;
-			formInputs[0].value = storedUser ?? formInputs[0].value;
-		}
-		if (pageName === 'change-password') {
-			formInputs = passwordInputs('change');
-		}
-		if (pageName === 'forgot-password') {
-			formInputs = passwordInputs('forgot');
-		}
-		if (pageName === 'profile-edit') {
-			formInputs = [...registerInputs];
-			formInputs.splice(9, 2);
-		}
-		return formInputs;
-	};
-
-	useEffect(() => {
-		if (pageName === 'profile-edit') dispatch({ type: 'load profile-edit' });
-	}, [pageName]);
-
-	const [state, dispatch] = useReducer(reducer, {
-		inputs: formInputs(),
-		formIsValid: false,
-		loading: false,
-		loginError: false,
-		registerError: false,
-		serverError: false,
-	});
-
-	const registeredData = (inputs) => {
-		let registeredData = {};
-		if (pageName === 'register') {
-			console.log(inputs);
-			registeredData = {
-				username: inputs[0].value,
-				lastName: inputs[1].value,
-				firstName: inputs[2].value,
-				ni: inputs[3].value,
-				hierarchy: inputs[4].value,
-				section,
-				guardId: inputs[5].value,
-				superior: inputs[6].value,
-				email: inputs[7].value,
-				password: inputs[8].value,
-				repeatPassword: inputs[9].value,
-			};
-		}
-		if (pageName === 'login') {
-			registeredData = {
-				usernameOrEmail: inputs[0].value,
-				password: inputs[1].value,
-			};
-		}
-		if (pageName === 'change-password') {
-			registeredData = {
-				currentPassword: inputs[0].value,
-				newPassword: inputs[1].value,
-				repeatNewPassword: inputs[2].value,
-			};
-		}
-		if (pageName === 'profile-edit') {
-			registeredData = {
-				newUserName: inputs[0].value !== userData.username ? inputs[0].value : null,
-				newLastName: inputs[1].value !== userData.lastName ? inputs[1].value : null,
-				newFirstName: inputs[2].value !== userData.firstName ? inputs[2].value : null,
-				newNi: inputs[3].value !== userData.ni ? inputs[3].value : null,
-				newHierarchy: inputs[4].value !== userData.hierarchy ? inputs[4].value : null,
-				newGuardId: inputs[5].value !== userData.guardId ? inputs[5].value : null,
-				newSection: inputs[6].value !== userData.guardId ? inputs[6].value : null,
-				newSuperior: inputs[7].value !== userData.superior ? inputs[7].value : null,
-				newEmail: inputs[8].value !== userData.email ? inputs[8].value : null,
-			};
-		}
-		if (pageName === 'forgot-password') {
-			registeredData = {
-				email: inputs[0].value,
-			};
-		}
-		console.log(registeredData);
-
-		return registeredData;
-	};
-
 	const submitForm = async (event) => {
 		if (!!event) event.preventDefault();
+		let formData = registeredData();
+		console.log(formData);
 		let headers = {
 			'Content-type': 'application/json',
 		};
@@ -133,7 +138,7 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		let resultData = await httpRequestHandler(
 			`http://localhost:5000/api/user/${pageName}`,
 			'POST',
-			JSON.stringify(registeredData(state.inputs)),
+			JSON.stringify(formData),
 			headers,
 		);
 		dispatch({ type: 'loading', payload: { status: false } });
@@ -155,13 +160,21 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			i.value = '';
 			i.errorMessage = '';
 		});
-		sendUserForm(resultData, state.inputs[0].value);
+		sendUserForm(resultData, pageName === 'login' ? formData.usernameOrEmail : null);
 	};
 
 	function reducer(state, action) {
+		const userSection = (s) => {
+			let userSection;
+			if (s === 'Phoning') userSection = 'Telefonía';
+			if (s === 'Monitoring') userSection = 'Monitoreo';
+			if (s === 'Dispatch') userSection = 'Despacho';
+			return userSection;
+		};
+
 		const validateInput = (name, value) => {
 			let errorMessage = '';
-			if (!value.length) {
+			if (!value.length && name !== 'comment') {
 				errorMessage = 'Complete el campo.';
 			}
 			if (name === 'ni') {
@@ -263,7 +276,8 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			let isValid = true;
 			inputs.forEach((i) => {
 				console.log(i.value.toString().length);
-				if (i.errorMessage.length || !i.value.toString().length) isValid = false;
+				if ((i.errorMessage.length || !i.value.toString().length) && i.name !== 'comment')
+					isValid = false;
 			});
 			if (pageName === 'profile-edit') {
 				let superior = userData.superior ? 'Si' : 'No';
@@ -284,6 +298,49 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		};
 
 		switch (action.type) {
+			case 'load start inputs': {
+				let formInputs;
+				if (pageName === 'register') {
+					formInputs = [...registerInputs];
+					formInputs.splice(5, 1);
+				}
+				if (pageName === 'login') {
+					formInputs = loginInputs;
+					formInputs[0].value = storedUser ?? formInputs[0].value;
+				}
+				if (pageName === 'change-password') {
+					formInputs = passwordInputs('change');
+				}
+				if (pageName === 'forgot-password') {
+					formInputs = passwordInputs('forgot');
+				}
+				if (pageName === 'profile-edit') {
+					formInputs = [...registerInputs];
+					formInputs.splice(9, 2);
+					formInputs[0].value = userData.username;
+					formInputs[1].value = userData.lastName;
+					formInputs[2].value = userData.firstName;
+					formInputs[3].value = userData.ni;
+					formInputs[4].value = userData.hierarchy;
+					formInputs[5].value = userSection(userData.section);
+					formInputs[6].value = !!userData.guardId ? userData.guardId : '-';
+					formInputs[7].value = userData.superior ? 'Si' : 'No';
+					formInputs[8].value = userData.email;
+					userContext.userData.admin &&
+						formInputs.push({
+							key: Math.random(),
+							name: 'comment',
+							optionsList: [],
+							password: false,
+							icon: <BiCommentDetail />,
+							placeHolder: 'Comentario (opcional)',
+							errorMessage: '',
+							value: '',
+							disabled: false,
+						});
+				}
+				return { ...state, inputs: formInputs };
+			}
 			case 'change': {
 				let newInputs = [...state.inputs];
 				let inputIndex = newInputs.findIndex((i) => i.name === action.payload.inputName);
@@ -293,19 +350,6 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 					action.payload.value,
 				);
 				return { ...state, inputs: newInputs, formIsValid: validateForm(newInputs) };
-			}
-			case 'load profile-edit': {
-				let newInputs = [...state.inputs];
-				newInputs[0].value = userData.username;
-				newInputs[1].value = userData.lastName;
-				newInputs[2].value = userData.firstName;
-				newInputs[3].value = userData.ni;
-				newInputs[4].value = userData.hierarchy;
-				newInputs[5].value = userSection(userData.section);
-				newInputs[6].value = !!userData.guardId ? userData.guardId : '-';
-				newInputs[7].value = userData.superior ? 'Si' : 'No';
-				newInputs[8].value = userData.email;
-				return { ...state, inputs: newInputs };
 			}
 			case 'loading': {
 				return { ...state, loading: action.payload.status };

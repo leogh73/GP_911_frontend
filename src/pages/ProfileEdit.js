@@ -36,12 +36,14 @@ const ProfileEdit = ({ startData }) => {
 	const navigate = useNavigate();
 
 	const modificationResult = (result) => {
-		result.userId ? setSuccess(true) : setError(true);
+		console.log(result);
+		result._id ? setSuccess(true) : setError(true);
 	};
 
 	const goBack = () => {
 		setError(false);
 		setSuccess(false);
+		navigate(`/users/${startData.section.toLowerCase()}`);
 	};
 
 	useEffect(() => {
@@ -61,24 +63,28 @@ const ProfileEdit = ({ startData }) => {
 	// if (section === 'Dispatch') userSection = 'Despacho';
 
 	return error ? (
-		<Message
-			title="Registro fallido"
-			icon={<FaUserTimes />}
-			body="No se pudo completar el proceso de registro. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas."
-			buttonText="VOLVER"
-			onClick={goBack}
-		/>
+		<div className="new-form">
+			<Message
+				title="Proceso fallido"
+				icon={<FaUserTimes />}
+				body="No se pudo completar el proceso de edición de datos. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas."
+				buttonText="VOLVER"
+				onClick={goBack}
+			/>
+		</div>
 	) : success ? (
-		<Message
-			title="Cambios guardados"
-			icon={<FaUserCheck />}
-			body="Nuevo usuario registrado exitosamente."
-			buttonText="VOLVER"
-			onClick={goBack}
-		/>
+		<div className="new-form">
+			<Message
+				title="Cambios guardados"
+				icon={<FaUserCheck />}
+				body="Datos de usuario modificados correctamente."
+				buttonText="VOLVER"
+				onClick={goBack}
+			/>
+		</div>
 	) : (
 		<Form
-			sendUserForm={() => console.log('click!')}
+			sendUserForm={modificationResult}
 			formTitle="Editar perfil"
 			icon={<FaUserEdit />}
 			rememberMe=""
