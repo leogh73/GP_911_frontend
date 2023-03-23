@@ -120,9 +120,18 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 						generateRandomId(),
 						'Confirmar reinicio de contraseña',
 						`¿Reiniciar contraseña para ${data.firstName} ${data.lastName}? Será reestablecida a "12345"`,
-						() => modifyData(type, data._id, { previous: data.status, new: 'Cancelado' }),
+						() => modifyData(type, data._id, 'password'),
 						'No',
 						true,
+					)}
+					{button(
+						<MdDeleteForever size={24} />,
+						generateRandomId(),
+						'Confirmar eliminar usuario',
+						`¿Eliminar usuario?`,
+						() => modifyData(type, data._id, null),
+						'No',
+						false,
 					)}
 				</>
 			);
@@ -204,9 +213,11 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 	};
 
 	const modifyData = async (type, itemId, status) => {
+		console.log(type);
+		console.log(itemId);
 		try {
 			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/item/modify',
+				`http://localhost:5000/api/${type === 'user' ? 'user' : 'item'}/modify`,
 				'POST',
 				JSON.stringify({ type, itemId, status, comment: commentContext.comment }),
 				{
@@ -219,6 +230,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 				navigate('/');
 				return;
 			}
+			console.log(consult);
 			callbackFn(status, consult);
 		} catch (error) {
 			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });

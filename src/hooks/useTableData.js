@@ -263,12 +263,14 @@ const useTableData = (dataList, rowType) => {
 
 		const modifyList = (id, newStatus, removeItem, changelog) => {
 			let newItemsList = { ...listData };
-			let index = newItemsList.fetched.findIndex((i) => i._id === id);
+			let indexFetched = newItemsList.fetched.findIndex((i) => i._id === id);
+			let indexFilter = newItemsList.filter.findIndex((i) => i._id === id);
 			if (removeItem) {
-				newItemsList.fetched.splice(index, 1);
+				newItemsList.fetched.splice(indexFetched, 1);
+				if (rowType === 'user') newItemsList.filter.splice(indexFilter, 1);
 			} else {
-				newItemsList.fetched[index].status = newStatus;
-				newItemsList.fetched[index].changelog.push(changelog);
+				newItemsList.fetched[indexFetched].status = newStatus;
+				newItemsList.fetched[indexFetched].changelog.push(changelog);
 			}
 			return newItemsList;
 		};

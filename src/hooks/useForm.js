@@ -20,7 +20,7 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 	const storedUser = loadUser();
 	const navigate = useNavigate();
 
-	const userData = !!profileData ? profileData : userContext.userData;
+	const userData = profileData ?? userContext.userData;
 	const ownProfile = !!profileData ? false : true;
 
 	const [state, dispatch] = useReducer(reducer, {
@@ -67,43 +67,44 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			};
 		}
 		if (pageName === 'profile-edit') {
-			let superior = profileData.superior ? 'Si' : 'No';
+			let superior = userData.superior ? 'Si' : 'No';
 			registeredData = {
-				userId: profileData._id,
+				userId: userData._id,
 				username: {
-					previous: profileData.username,
+					previous: userData.username,
 					new: state.inputs[0].value !== userData.username ? state.inputs[0].value : null,
 				},
 				lastName: {
-					previous: profileData.lastName,
+					previous: userData.lastName,
 					new: state.inputs[1].value !== userData.lastName ? state.inputs[1].value : null,
 				},
 				firstName: {
-					previous: profileData.firstName,
+					previous: userData.firstName,
 					new: state.inputs[2].value !== userData.firstName ? state.inputs[2].value : null,
 				},
 				ni: {
-					previous: profileData.ni,
+					previous: userData.ni,
 					new: state.inputs[3].value !== userData.ni ? state.inputs[3].value : null,
 				},
 				hierarchy: {
-					previous: profileData.hierarchy,
+					previous: userData.hierarchy,
 					new: state.inputs[4].value !== userData.hierarchy ? state.inputs[4].value : null,
 				},
 				section: {
-					previous: userSection(profileData.section),
-					new: state.inputs[5].value !== userData.guardId ? state.inputs[5].value : null,
+					previous: userSection(userData.section),
+					new:
+						state.inputs[5].value !== userSection(userData.section) ? state.inputs[5].value : null,
 				},
 				guardId: {
-					previous: profileData.guardId,
+					previous: userData.guardId,
 					new: state.inputs[6].value !== userData.guardId ? state.inputs[6].value : null,
 				},
 				superior: {
-					previous: profileData.superior ? 'Si' : 'No',
+					previous: userData.superior ? 'Si' : 'No',
 					new: state.inputs[7].value !== superior ? state.inputs[7].value : null,
 				},
 				email: {
-					previous: profileData.email,
+					previous: userData.email,
 					new: state.inputs[8].value !== userData.email ? state.inputs[8].value : null,
 				},
 				comment: state.inputs[9].value,
@@ -371,6 +372,21 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			case 'server error': {
 				return { ...state, serverError: action.payload.status };
 			}
+			// case 'clear form': {
+			// 	let newInputs = [...state.inputs];
+			// 	newInputs.forEach((i) => {
+			// 		i.value = '';
+			// 		i.errorMessage = '';
+			// 	});
+			// 	return {
+			// 		inputs: newInputs,
+			// 		formIsValid: false,
+			// 		loading: false,
+			// 		loginError: false,
+			// 		registerError: false,
+			// 		serverError: false,
+			// 	};
+			// }
 			default:
 				break;
 		}

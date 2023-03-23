@@ -30,17 +30,24 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 						id: consult.result._id,
 					},
 				});
-				toast(`Cambio eliminado correctamente.`, { type: 'success' });
+				toast(`${rowType === 'change' ? 'Cambio' : 'Usuario'} eliminado correctamente.`, {
+					type: 'success',
+				});
 			} else {
 				dispatch({
 					payload: {
 						type: 'modify',
 						id: consult.result._id,
-						status: status.new,
+						status: rowType === 'change' ? status.new : null,
 						changelog: consult.changelogItem,
 					},
 				});
-				toast(`Cambio ${status.new.toLowerCase()} correctamente.`, { type: 'success' });
+				toast(
+					`${rowType === 'change' ? 'Cambio' : 'Usuario'} ${
+						rowType === 'change' ? status.new.toLowerCase() : 'modificado'
+					} correctamente.`,
+					{ type: 'success' },
+				);
 			}
 		}
 		if (!consult || consult.error) {
