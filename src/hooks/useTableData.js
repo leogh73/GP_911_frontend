@@ -264,10 +264,10 @@ const useTableData = (dataList, rowType) => {
 		const modifyList = (id, newStatus, removeItem, changelog) => {
 			let newItemsList = { ...listData };
 			let indexFetched = newItemsList.fetched.findIndex((i) => i._id === id);
-			let indexFilter = newItemsList.filter.findIndex((i) => i._id === id);
 			if (removeItem) {
-				newItemsList.fetched.splice(indexFetched, 1);
-				if (rowType === 'user') newItemsList.filter.splice(indexFilter, 1);
+				indexFetched && newItemsList.fetched.splice(indexFetched, 1);
+				let indexFilter = newItemsList.filter.findIndex((i) => i._id === id);
+				indexFilter && newItemsList.filter.splice(indexFilter, 1);
 			} else {
 				newItemsList.fetched[indexFetched].status = newStatus;
 				newItemsList.fetched[indexFetched].changelog.push(changelog);

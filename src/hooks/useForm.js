@@ -20,8 +20,9 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 	const storedUser = loadUser();
 	const navigate = useNavigate();
 
-	const userData = profileData ?? userContext.userData;
-	const ownProfile = !!profileData ? false : true;
+	let ownProfile = profileData?.userId === userContext?.userData?.userId ? true : false;
+	console.log(profileData?.userId);
+	console.log(userContext?.userData?.userId);
 
 	const [state, dispatch] = useReducer(reducer, {
 		inputs: [],
@@ -67,45 +68,47 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			};
 		}
 		if (pageName === 'profile-edit') {
-			let superior = userData.superior ? 'Si' : 'No';
+			let superior = profileData.superior ? 'Si' : 'No';
 			registeredData = {
-				userId: userData._id,
+				userId: profileData._id,
 				username: {
-					previous: userData.username,
-					new: state.inputs[0].value !== userData.username ? state.inputs[0].value : null,
+					previous: profileData.username,
+					new: state.inputs[0].value !== profileData.username ? state.inputs[0].value : null,
 				},
 				lastName: {
-					previous: userData.lastName,
-					new: state.inputs[1].value !== userData.lastName ? state.inputs[1].value : null,
+					previous: profileData.lastName,
+					new: state.inputs[1].value !== profileData.lastName ? state.inputs[1].value : null,
 				},
 				firstName: {
-					previous: userData.firstName,
-					new: state.inputs[2].value !== userData.firstName ? state.inputs[2].value : null,
+					previous: profileData.firstName,
+					new: state.inputs[2].value !== profileData.firstName ? state.inputs[2].value : null,
 				},
 				ni: {
-					previous: userData.ni,
-					new: state.inputs[3].value !== userData.ni ? state.inputs[3].value : null,
+					previous: profileData.ni,
+					new: state.inputs[3].value !== profileData.ni ? state.inputs[3].value : null,
 				},
 				hierarchy: {
-					previous: userData.hierarchy,
-					new: state.inputs[4].value !== userData.hierarchy ? state.inputs[4].value : null,
+					previous: profileData.hierarchy,
+					new: state.inputs[4].value !== profileData.hierarchy ? state.inputs[4].value : null,
 				},
 				section: {
-					previous: userSection(userData.section),
+					previous: userSection(profileData.section),
 					new:
-						state.inputs[5].value !== userSection(userData.section) ? state.inputs[5].value : null,
+						state.inputs[5].value !== userSection(profileData.section)
+							? state.inputs[5].value
+							: null,
 				},
 				guardId: {
-					previous: userData.guardId,
-					new: state.inputs[6].value !== userData.guardId ? state.inputs[6].value : null,
+					previous: profileData.guardId,
+					new: state.inputs[6].value !== profileData.guardId ? state.inputs[6].value : null,
 				},
 				superior: {
-					previous: userData.superior ? 'Si' : 'No',
+					previous: profileData.superior ? 'Si' : 'No',
 					new: state.inputs[7].value !== superior ? state.inputs[7].value : null,
 				},
 				email: {
-					previous: userData.email,
-					new: state.inputs[8].value !== userData.email ? state.inputs[8].value : null,
+					previous: profileData.email,
+					new: state.inputs[8].value !== profileData.email ? state.inputs[8].value : null,
 				},
 				comment: state.inputs[9].value,
 			};
@@ -130,7 +133,6 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 	const submitForm = async (event) => {
 		if (!!event) event.preventDefault();
 		let formData = registeredData();
-		console.log(formData);
 		let headers = {
 			'Content-type': 'application/json',
 		};
@@ -143,7 +145,6 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			headers,
 		);
 		dispatch({ type: 'loading', payload: { status: false } });
-		console.log(resultData);
 		if (resultData.error === 'server') {
 			return dispatch({ type: 'server error', payload: { status: true } });
 		}
@@ -154,14 +155,17 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			return dispatch({ type: 'register error', payload: { status: true } });
 		}
 		if (resultData.error === 'Token expired') {
-			userContext.userData.logout(true);
+			userContext.profileData.logout(true);
 			return navigate('/');
 		}
 		state.inputs.forEach((i) => {
 			i.value = '';
 			i.errorMessage = '';
 		});
-		sendUserForm(resultData, pageName === 'login' ? formData.usernameOrEmail : null);
+		let extraData;
+		if (pageName === 'login') extraData = formData.usernameOrEmail;
+		if (pageName === 'profile-edit') extraData = ownProfile;
+		sendUserForm(resultData, extraData);
 	};
 
 	function reducer(state, action) {
@@ -281,17 +285,17 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 					isValid = false;
 			});
 			if (pageName === 'profile-edit') {
-				let superior = userData.superior ? 'Si' : 'No';
+				let superior = profileData.superior ? 'Si' : 'No';
 				if (
-					inputs[0].value === userData.username &&
-					inputs[1].value === userData.lastName &&
-					inputs[2].value === userData.firstName &&
-					inputs[3].value === userData.ni &&
-					inputs[4].value === userData.hierarchy &&
-					inputs[5].value === userSection(userData.section) &&
-					inputs[6].value === userData.guardId &&
+					inputs[0].value === profileData.username &&
+					inputs[1].value === profileData.lastName &&
+					inputs[2].value === profileData.firstName &&
+					inputs[3].value === profileData.ni &&
+					inputs[4].value === profileData.hierarchy &&
+					inputs[5].value === userSection(profileData.section) &&
+					inputs[6].value === profileData.guardId &&
 					inputs[7].value === superior &&
-					inputs[8].value === userData.email
+					inputs[8].value === profileData.email
 				)
 					isValid = false;
 			}
@@ -318,15 +322,24 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 				if (pageName === 'profile-edit') {
 					formInputs = [...registerInputs];
 					formInputs.splice(9, 2);
-					formInputs[0].value = userData.username;
-					formInputs[1].value = userData.lastName;
-					formInputs[2].value = userData.firstName;
-					formInputs[3].value = userData.ni;
-					formInputs[4].value = userData.hierarchy;
-					formInputs[5].value = userSection(userData.section);
-					formInputs[6].value = !!userData.guardId ? userData.guardId : '-';
-					formInputs[7].value = userData.superior ? 'Si' : 'No';
-					formInputs[8].value = userData.email;
+					formInputs[0].value = profileData.username;
+					formInputs[1].value = profileData.lastName;
+					formInputs[2].value = profileData.firstName;
+					formInputs[3].value = profileData.ni;
+					formInputs[4].value = profileData.hierarchy;
+					formInputs[5].value = userSection(profileData.section);
+					formInputs[6].value = !!profileData.guardId ? profileData.guardId : '-';
+					formInputs[7].value = profileData.superior ? 'Si' : 'No';
+					formInputs[8].value = profileData.email;
+					if (!userContext.userData.admin && ownProfile) {
+						formInputs[3].disabled = true;
+						formInputs[4].disabled = true;
+						formInputs[5].optionsList = [];
+						formInputs[5].disabled = true;
+						formInputs[6].disabled = true;
+						formInputs[7].optionsList = [];
+						formInputs[7].disabled = true;
+					}
 					userContext.userData.admin &&
 						formInputs.push({
 							key: Math.random(),

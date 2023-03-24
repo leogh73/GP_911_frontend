@@ -10,7 +10,7 @@ const Password = ({ type }) => {
 	const navigate = useNavigate();
 
 	const processResult = (result) => {
-		result._id ? setSuccess(true) : setError(true);
+		result.result._id ? setSuccess(true) : setError(true);
 	};
 
 	const goBack = () => {

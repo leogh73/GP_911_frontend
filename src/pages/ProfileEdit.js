@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
 import Form from '../components/Form';
-import { FaUserEdit } from 'react-icons/fa';
+import { FaUserCheck, FaUserEdit, FaUserTimes } from 'react-icons/fa';
 import { HiUserCircle } from 'react-icons/hi';
 import { TbHierarchy } from 'react-icons/tb';
 
@@ -20,14 +20,20 @@ import { MdSupervisorAccount } from 'react-icons/md';
 import { GrUserAdmin } from 'react-icons/gr';
 
 const ProfileEdit = ({ startData }) => {
+	const [success, setSuccess] = useState();
+	const [error, setError] = useState();
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 
-	const editResult = (result) => {
-		result._id
-			? toast('Usuario modificado correctamente', { type: 'success' })
-			: toast('No se pudo completar el proceso.', { type: 'error' });
-		navigate(`/users/${startData.section.toLowerCase()}`);
+	const editResult = (result, ownProfile) => {
+		if (ownProfile) {
+			result._id ? setSuccess(true) : setError(true);
+		} else {
+			result._id
+				? toast('Usuario modificado correctamente', { type: 'success' })
+				: toast('No se pudo completar el proceso.', { type: 'error' });
+			navigate(`/users/${startData.section.toLowerCase()}`);
+		}
 	};
 
 	useEffect(() => {
@@ -39,7 +45,35 @@ const ProfileEdit = ({ startData }) => {
 		};
 	}, [userContext]);
 
-	return (
+	const goBack = () => {
+		setError(false);
+		setSuccess(false);
+		navigate('/');
+	};
+
+	return error ? (
+		<div className="new-form">
+			<Message
+				title={'Edición fallida'}
+				icon={<FaUserTimes />}
+				body={`No se pudo completar el proceso de edición de perfil. Intente nuevamente más tarde. Si el problema persiste, contacte al administrador. Disculpe las molestias ocasionadas.`}
+				buttonText="VOLVER"
+				onClick={goBack}
+			/>
+		</div>
+	) : success ? (
+		<div className="new-form">
+			<Message
+				title={'Solicitud correcta'}
+				icon={<FaUserCheck />}
+				body={
+					'Se envió su pedido para cambio de datos. Verifique su correo electrónico y siga las instrucciones.'
+				}
+				buttonText="VOLVER"
+				onClick={goBack}
+			/>
+		</div>
+	) : (
 		<Form
 			sendUserForm={editResult}
 			formTitle="Editar perfil"

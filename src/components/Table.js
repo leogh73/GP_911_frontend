@@ -22,6 +22,7 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 	const { listData, dispatch } = useTableData(dataList, rowType);
 
 	const resultModifyRow = (status, consult) => {
+		console.log(consult);
 		if (consult.result && consult.result._id) {
 			if (!status) {
 				dispatch({
