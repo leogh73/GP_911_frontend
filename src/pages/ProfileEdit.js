@@ -26,6 +26,7 @@ const ProfileEdit = ({ startData }) => {
 	const navigate = useNavigate();
 
 	const editResult = (result, ownProfile) => {
+		console.log(result);
 		if (ownProfile) {
 			result._id ? setSuccess(true) : setError(true);
 		} else {
@@ -48,7 +49,7 @@ const ProfileEdit = ({ startData }) => {
 	const goBack = () => {
 		setError(false);
 		setSuccess(false);
-		navigate('/');
+		navigate('/profile');
 	};
 
 	return error ? (
@@ -67,7 +68,7 @@ const ProfileEdit = ({ startData }) => {
 				title={'Solicitud correcta'}
 				icon={<FaUserCheck />}
 				body={
-					'Se envió su pedido para cambio de datos. Verifique su correo electrónico y siga las instrucciones.'
+					'Se envió su pedido para cambio de datos. Verifique su correo electrónico y siga las instrucciones. Si cambió su correo electrónico, verifique la nueva dirección. Si no lo encuentra en su bandeja de entrada, verifique su correo no deseado o spam.'
 				}
 				buttonText="VOLVER"
 				onClick={goBack}

@@ -118,8 +118,8 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					{button(
 						<RiRotateLockFill size={28} />,
 						generateRandomId(),
-						'Confirmar reinicio de contraseña',
-						`¿Reiniciar contraseña para ${data.firstName} ${data.lastName}? Será reestablecida a "12345"`,
+						'Confirmar reestablecer contraseña',
+						`¿Reestrablecer contraseña para ${data.firstName} ${data.lastName}? Será reestablecida a "12345"`,
 						() => modifyData(type, data._id, 'password'),
 						'No',
 						true,
@@ -213,8 +213,6 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 	};
 
 	const modifyData = async (type, itemId, status) => {
-		console.log(type);
-		console.log(itemId);
 		try {
 			let consult = await httpRequestHandler(
 				`http://localhost:5000/api/${type === 'user' ? 'user' : 'item'}/modify`,

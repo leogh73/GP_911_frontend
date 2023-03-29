@@ -12,6 +12,7 @@ import Password from '../pages/Password';
 import Users from '../pages/Users';
 import Profile from '../pages/Profile';
 import ProfileEdit from '../pages/ProfileEdit';
+import ProfileEditConfirm from '../pages/ProfileEditConfirm';
 
 const useRoutes = (token, userData) => {
 	const location = useLocation();
@@ -76,11 +77,6 @@ const useRoutes = (token, userData) => {
 
 	if (!!userData && userData.admin) adminRoutes.forEach((route) => userRoutes.push(route));
 
-	// if (!!userData && userData.superior)
-	// 	superiorToues.forEach({
-	// 		user
-	// 	});
-
 	const routes = token ? (
 		<Routes>
 			<Route path="/" element={<Navigate to="/changes/agreed" />} />
@@ -102,6 +98,7 @@ const useRoutes = (token, userData) => {
 			<Route path="/profile">
 				<Route path="" element={<Profile />} />
 				<Route path="edit" element={<ProfileEdit startData={userData} />} />
+				<Route path="edit-confirm/:token" element={<ProfileEditConfirm />} />
 				{state.activeEditRoute && (
 					<Route path="edit-user" element={<ProfileEdit startData={state.profileData} />} />
 				)}

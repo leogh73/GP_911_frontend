@@ -21,8 +21,6 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 	const navigate = useNavigate();
 
 	let ownProfile = profileData?.userId === userContext?.userData?.userId ? true : false;
-	console.log(profileData?.userId);
-	console.log(userContext?.userData?.userId);
 
 	const [state, dispatch] = useReducer(reducer, {
 		inputs: [],
@@ -70,7 +68,8 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		if (pageName === 'profile-edit') {
 			let superior = profileData.superior ? 'Si' : 'No';
 			registeredData = {
-				userId: profileData._id,
+				userId: profileData.userId,
+				changeToken: null,
 				username: {
 					previous: profileData.username,
 					new: state.inputs[0].value !== profileData.username ? state.inputs[0].value : null,
@@ -138,6 +137,7 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		};
 		if (pageName !== 'login') headers.authorization = `Bearer ${userContext.token}`;
 		dispatch({ type: 'loading', payload: { status: true } });
+		console.log(formData);
 		let resultData = await httpRequestHandler(
 			`http://localhost:5000/api/user/${pageName}`,
 			'POST',
@@ -254,7 +254,6 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		};
 
 		const validateForm = (inputs) => {
-			console.log(inputs);
 			let guardIndex = inputs.findIndex((i) => i.name === 'guardId');
 			if (pageName === 'register' || pageName === 'profile-edit') {
 				if (inputs[inputs.findIndex((i) => i.name === 'superior')].value === 'Si') {
@@ -280,7 +279,6 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			}
 			let isValid = true;
 			inputs.forEach((i) => {
-				console.log(i.value.toString().length);
 				if ((i.errorMessage.length || !i.value.toString().length) && i.name !== 'comment')
 					isValid = false;
 			});
@@ -340,18 +338,17 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 						formInputs[7].optionsList = [];
 						formInputs[7].disabled = true;
 					}
-					userContext.userData.admin &&
-						formInputs.push({
-							key: Math.random(),
-							name: 'comment',
-							optionsList: [],
-							password: false,
-							icon: <BiCommentDetail />,
-							placeHolder: 'Comentario (opcional)',
-							errorMessage: '',
-							value: '',
-							disabled: false,
-						});
+					formInputs.push({
+						key: Math.random(),
+						name: 'comment',
+						optionsList: [],
+						password: false,
+						icon: <BiCommentDetail />,
+						placeHolder: 'Comentario (opcional)',
+						errorMessage: '',
+						value: '',
+						disabled: false,
+					});
 				}
 				return { ...state, inputs: formInputs };
 			}
@@ -385,21 +382,6 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			case 'server error': {
 				return { ...state, serverError: action.payload.status };
 			}
-			// case 'clear form': {
-			// 	let newInputs = [...state.inputs];
-			// 	newInputs.forEach((i) => {
-			// 		i.value = '';
-			// 		i.errorMessage = '';
-			// 	});
-			// 	return {
-			// 		inputs: newInputs,
-			// 		formIsValid: false,
-			// 		loading: false,
-			// 		loginError: false,
-			// 		registerError: false,
-			// 		serverError: false,
-			// 	};
-			// }
 			default:
 				break;
 		}

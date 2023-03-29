@@ -44,9 +44,9 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 					},
 				});
 				toast(
-					`${rowType === 'change' ? 'Cambio' : 'Usuario'} ${
-						rowType === 'change' ? status.new.toLowerCase() : 'modificado'
-					} correctamente.`,
+					`${
+						rowType === 'change' ? `Cambio ${status.new.toLowerCase()}` : 'Contraseña restablecida'
+					} correctamente`,
 					{ type: 'success' },
 				);
 			}
