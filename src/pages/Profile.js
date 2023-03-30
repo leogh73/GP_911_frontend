@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
 import Form from '../components/Form';
@@ -29,9 +29,10 @@ import { CgProfile } from 'react-icons/cg';
 import { MdSupervisorAccount } from 'react-icons/md';
 import { GrUserAdmin } from 'react-icons/gr';
 
-const Profile = () => {
+const Profile = ({ userData }) => {
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
+	const user = !Object.keys(userData).length ? userContext.userData : userData;
 
 	const {
 		username,
@@ -44,7 +45,7 @@ const Profile = () => {
 		email,
 		superior,
 		admin,
-	} = userContext.userData;
+	} = user;
 
 	let userSection;
 	if (section === 'Phoning') userSection = 'Teléfonía';
@@ -107,8 +108,10 @@ const Profile = () => {
 				// disabled={!dataIsValid}
 				// loading={loadingSendData}
 				onClick={() => {
-					// userContext.activateEditionRoute(true);
-					// userContext.loadProfileData(startData);
+					userContext.dispatch({
+						type: 'load profile edit data',
+						payload: { profile: user },
+					});
 					navigate('/profile/edit');
 				}}
 			/>

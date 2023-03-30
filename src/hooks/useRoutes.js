@@ -2,7 +2,7 @@ import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import NotFound from '../pages/NotFound';
-import { useReducer, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import ChangeEdit from '../pages/ChangeEdit';
 import NewItem from '../pages/NewItem';
 import Changes from '../pages/Changes';
@@ -13,13 +13,15 @@ import Users from '../pages/Users';
 import Profile from '../pages/Profile';
 import ProfileEdit from '../pages/ProfileEdit';
 import ProfileEditConfirm from '../pages/ProfileEditConfirm';
+import UserContext from '../context/UserContext';
 
 const useRoutes = (token, userData) => {
-	const location = useLocation();
+	console.log(userData);
 	const [state, dispatch] = useReducer(reducer, {
 		activeEditRoute: false,
 		changeData: {},
-		profileData: {},
+		profileEditData: {},
+		profileUserData: {},
 	});
 
 	function reducer(state, action) {
@@ -35,16 +37,29 @@ const useRoutes = (token, userData) => {
 					changeData: action.payload.change,
 					activeEditRoute: action.payload.editRoute,
 				};
-			case 'load profile data':
+			case 'load profile edit data':
 				return {
 					...state,
-					profileData: action.payload.profile,
+					profileEditData: action.payload.profile,
 					activeEditRoute: action.payload.editRoute,
+				};
+			case 'load profile user data':
+				return {
+					...state,
+					profileUserData: action.payload.profile,
 				};
 			default:
 				break;
 		}
 	}
+
+	// useEffect(() => {
+	// 	console.log(user);
+	// 	UserContext.dispatch({
+	// 		type: 'load profile user data',
+	// 		payload: { profile: user },
+	// 	});
+	// }, []);
 
 	const superiorRoutes = [
 		{
@@ -96,11 +111,11 @@ const useRoutes = (token, userData) => {
 				<Route path="search" element={<Schedule type={'search'} />} />
 			</Route>
 			<Route path="/profile">
-				<Route path="" element={<Profile />} />
-				<Route path="edit" element={<ProfileEdit startData={userData} />} />
+				<Route path="" element={<Profile userData={state.profileUserData} />} />
+				<Route path="edit" element={<ProfileEdit startData={state.profileEditData} />} />
 				<Route path="edit-confirm/:token" element={<ProfileEditConfirm />} />
 				{state.activeEditRoute && (
-					<Route path="edit-user" element={<ProfileEdit startData={state.profileData} />} />
+					<Route path="edit-user" element={<ProfileEdit startData={state.profileEditData} />} />
 				)}
 			</Route>
 			{userData.superior
@@ -111,24 +126,27 @@ const useRoutes = (token, userData) => {
 						<Route key={route.key} path={route.path} element={route.element} />
 				  ))}
 			{userData.admin && (
-				<Route path="/users">
-					<Route path="phoning" element={<Users section={'Phoning'} />} />
-					<Route path="dispatch" element={<Users section={'Dispatch'} />} />
-					<Route path="monitoring" element={<Users section={'Monitoring'} />} />
-				</Route>
-			)}
-			{userData.admin && (
-				<Route path="/register">
-					<Route path="phoning" element={<Register key="phone-register" section={'Phoning'} />} />
-					<Route
-						path="dispatch"
-						element={<Register key="dispatch-register" section={'Dispatch'} />}
-					/>
-					<Route
-						path="monitoring"
-						element={<Register key="monitoring-register" section={'Monitoring'} />}
-					/>
-				</Route>
+				<>
+					<Route path="/users">
+						<Route path="phoning" element={<Users section={'Phoning'} />} />
+						<Route path="dispatch" element={<Users section={'Dispatch'} />} />
+						<Route path="monitoring" element={<Users section={'Monitoring'} />} />
+					</Route>
+					<Route path="/register">
+						<Route
+							path="phoning"
+							element={<Register key="phone-register" section={'Phoning'} />}
+						/>
+						<Route
+							path="dispatch"
+							element={<Register key="dispatch-register" section={'Dispatch'} />}
+						/>
+						<Route
+							path="monitoring"
+							element={<Register key="monitoring-register" section={'Monitoring'} />}
+						/>
+					</Route>
+				</>
 			)}
 			<Route path="*" element={<NotFound />} />
 		</Routes>

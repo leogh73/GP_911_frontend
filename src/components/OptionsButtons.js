@@ -33,7 +33,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 
 	const editProfilePage = () => {
 		userContext.dispatch({
-			type: 'load profile data',
+			type: 'load profile edit data',
 			payload: { profile: data, editRoute: true },
 		});
 		navigate('/profile/edit-user');

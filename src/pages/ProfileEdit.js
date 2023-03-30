@@ -40,8 +40,8 @@ const ProfileEdit = ({ startData }) => {
 	useEffect(() => {
 		return () => {
 			userContext.dispatch({
-				type: 'load profile data',
-				payload: { profile: null, editRoute: false },
+				type: 'load profile edit data',
+				payload: { profile: {}, editRoute: false },
 			});
 		};
 	}, [userContext]);

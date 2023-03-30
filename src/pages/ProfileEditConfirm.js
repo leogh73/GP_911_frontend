@@ -30,7 +30,7 @@ const ProfileEditConfirm = () => {
 	const location = useLocation();
 	const token = location.pathname.split('/token=')[1];
 
-	const confirmProfileChange = useCallback(async () => {
+	const confirmProfileChange = async () => {
 		try {
 			console.log('CONFIRM CHANGES!!');
 			let consult = await httpRequestHandler(
@@ -40,9 +40,13 @@ const ProfileEditConfirm = () => {
 				{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
 			);
 			if (consult.error) return setSuccess(false);
-			consult.token = userContext.userData.token;
-			consult.userId = consult._id;
-			userContext.login(consult);
+			// userContext.dispatch({
+			// 	type: 'load profile user data',
+			// 	payload: { profile: consult },
+			// });
+			// consult.token = userContext.userData.token;
+			// consult.userId = consult._id;
+			// userContext.login(consult);
 			setSuccess(true);
 		} catch (error) {
 			console.log(error);
@@ -50,7 +54,7 @@ const ProfileEditConfirm = () => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, userContext]);
+	};
 
 	useEffect(() => {
 		confirmProfileChange();
