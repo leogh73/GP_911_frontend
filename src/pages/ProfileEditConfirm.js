@@ -20,26 +20,32 @@ import { CgProfile } from 'react-icons/cg';
 import { MdSupervisorAccount } from 'react-icons/md';
 import { GrUserAdmin } from 'react-icons/gr';
 import Loading from '../components/Loading';
+import ProfileContext from '../context/ProfileContext';
 
 const ProfileEditConfirm = () => {
 	const { httpRequestHandler } = useHttpConnection();
 	const [success, setSuccess] = useState();
 	const [loading, setLoading] = useState(true);
+	const [result, setResult] = useState();
 	const userContext = useContext(UserContext);
+	const profileContext = useContext(ProfileContext);
 	const navigate = useNavigate();
 	const location = useLocation();
-	const token = location.pathname.split('/token=')[1];
+	const tokenData = location.pathname.split('/token=')[1];
 
-	const confirmProfileChange = async () => {
+	const confirmProfileChange = useCallback(async () => {
 		try {
 			console.log('CONFIRM CHANGES!!');
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/user/profile-edit',
 				'POST',
-				JSON.stringify({ changeToken: token }),
+				JSON.stringify({ changeToken: tokenData }),
 				{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
 			);
 			if (consult.error) return setSuccess(false);
+			setResult(consult.result);
+			// profileContext.loadProfileData(consult.result);
+			// console.log(consult.result);
 			// userContext.dispatch({
 			// 	type: 'load profile user data',
 			// 	payload: { profile: consult },
@@ -54,13 +60,21 @@ const ProfileEditConfirm = () => {
 		} finally {
 			setLoading(false);
 		}
-	};
+	}, [httpRequestHandler, tokenData, userContext.token]);
 
 	useEffect(() => {
 		confirmProfileChange();
+		return () => setLoading(true);
 	}, [confirmProfileChange]);
 
 	const goBack = () => {
+		// userContext.dispatch({
+		// 	type: 'load profile user data',
+		// 	payload: { profile: result },
+		// });
+		result.token = userContext.userData.token;
+		result.userId = result._id;
+		userContext.login(result);
 		navigate('/profile');
 	};
 

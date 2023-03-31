@@ -154,7 +154,8 @@ const useRoutes = (token, userData) => {
 		<Routes>
 			<Route path="/" element={<Login />} />
 			<Route path="*" element={<NotFound />} />
-			<Route path="/forgotpassword" element={<Password type={'forgot'} />} />
+			<Route path="/forgotpassword" element={<Password type={'forgot'} />} />{' '}
+			<Route path="/newpassword/:token" element={<Password type={'new-password'} />} />
 		</Routes>
 	);
 

@@ -1,10 +1,7 @@
 import { useCallback, useContext, useEffect, useReducer, useRef, useState } from 'react';
 import loginInputs from '../inputFields/LoginInputs';
 import passwordInputs from '../inputFields/PasswordInputs';
-import passwordSchema from '../schemas/PasswordForm';
-import loginSchema from '../schemas/LoginForm';
 import registerInputs from '../inputFields/RegisterInputs';
-import registerSchema from '../schemas/RegisterForm';
 import useHttpConnection from './useHttpConnection';
 import useRememberMe from './useRememberMe';
 import UserContext from '../context/UserContext';

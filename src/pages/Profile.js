@@ -28,11 +28,11 @@ import UserContext from '../context/UserContext';
 import { CgProfile } from 'react-icons/cg';
 import { MdSupervisorAccount } from 'react-icons/md';
 import { GrUserAdmin } from 'react-icons/gr';
+import ProfileContext from '../context/ProfileContext';
 
-const Profile = ({ userData }) => {
+const Profile = () => {
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
-	const user = !Object.keys(userData).length ? userContext.userData : userData;
 
 	const {
 		username,
@@ -45,7 +45,7 @@ const Profile = ({ userData }) => {
 		email,
 		superior,
 		admin,
-	} = user;
+	} = userContext.userData;
 
 	let userSection;
 	if (section === 'Phoning') userSection = 'Teléfonía';
@@ -110,7 +110,7 @@ const Profile = ({ userData }) => {
 				onClick={() => {
 					userContext.dispatch({
 						type: 'load profile edit data',
-						payload: { profile: user },
+						payload: { profile: userContext.userData },
 					});
 					navigate('/profile/edit');
 				}}
