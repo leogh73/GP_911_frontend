@@ -3,94 +3,34 @@ import { Link, useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
 import Form from '../components/Form';
 import { FaUserCheck, FaUserCircle, FaUserLock, FaUserTimes } from 'react-icons/fa';
+import Modal from '../components/Modal';
 
 const Password = ({ type }) => {
 	const [success, setSuccess] = useState();
 	const [error, setError] = useState();
+	const [emailIsValid, setEmailIsValid] = useState(false);
 	const navigate = useNavigate();
 
 	const processResult = (result) => {
-		result.result._id ? setSuccess(true) : setError(true);
+		if (result.error === 'User not found') return setEmailIsValid(true);
+		result._id ? setSuccess(true) : setError(true);
 	};
 
 	const goBack = () => {
 		setError(false);
 		setSuccess(false);
+		setEmailIsValid(false);
 		navigate('/');
 	};
-
-	let formData;
-	if (type === 'change') {
-		formData = { title: 'Cambio de contraseña', pageName: 'change-password', footer: null };
-	}
-	if (type === 'forgot') {
-		formData = {
-			title: 'Recuperación de contraseña',
-			pageName: 'forgot-password',
-			footer: (
-				<>
-					(
-					<div className="form-footer">
-						<div className="separator" />
-						<Link className="text-center" to="/">
-							Volver
-						</Link>
-					</div>
-					)
-				</>
-			),
-		};
-	}
-	if (type === 'new') {
-		formData = { title: 'Nueva contraseña', pageName: 'new-password', footer: null };
-	}
-
-	let errorMessage;
-	if (type === 'change') {
-		errorMessage = {
-			title: 'Cambio fallido',
-			body: 'No se pudo completar el proceso de cambio de contraseña.',
-		};
-	}
-	if (type === 'forgot') {
-		errorMessage = {
-			title: 'Recuperación fallida',
-			body: 'No se pudo completar el proceso de recuperación de contraseña.',
-		};
-	}
-	if (type === 'new') {
-		errorMessage = {
-			title: 'Modificación fallida',
-			body: 'No se pudo completar el proceso de modificación de contraseña. Reintente más tarde',
-		};
-	}
-
-	let successMessage;
-	if (type === 'change') {
-		successMessage = {
-			title: 'Contraseña cambiada correctamente',
-			body: 'No se pudo completar el proceso de cambio de contraseña.',
-		};
-	}
-	if (type === 'forgot') {
-		successMessage = {
-			title: 'Solicitud correcta',
-			body: 'Se completó correctamente el pedido de recuperación de contraseña. Verifique su correo electrónico y siga las instrucciones.',
-		};
-	}
-	if (type === 'new') {
-		successMessage = {
-			title: 'Recuperación de contraseña correcta',
-			body: 'Ya puede iniciar sesión con su nueva contraseña.',
-		};
-	}
 
 	return error ? (
 		<div className="new-form">
 			<Message
-				title={errorMessage.title}
+				title={type === 'change' ? 'Cambio fallido' : 'Recuperación fallida'}
 				icon={<FaUserTimes />}
-				body={`${errorMessage.body} Intente nuevamente más tarde. Si el problema persiste,o cntacte al administrador. Disculpe las molestias ocasionadas.`}
+				body={`No se pudo completar el proceso de ${
+					type === 'change' ? 'cambio' : 'recuperación'
+				} de contraseña.`}
 				buttonText="VOLVER"
 				onClick={goBack}
 			/>
@@ -98,23 +38,50 @@ const Password = ({ type }) => {
 	) : success ? (
 		<div className="new-form">
 			<Message
-				title={successMessage.title}
+				title={type === 'change' ? 'Contraseña cambiada correctamente.' : 'Solicitud correcta'}
 				icon={<FaUserCheck />}
-				body={successMessage.body}
+				body={
+					type === 'change'
+						? 'Se completó correctamente el proceso de cambio de contraseña'
+						: 'Se completó correctamente el pedido de recuperación de contraseña. Verifique su correo electrónico y siga las instrucciones.'
+				}
 				buttonText="VOLVER"
 				onClick={goBack}
 			/>
 		</div>
 	) : (
-		<Form
-			sendUserForm={processResult}
-			formTitle={formData.title}
-			icon={<FaUserLock />}
-			rememberMe=""
-			buttonText="ENVIAR"
-			pageName={formData.pageName}
-			footer={formData.footer}
-		/>
+		<>
+			<Form
+				sendUserForm={processResult}
+				formTitle={type === 'change' ? 'Cambio de contraseña' : 'Recuperación de contraseña'}
+				icon={<FaUserLock />}
+				rememberMe=""
+				buttonText="ENVIAR"
+				pageName={type === 'change' ? 'change-password' : 'forgot-password'}
+				footer={
+					type === 'change' ? null : (
+						<>
+							<div className="form-footer">
+								<div className="separator" />
+								<Link className="text-center" to="/">
+									Volver
+								</Link>
+							</div>
+						</>
+					)
+				}
+			/>
+			{emailIsValid && (
+				<Modal
+					id="login-error"
+					title={'Error'}
+					body={'El correo electrónico ingresado no corresponde a ningún usuario registrado.'}
+					closeText={'Cerrar'}
+					closeFunction={() => setEmailIsValid(true)}
+					error={emailIsValid}
+				/>
+			)}
+		</>
 	);
 };
 

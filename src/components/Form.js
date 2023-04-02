@@ -21,8 +21,15 @@ const Form = ({
 	section,
 	profileData,
 	profileView,
+	userId,
 }) => {
-	const { state, submitForm, dispatch } = useForm(pageName, sendUserForm, profileData, section);
+	const { state, submitForm, dispatch } = useForm(
+		pageName,
+		sendUserForm,
+		profileData,
+		section,
+		userId,
+	);
 	// const userContext = useContext(UserContext);
 	const formIndex = 5;
 
@@ -41,6 +48,7 @@ const Form = ({
 		if (type === 'login') dispatchType = 'login error';
 		if (type === 'register') dispatchType = 'register error';
 		if (type === 'server') dispatchType = 'server error';
+		if (type === 'password') dispatchType = 'password error';
 		dispatch({
 			type: dispatchType,
 			payload: { status: false },
@@ -50,16 +58,6 @@ const Form = ({
 	return (
 		<div className="new-form">
 			<div className={`form ${pageName}`}>
-				{/* <LoadingOverlay
-					active={loading}
-					styles={{
-						overlay: (base) => ({
-							...base,
-							background: spinnerBackground,
-						}),
-					}}
-					spinner={<Loading />}
-				> */}
 				<Title text={formTitle} icon={icon} />
 				<form action="" method="" name="register" onSubmit={submitForm}>
 					<div className={`inputs-container ${pageName}`}>
@@ -120,10 +118,7 @@ const Form = ({
 					</div>
 					{footer}
 				</form>
-				{/* </LoadingOverlay> */}
 			</div>
-			{/* {loading && <Loading type={'closed'} />} */}
-
 			{state.loginError && (
 				<Modal
 					id="login-error"
@@ -152,6 +147,16 @@ const Form = ({
 					closeText={'Cerrar'}
 					closeFunction={() => closeErrorModal('server')}
 					error={state.serverError}
+				/>
+			)}
+			{state.passwordError && (
+				<Modal
+					id="login-error"
+					title={'Error'}
+					body={'La contraseña actual es inválida.'}
+					closeText={'Cerrar'}
+					closeFunction={() => closeErrorModal('password')}
+					error={state.passwordError}
 				/>
 			)}
 		</div>

@@ -28,7 +28,6 @@ import UserContext from '../context/UserContext';
 import { CgProfile } from 'react-icons/cg';
 import { MdSupervisorAccount } from 'react-icons/md';
 import { GrUserAdmin } from 'react-icons/gr';
-import ProfileContext from '../context/ProfileContext';
 
 const Profile = () => {
 	const userContext = useContext(UserContext);

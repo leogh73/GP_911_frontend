@@ -20,7 +20,6 @@ import { CgProfile } from 'react-icons/cg';
 import { MdSupervisorAccount } from 'react-icons/md';
 import { GrUserAdmin } from 'react-icons/gr';
 import Loading from '../components/Loading';
-import ProfileContext from '../context/ProfileContext';
 
 const ProfileEditConfirm = () => {
 	const { httpRequestHandler } = useHttpConnection();
@@ -28,7 +27,6 @@ const ProfileEditConfirm = () => {
 	const [loading, setLoading] = useState(true);
 	const [result, setResult] = useState();
 	const userContext = useContext(UserContext);
-	const profileContext = useContext(ProfileContext);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const tokenData = location.pathname.split('/token=')[1];
@@ -68,13 +66,11 @@ const ProfileEditConfirm = () => {
 	}, [confirmProfileChange]);
 
 	const goBack = () => {
-		// userContext.dispatch({
-		// 	type: 'load profile user data',
-		// 	payload: { profile: result },
-		// });
-		result.token = userContext.userData.token;
-		result.userId = result._id;
-		userContext.login(result);
+		if (!result.error) {
+			result.token = userContext.userData.token;
+			result.userId = result._id;
+			userContext.login(result);
+		}
 		navigate('/profile');
 	};
 

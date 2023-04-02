@@ -13,7 +13,6 @@ import UserContext from './context/UserContext';
 
 const App = () => {
 	const { userData, token, login, logout } = useUser();
-
 	const { routes, state, dispatch } = useRoutes(token, userData);
 
 	return (

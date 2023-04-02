@@ -10,7 +10,7 @@ import { FaBuilding } from 'react-icons/fa';
 import { MdSupervisorAccount } from 'react-icons/md';
 import { BiCommentDetail } from 'react-icons/bi';
 
-const useForm = (pageName, sendUserForm, profileData, section) => {
+const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 	const { loadUser } = useRememberMe();
 	const { httpRequestHandler } = useHttpConnection();
 	const userContext = useContext(UserContext);
@@ -24,8 +24,10 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		formIsValid: false,
 		loading: false,
 		loginError: false,
-		registerError: false,
 		serverError: false,
+		registerError: false,
+		passwordError: false,
+		newPasswordError: false,
 	});
 
 	useEffect(() => {
@@ -114,6 +116,12 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 				email: state.inputs[0].value,
 			};
 		}
+		if (pageName === 'new-password') {
+			registeredData = {
+				userId,
+				newPassword: state.inputs[0].value,
+			};
+		}
 
 		return registeredData;
 	};
@@ -132,7 +140,8 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		let headers = {
 			'Content-type': 'application/json',
 		};
-		if (pageName !== 'login') headers.authorization = `Bearer ${userContext.token}`;
+		if (pageName !== 'login' || pageName !== 'forgot-password')
+			headers.authorization = `Bearer ${userContext.token}`;
 		dispatch({ type: 'loading', payload: { status: true } });
 		console.log(formData);
 		let resultData = await httpRequestHandler(
@@ -141,6 +150,7 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 			JSON.stringify(formData),
 			headers,
 		);
+		console.log(resultData);
 		dispatch({ type: 'loading', payload: { status: false } });
 		if (resultData.error === 'server') {
 			return dispatch({ type: 'server error', payload: { status: true } });
@@ -150,6 +160,9 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 		}
 		if (pageName === 'register' && resultData.error) {
 			return dispatch({ type: 'register error', payload: { status: true } });
+		}
+		if (pageName === 'change-password' && resultData.error) {
+			return dispatch({ type: 'password error', payload: { status: true } });
 		}
 		if (resultData.error === 'Token expired') {
 			userContext.profileData.logout(true);
@@ -314,6 +327,9 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 				if (pageName === 'forgot-password') {
 					formInputs = passwordInputs('forgot');
 				}
+				if (pageName === 'new-password') {
+					formInputs = passwordInputs('new');
+				}
 				if (pageName === 'profile-edit') {
 					formInputs = [...registerInputs];
 					formInputs.splice(9, 2);
@@ -373,6 +389,13 @@ const useForm = (pageName, sendUserForm, profileData, section) => {
 				return {
 					...state,
 					registerError: action.payload.status,
+					formIsValid: false,
+				};
+			}
+			case 'password error': {
+				return {
+					...state,
+					passwordError: action.payload.status,
 					formIsValid: false,
 				};
 			}

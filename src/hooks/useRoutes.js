@@ -14,6 +14,7 @@ import Profile from '../pages/Profile';
 import ProfileEdit from '../pages/ProfileEdit';
 import ProfileEditConfirm from '../pages/ProfileEditConfirm';
 import UserContext from '../context/UserContext';
+import RecoverPassword from '../pages/RecoverPassword';
 
 const useRoutes = (token, userData) => {
 	console.log(userData);
@@ -111,7 +112,7 @@ const useRoutes = (token, userData) => {
 				<Route path="search" element={<Schedule type={'search'} />} />
 			</Route>
 			<Route path="/profile">
-				<Route path="" element={<Profile userData={state.profileUserData} />} />
+				<Route path="" element={<Profile />} />
 				<Route path="edit" element={<ProfileEdit startData={state.profileEditData} />} />
 				<Route path="edit-confirm/:token" element={<ProfileEditConfirm />} />
 				{state.activeEditRoute && (
@@ -154,8 +155,8 @@ const useRoutes = (token, userData) => {
 		<Routes>
 			<Route path="/" element={<Login />} />
 			<Route path="*" element={<NotFound />} />
-			<Route path="/forgotpassword" element={<Password type={'forgot'} />} />{' '}
-			<Route path="/newpassword/:token" element={<Password type={'new-password'} />} />
+			<Route path="/forgotpassword" element={<Password type={'forgot'} />} />
+			<Route path="/new-password/:token" element={<RecoverPassword />} />
 		</Routes>
 	);
 
