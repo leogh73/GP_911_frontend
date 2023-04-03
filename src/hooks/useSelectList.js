@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useReducer, useCallback } from 'react';
+import { useEffect, useContext, useReducer, useCallback } from 'react';
 import { toast } from 'react-toastify';
 import SendNewContext from '../context/SendNewContext';
 import UserContext from '../context/UserContext';

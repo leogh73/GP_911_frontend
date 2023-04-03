@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
 import Form from '../components/Form';
-import { FaUserCheck, FaUserCircle, FaUserLock, FaUserTimes } from 'react-icons/fa';
+import { FaUserCheck, FaUserLock, FaUserTimes } from 'react-icons/fa';
 import Modal from '../components/Modal';
 
 const Password = ({ type }) => {

@@ -1,24 +1,12 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
 import Form from '../components/Form';
-import { FaUserCheck, FaUserEdit, FaUserLock, FaUserTimes } from 'react-icons/fa';
-import { HiUserCircle } from 'react-icons/hi';
-import { TbHierarchy } from 'react-icons/tb';
-
-import { toast, ToastContainer } from 'react-toastify';
-import { BiCommentDetail } from 'react-icons/bi';
+import { FaUserCheck, FaUserLock, FaUserTimes } from 'react-icons/fa';
 
 import 'react-calendar/dist/Calendar.css';
-import Modal from '../components/Modal';
-import Button from '../components/Button';
-import Title from '../components/Title';
 
 import useHttpConnection from '../hooks/useHttpConnection';
-import UserContext from '../context/UserContext';
-import { CgProfile } from 'react-icons/cg';
-import { MdSupervisorAccount } from 'react-icons/md';
-import { GrUserAdmin } from 'react-icons/gr';
 import Loading from '../components/Loading';
 
 const RecoverPassword = () => {
@@ -30,15 +18,14 @@ const RecoverPassword = () => {
 	const [loadingForm, setLoadingForm] = useState(true);
 	const navigate = useNavigate();
 	const location = useLocation();
-	const tokenData = location.pathname.split('/token=')[1];
+	const token = location.pathname.split('/token=')[1];
 
 	const checkToken = useCallback(async () => {
 		try {
-			console.log('CONFIRM CHANGES!!');
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/user/forgot-password',
 				'POST',
-				JSON.stringify({ token: tokenData }),
+				JSON.stringify({ token }),
 				{ 'Content-type': 'application/json' },
 			);
 			if (consult.error) return setTokenIsValid(false);
@@ -49,7 +36,7 @@ const RecoverPassword = () => {
 		} finally {
 			setLoadingForm(false);
 		}
-	}, [httpRequestHandler, tokenData]);
+	}, [httpRequestHandler, token]);
 
 	const processResult = (result) => {
 		result.result._id ? setSuccessPassword(true) : setErrorPassword(true);

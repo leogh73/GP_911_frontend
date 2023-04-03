@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { FaUser, FaExchangeAlt, FaEdit } from 'react-icons/fa';
 import { BiCommentDetail } from 'react-icons/bi';

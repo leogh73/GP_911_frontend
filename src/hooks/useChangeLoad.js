@@ -1,8 +1,7 @@
-import { useState, useCallback, useEffect, useContext, useReducer } from 'react';
+import { useCallback, useEffect, useContext, useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import CommentContext from '../context/CommentContext';
-import SendNewContext from '../context/SendNewContext';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 

@@ -4,7 +4,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import Table from '../components/Table';
-import CommentContext from '../context/CommentContext';
 import SectionContext from '../context/SectionContext';
 
 import UserContext from '../context/UserContext';
@@ -37,18 +36,12 @@ const Users = ({ section }) => {
 				}
 				return;
 			}
-			console.log(consult.allUsers);
 			setDataList(consult.allUsers);
 		} catch (error) {
 			console.log(error);
 			setError(true);
 		} finally {
 			setLoading(false);
-			// if (section === 'phoning')
-			// 	userContext.dispatch({
-			// 		type: 'load active tab',
-			// 		payload: { tab: `/users/phoning` },
-			// 	});
 		}
 	}, [httpRequestHandler, section, userContext, navigate]);
 

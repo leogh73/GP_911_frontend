@@ -14,13 +14,11 @@ import Modal from './Modal';
 import './OptionsButtons.css';
 
 import CommentContext from '../context/CommentContext';
-import SectionContext from '../context/SectionContext';
 
 const OptionsButtons = ({ type, data, callbackFn }) => {
 	const { httpRequestHandler } = useHttpConnection();
 	const userContext = useContext(UserContext);
 	const commentContext = useContext(CommentContext);
-	const sectionContext = useContext(SectionContext);
 	const fullName = `${userContext.userData.lastName} ${userContext.userData.firstName}`;
 	const navigate = useNavigate();
 
@@ -228,7 +226,6 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 				navigate('/');
 				return;
 			}
-			console.log(consult);
 			callbackFn(status, consult);
 		} catch (error) {
 			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useReducer, useRef, useState } from 'react';
+import { useContext, useEffect, useReducer } from 'react';
 import loginInputs from '../inputFields/LoginInputs';
 import passwordInputs from '../inputFields/PasswordInputs';
 import registerInputs from '../inputFields/RegisterInputs';
@@ -6,8 +6,6 @@ import useHttpConnection from './useHttpConnection';
 import useRememberMe from './useRememberMe';
 import UserContext from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { FaBuilding } from 'react-icons/fa';
-import { MdSupervisorAccount } from 'react-icons/md';
 import { BiCommentDetail } from 'react-icons/bi';
 
 const useForm = (pageName, sendUserForm, profileData, section, userId) => {
@@ -140,17 +138,14 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 		let headers = {
 			'Content-type': 'application/json',
 		};
-		if (pageName !== 'login' || pageName !== 'forgot-password')
-			headers.authorization = `Bearer ${userContext.token}`;
+		if (pageName !== 'login') headers.authorization = `Bearer ${userContext.token}`;
 		dispatch({ type: 'loading', payload: { status: true } });
-		console.log(formData);
 		let resultData = await httpRequestHandler(
 			`http://localhost:5000/api/user/${pageName}`,
 			'POST',
 			JSON.stringify(formData),
 			headers,
 		);
-		console.log(resultData);
 		dispatch({ type: 'loading', payload: { status: false } });
 		if (resultData.error === 'server') {
 			return dispatch({ type: 'server error', payload: { status: true } });
@@ -234,19 +229,21 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 				if (value.length && value.length < 3)
 					errorMessage = 'La contraseña deben ser al menos 3 caracteres.';
 			}
-			if (
-				name === 'newPassword' &&
-				value.length === state.inputs[1].value.length &&
-				value === state.inputs[0].value
-			) {
-				errorMessage = 'La nueva contraseña no puede ser igual a la actual.';
-			}
-			if (
-				name === 'newPassword' &&
-				state.inputs[2].value.length &&
-				value !== state.inputs[2].value
-			) {
-				errorMessage = 'La nueva contraseña no coincide.';
+			if (pageName !== 'new-password') {
+				if (
+					name === 'newPassword' &&
+					value.length === state.inputs[1].value.length &&
+					value === state.inputs[0].value
+				) {
+					errorMessage = 'La nueva contraseña no puede ser igual a la actual.';
+				}
+				if (
+					name === 'newPassword' &&
+					state.inputs[2].value.length &&
+					value !== state.inputs[2].value
+				) {
+					errorMessage = 'La nueva contraseña no coincide.';
+				}
 			}
 			if (
 				(name === 'password' &&
@@ -256,7 +253,9 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 				(name === 'repeatPassword' &&
 					value.length &&
 					value !== state.inputs[state.inputs.findIndex((i) => i.name === 'password')].value) ||
-				(name === 'repeatNewPassword' && value.length && value !== state.inputs[1].value)
+				(name === 'repeatNewPassword' &&
+					value.length &&
+					(value !== state.inputs[1].value || value !== state.inputs[0].value))
 			) {
 				errorMessage = 'La contraseña no coincide.';
 			}

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import './Modal.css';
 import { IoMdClose } from 'react-icons/io';
 import Button from './Button';

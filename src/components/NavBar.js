@@ -6,7 +6,6 @@ import {
 	FaRegCalendarAlt,
 	FaList,
 	FaUserClock,
-	FaUserPlus,
 	FaUserAlt,
 	FaUserCircle,
 	FaKey,

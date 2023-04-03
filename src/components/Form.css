@@ -32,6 +32,7 @@ form {
 .form.register,
 .form.profile-edit,
 .form.change-password,
+.form.new-password,
 .form.forgot-password {
 	padding: 20px;
 }

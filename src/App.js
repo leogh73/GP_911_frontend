@@ -3,8 +3,6 @@ import { IconContext } from 'react-icons';
 import './App.css';
 
 import NavBar from './components/NavBar';
-import Footer from './components/Footer';
-import IdleTimer from './components/IdleTimer';
 
 import useUser from './hooks/useUser';
 import useRoutes from './hooks/useRoutes';
@@ -32,7 +30,12 @@ const App = () => {
 			</IconContext.Provider>
 			<ToastContainer />
 			{/* <IdleTimer token={token} /> */}
-			<Footer />
+			<footer className="footer">
+				<div className="ft-logo">
+					<img alt="" src={'./logo-911.png'}></img>
+				</div>
+				<div className="ft-text">© 2022</div>
+			</footer>
 		</UserContext.Provider>
 	);
 };

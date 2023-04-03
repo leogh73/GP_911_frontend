@@ -3,11 +3,10 @@ import Button from './Button';
 import Title from './Title';
 
 import useForm from '../hooks/useForm';
+
 import './Form.css';
+
 import Modal from './Modal';
-import UserContext from '../context/UserContext';
-import { useContext, useEffect } from 'react';
-import { BiCommentDetail } from 'react-icons/bi';
 
 const Form = ({
 	sendUserForm,
@@ -30,8 +29,6 @@ const Form = ({
 		section,
 		userId,
 	);
-	// const userContext = useContext(UserContext);
-	const formIndex = 5;
 
 	const changeHandler = (e) => {
 		dispatch({

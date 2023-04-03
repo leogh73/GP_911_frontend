@@ -1,24 +1,12 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
-import Form from '../components/Form';
-import { FaUserCheck, FaUserEdit, FaUserTimes } from 'react-icons/fa';
-import { HiUserCircle } from 'react-icons/hi';
-import { TbHierarchy } from 'react-icons/tb';
-
-import { toast, ToastContainer } from 'react-toastify';
-import { BiCommentDetail } from 'react-icons/bi';
+import { FaUserCheck, FaUserTimes } from 'react-icons/fa';
 
 import 'react-calendar/dist/Calendar.css';
-import Modal from '../components/Modal';
-import Button from '../components/Button';
-import Title from '../components/Title';
 
 import useHttpConnection from '../hooks/useHttpConnection';
 import UserContext from '../context/UserContext';
-import { CgProfile } from 'react-icons/cg';
-import { MdSupervisorAccount } from 'react-icons/md';
-import { GrUserAdmin } from 'react-icons/gr';
 import Loading from '../components/Loading';
 
 const ProfileEditConfirm = () => {
@@ -33,7 +21,6 @@ const ProfileEditConfirm = () => {
 
 	const confirmProfileChange = useCallback(async () => {
 		try {
-			console.log('CONFIRM CHANGES!!');
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/user/profile-edit',
 				'POST',
@@ -42,15 +29,6 @@ const ProfileEditConfirm = () => {
 			);
 			if (consult.error) return setSuccess(false);
 			setResult(consult.result);
-			// profileContext.loadProfileData(consult.result);
-			// console.log(consult.result);
-			// userContext.dispatch({
-			// 	type: 'load profile user data',
-			// 	payload: { profile: consult },
-			// });
-			// consult.token = userContext.userData.token;
-			// consult.userId = consult._id;
-			// userContext.login(consult);
 			setSuccess(true);
 		} catch (error) {
 			console.log(error);
@@ -66,7 +44,7 @@ const ProfileEditConfirm = () => {
 	}, [confirmProfileChange]);
 
 	const goBack = () => {
-		if (!result.error) {
+		if (success) {
 			result.token = userContext.userData.token;
 			result.userId = result._id;
 			userContext.login(result);

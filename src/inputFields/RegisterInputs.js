@@ -1,9 +1,7 @@
-import { useContext } from 'react';
 import { FaUsers, FaUser, FaIdCard, FaBuilding, FaEnvelope, FaKey } from 'react-icons/fa';
 import { HiUserCircle } from 'react-icons/hi';
 import { MdSupervisorAccount } from 'react-icons/md';
 import { TbHierarchy } from 'react-icons/tb';
-import UserContext from '../context/UserContext';
 
 const registerInputs = [
 	{

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext, useReducer, useCallback } from 'react';
+import { useEffect, useContext, useReducer, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
@@ -149,12 +149,10 @@ const useAffectedLoad = (sendResult) => {
 			Object.entries(state.data.disaffectedData).map((data) => data[1]),
 			state.data.bookPage,
 		].flat(1);
-		console.log(formData);
 		let isValid = true;
 		formData.forEach((data) => {
 			if (data === '-') isValid = false;
 		});
-		console.log(isValid);
 		dispatch({ type: 'data is valid', payload: { status: isValid } });
 	}, [state.data]);
 

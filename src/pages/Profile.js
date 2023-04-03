@@ -1,26 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import Message from '../components/Message';
-import Form from '../components/Form';
-import {
-	FaUsers,
-	FaUser,
-	FaIdCard,
-	FaBuilding,
-	FaEnvelope,
-	FaKey,
-	FaUserEdit,
-	FaUserCheck,
-	FaUserTimes,
-} from 'react-icons/fa';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FaUsers, FaUser, FaIdCard, FaBuilding, FaEnvelope } from 'react-icons/fa';
 import { HiUserCircle } from 'react-icons/hi';
 import { TbHierarchy } from 'react-icons/tb';
 
-import { ToastContainer } from 'react-toastify';
-import { BiCommentDetail } from 'react-icons/bi';
-
 import 'react-calendar/dist/Calendar.css';
-import Modal from '../components/Modal';
 import Button from '../components/Button';
 import Title from '../components/Title';
 
@@ -104,8 +88,6 @@ const Profile = () => {
 				className="button"
 				text={'EDITAR'}
 				width={200}
-				// disabled={!dataIsValid}
-				// loading={loadingSendData}
 				onClick={() => {
 					userContext.dispatch({
 						type: 'load profile edit data',

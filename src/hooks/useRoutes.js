@@ -1,8 +1,8 @@
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
 import NotFound from '../pages/NotFound';
-import { useEffect, useReducer, useState } from 'react';
+import { useReducer } from 'react';
 import ChangeEdit from '../pages/ChangeEdit';
 import NewItem from '../pages/NewItem';
 import Changes from '../pages/Changes';
@@ -13,16 +13,13 @@ import Users from '../pages/Users';
 import Profile from '../pages/Profile';
 import ProfileEdit from '../pages/ProfileEdit';
 import ProfileEditConfirm from '../pages/ProfileEditConfirm';
-import UserContext from '../context/UserContext';
 import RecoverPassword from '../pages/RecoverPassword';
 
 const useRoutes = (token, userData) => {
-	console.log(userData);
 	const [state, dispatch] = useReducer(reducer, {
 		activeEditRoute: false,
 		changeData: {},
 		profileEditData: {},
-		profileUserData: {},
 	});
 
 	function reducer(state, action) {
@@ -44,23 +41,10 @@ const useRoutes = (token, userData) => {
 					profileEditData: action.payload.profile,
 					activeEditRoute: action.payload.editRoute,
 				};
-			case 'load profile user data':
-				return {
-					...state,
-					profileUserData: action.payload.profile,
-				};
 			default:
 				break;
 		}
 	}
-
-	// useEffect(() => {
-	// 	console.log(user);
-	// 	UserContext.dispatch({
-	// 		type: 'load profile user data',
-	// 		payload: { profile: user },
-	// 	});
-	// }, []);
 
 	const superiorRoutes = [
 		{
@@ -113,7 +97,7 @@ const useRoutes = (token, userData) => {
 			</Route>
 			<Route path="/profile">
 				<Route path="" element={<Profile />} />
-				<Route path="edit" element={<ProfileEdit startData={state.profileEditData} />} />
+				<Route path="edit" element={<ProfileEdit startData={userData} />} />
 				<Route path="edit-confirm/:token" element={<ProfileEditConfirm />} />
 				{state.activeEditRoute && (
 					<Route path="edit-user" element={<ProfileEdit startData={state.profileEditData} />} />
