@@ -55,7 +55,7 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 					'GET',
 					null,
 					{
-						authorization: `Bearer ${userContext.token}`,
+						authorization: `Bearer ${userContext.isLoggedIn}`,
 					},
 				);
 			} catch (error) {
@@ -68,7 +68,7 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 			type: 'load start data',
 			payload: { items: data },
 		});
-	}, [httpRequestHandler, type, userContext.token]);
+	}, [httpRequestHandler, type, userContext.isLoggedIn]);
 
 	useEffect(() => {
 		loadStartData();

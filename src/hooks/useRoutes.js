@@ -15,7 +15,7 @@ import ProfileEdit from '../pages/ProfileEdit';
 import ProfileEditConfirm from '../pages/ProfileEditConfirm';
 import RecoverPassword from '../pages/RecoverPassword';
 
-const useRoutes = (token, userData) => {
+const useRoutes = (isLoggedIn, userData) => {
 	const [state, dispatch] = useReducer(reducer, {
 		activeEditRoute: false,
 		changeData: {},
@@ -77,7 +77,7 @@ const useRoutes = (token, userData) => {
 
 	if (!!userData && userData.admin) adminRoutes.forEach((route) => userRoutes.push(route));
 
-	const routes = token ? (
+	const routes = isLoggedIn ? (
 		<Routes>
 			<Route path="/" element={<Navigate to="/changes/agreed" />} />
 			<Route path="/changes" element={<Navigate to="/changes/agreed" />} />
@@ -98,7 +98,7 @@ const useRoutes = (token, userData) => {
 			<Route path="/profile">
 				<Route path="" element={<Profile />} />
 				<Route path="edit" element={<ProfileEdit startData={userData} />} />
-				<Route path="edit-confirm/:token" element={<ProfileEditConfirm />} />
+				<Route path="edit-confirm/:isLoggedIn" element={<ProfileEditConfirm />} />
 				{state.activeEditRoute && (
 					<Route path="edit-user" element={<ProfileEdit startData={state.profileEditData} />} />
 				)}
@@ -140,7 +140,7 @@ const useRoutes = (token, userData) => {
 			<Route path="/" element={<Login />} />
 			<Route path="*" element={<NotFound />} />
 			<Route path="/forgotpassword" element={<Password type={'forgot'} />} />
-			<Route path="/new-password/:token" element={<RecoverPassword />} />
+			<Route path="/new-password/:isLoggedIn" element={<RecoverPassword />} />
 		</Routes>
 	);
 

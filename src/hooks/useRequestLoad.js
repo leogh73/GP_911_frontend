@@ -94,7 +94,7 @@ const useRequestLoad = (sendResult) => {
 				'POST',
 				JSON.stringify(state.data),
 				{
-					authorization: `Bearer ${userContext.token}`,
+					authorization: `Bearer ${userContext.isLoggedIn}`,
 					'Content-type': 'application/json',
 				},
 			);

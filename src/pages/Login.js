@@ -13,6 +13,7 @@ const Login = () => {
 	const userContext = useContext(UserContext);
 
 	const userLogin = (resultData, usernameOrPassword) => {
+		console.log(resultData);
 		userContext.login(resultData);
 		rememberUser(usernameOrPassword, rememberMe.current);
 	};

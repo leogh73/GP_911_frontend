@@ -217,7 +217,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 				'POST',
 				JSON.stringify({ type, itemId, status, comment: commentContext.comment }),
 				{
-					authorization: `Bearer ${userContext.token}`,
+					authorization: `Bearer ${userContext.isLoggedIn}`,
 					'Content-type': 'application/json',
 				},
 			);

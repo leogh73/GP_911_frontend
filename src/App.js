@@ -10,14 +10,14 @@ import useRoutes from './hooks/useRoutes';
 import UserContext from './context/UserContext';
 
 const App = () => {
-	const { userData, token, login, logout } = useUser();
-	const { routes, state, dispatch } = useRoutes(token, userData);
+	const { userData, isLoggedIn, login, logout } = useUser();
+	const { routes, state, dispatch } = useRoutes(isLoggedIn, userData);
 
 	return (
 		<UserContext.Provider
 			value={{
 				userData,
-				token,
+				isLoggedIn,
 				login,
 				logout,
 				state,
@@ -29,7 +29,7 @@ const App = () => {
 				<div className="layout">{routes}</div>
 			</IconContext.Provider>
 			<ToastContainer />
-			{/* <IdleTimer token={token} /> */}
+			{/* <IdleTimer isLoggedIn={isLoggedIn} /> */}
 			<footer className="footer">
 				<div className="ft-logo">
 					<img alt="" src={'./logo-911.png'}></img>

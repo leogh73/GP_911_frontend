@@ -24,7 +24,7 @@ const Affected = () => {
 				'http://localhost:5000/api/item/all',
 				'POST',
 				JSON.stringify({ type: 'affected' }),
-				{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
+				{ authorization: `Bearer ${userContext.isLoggedIn}`, 'Content-type': 'application/json' },
 			);
 			if (consult.error) {
 				setError(true);

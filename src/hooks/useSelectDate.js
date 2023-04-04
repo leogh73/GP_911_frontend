@@ -103,7 +103,7 @@ const useSelectDate = (sendDate, name) => {
 				'POST',
 				JSON.stringify({ date: dateData.formattedDate }),
 				{
-					authorization: `Bearer ${userContext.token}`,
+					authorization: `Bearer ${userContext.isLoggedIn}`,
 					'Content-type': 'application/json',
 				},
 			);

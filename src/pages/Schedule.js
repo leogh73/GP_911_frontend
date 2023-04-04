@@ -39,7 +39,7 @@ const Schedule = ({ type }) => {
 					'GET',
 					null,
 					{
-						authorization: `Bearer ${userContext.token}`,
+						authorization: `Bearer ${userContext.isLoggedIn}`,
 					},
 				);
 			if (type === 'search' && !!selectedDate)
@@ -47,7 +47,10 @@ const Schedule = ({ type }) => {
 					`http://localhost:5000/api/spreadsheet/search`,
 					'POST',
 					JSON.stringify({ date: selectedDate }),
-					{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'Application/json' },
+					{
+						authorization: `Bearer ${userContext.isLoggedIn}`,
+						'Content-type': 'Application/json',
+					},
 				);
 			if (consult.error) {
 				setError(true);

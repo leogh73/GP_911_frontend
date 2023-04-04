@@ -2,12 +2,12 @@ import { useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import UserContext from '../context/UserContext';
 
-const IdleTimer = ({ token }) => {
+const IdleTimer = ({ isLoggedIn }) => {
 	const navigate = useNavigate();
 	const userContext = useContext(UserContext);
 
 	useEffect(() => {
-		if (!token) {
+		if (!isLoggedIn) {
 			return;
 		}
 
@@ -32,7 +32,7 @@ const IdleTimer = ({ token }) => {
 				window.removeEventListener('mousemove', restartAutoReset);
 			}
 		};
-	}, [userContext, token, navigate]);
+	}, [userContext, isLoggedIn, navigate]);
 
 	return <div />;
 };

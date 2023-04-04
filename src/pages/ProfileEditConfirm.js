@@ -17,15 +17,15 @@ const ProfileEditConfirm = () => {
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 	const location = useLocation();
-	const tokenData = location.pathname.split('/token=')[1];
+	const isLoggedInData = location.pathname.split('/isLoggedIn=')[1];
 
 	const confirmProfileChange = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/user/profile-edit',
 				'POST',
-				JSON.stringify({ changeToken: tokenData }),
-				{ authorization: `Bearer ${userContext.token}`, 'Content-type': 'application/json' },
+				JSON.stringify({ changeToken: isLoggedInData }),
+				{ authorization: `Bearer ${userContext.isLoggedIn}`, 'Content-type': 'application/json' },
 			);
 			if (consult.error) return setSuccess(false);
 			setResult(consult.result);
@@ -36,7 +36,7 @@ const ProfileEditConfirm = () => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, tokenData, userContext.token]);
+	}, [httpRequestHandler, isLoggedInData, userContext.isLoggedIn]);
 
 	useEffect(() => {
 		confirmProfileChange();
@@ -45,7 +45,7 @@ const ProfileEditConfirm = () => {
 
 	const goBack = () => {
 		if (success) {
-			result.token = userContext.userData.token;
+			result.isLoggedIn = userContext.userData.isLoggedIn;
 			result.userId = result._id;
 			userContext.login(result);
 		}

@@ -11,21 +11,21 @@ import Loading from '../components/Loading';
 
 const RecoverPassword = () => {
 	const { httpRequestHandler } = useHttpConnection();
-	const [tokenIsValid, setTokenIsValid] = useState();
+	const [isLoggedInIsValid, setTokenIsValid] = useState();
 	const [errorPassword, setErrorPassword] = useState();
 	const [successPassword, setSuccessPassword] = useState();
 	const [userId, setUserId] = useState();
 	const [loadingForm, setLoadingForm] = useState(true);
 	const navigate = useNavigate();
 	const location = useLocation();
-	const token = location.pathname.split('/token=')[1];
+	const isLoggedIn = location.pathname.split('/isLoggedIn=')[1];
 
 	const checkToken = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/user/forgot-password',
 				'POST',
-				JSON.stringify({ token }),
+				JSON.stringify({ isLoggedIn }),
 				{ 'Content-type': 'application/json' },
 			);
 			if (consult.error) return setTokenIsValid(false);
@@ -36,7 +36,7 @@ const RecoverPassword = () => {
 		} finally {
 			setLoadingForm(false);
 		}
-	}, [httpRequestHandler, token]);
+	}, [httpRequestHandler, isLoggedIn]);
 
 	const processResult = (result) => {
 		result.result._id ? setSuccessPassword(true) : setErrorPassword(true);
@@ -57,7 +57,7 @@ const RecoverPassword = () => {
 		<div className="spinner-container-change">
 			<Loading type={'closed'} />
 		</div>
-	) : !tokenIsValid ? (
+	) : !isLoggedInIsValid ? (
 		<div className="new-form">
 			<Message
 				title={'Acceso incorrecto'}

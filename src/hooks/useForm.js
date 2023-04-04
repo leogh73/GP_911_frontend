@@ -138,7 +138,7 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 		let headers = {
 			'Content-type': 'application/json',
 		};
-		if (pageName !== 'login') headers.authorization = `Bearer ${userContext.token}`;
+		if (pageName !== 'login') headers.authorization = `Bearer ${userContext.isLoggedIn}`;
 		dispatch({ type: 'loading', payload: { status: true } });
 		let resultData = await httpRequestHandler(
 			`http://localhost:5000/api/user/${pageName}`,
