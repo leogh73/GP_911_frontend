@@ -9,14 +9,12 @@ const useHttpConnection = () => {
 				const abortConnection = new AbortController();
 				activeHttpConnections.current.push(abortConnection);
 
-				// if(url==='http://localhost:5000/api/user/login')
-
 				const response = await fetch(url, {
 					method,
 					body,
 					headers,
 					signal: abortConnection.signal,
-					// credentials: 'include',
+					credentials: 'include',
 				});
 
 				const responseData = await response.json();

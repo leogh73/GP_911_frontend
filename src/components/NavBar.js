@@ -66,7 +66,7 @@ const NavBar = () => {
 		const burger = document.querySelector('.burger');
 		const navLinks = document.querySelector('.nav-links');
 		const layout = document.querySelector('.layout');
-		const userMenu = userContext.isLoggedIn ? document.querySelector('.user-toggle') : null;
+		const userMenu = userContext.token ? document.querySelector('.user-toggle') : null;
 		const navLinksList = document.querySelectorAll('.nav-links li');
 
 		const body = document.querySelector('body');
@@ -86,7 +86,7 @@ const NavBar = () => {
 			body.classList.toggle('body-navbar-overflow');
 		};
 
-		if (userContext.isLoggedIn) {
+		if (userContext.token) {
 			burger.addEventListener('click', () => {
 				toggleNavBar();
 				if (userMenu.classList.contains('active')) userMenu.classList.toggle('active');
@@ -119,7 +119,7 @@ const NavBar = () => {
 		});
 
 		return () => {
-			if (userContext.isLoggedIn) {
+			if (userContext.token) {
 				userMenu.removeEventListener('click', () => {});
 				burger.removeEventListener('click', () => {
 					navLinks.classList.toggle('nav-links');
@@ -138,10 +138,10 @@ const NavBar = () => {
 				});
 			}
 		};
-	}, [userContext.isLoggedIn]);
+	}, [userContext.token]);
 
 	useEffect(() => {
-		if (userContext.isLoggedIn) {
+		if (userContext.token) {
 			const navLinksList = document.querySelectorAll('.nav-links li');
 			navLinksList.forEach((link) => {
 				if (link.classList.contains('clicked')) link.classList.remove('clicked');
@@ -150,7 +150,7 @@ const NavBar = () => {
 			let activeLink = document.getElementById(clickedUrl);
 			if (!!activeLink) activeLink.classList.add('clicked');
 		}
-	}, [userContext.isLoggedIn, location.pathname]);
+	}, [userContext.token, location.pathname]);
 
 	const modeButton = () => (
 		<>
@@ -191,7 +191,7 @@ const NavBar = () => {
 				<div className="logo">
 					<h4>Guardias 911</h4>
 				</div>
-				{userContext.isLoggedIn ? (
+				{userContext.token ? (
 					<>
 						<ul className="nav-links" onClick={navLinksClickHandler}>
 							<li id={'/schedule'}>

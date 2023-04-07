@@ -25,7 +25,10 @@ const ProfileEditConfirm = () => {
 				'http://localhost:5000/api/user/profile-edit',
 				'POST',
 				JSON.stringify({ changeToken: isLoggedInData }),
-				{ authorization: `Bearer ${userContext.isLoggedIn}`, 'Content-type': 'application/json' },
+				{
+					authorization: `Bearer ${userContext.token}`,
+					'Content-type': 'application/json',
+				},
 			);
 			if (consult.error) return setSuccess(false);
 			setResult(consult.result);
@@ -36,7 +39,7 @@ const ProfileEditConfirm = () => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, isLoggedInData, userContext.isLoggedIn]);
+	}, [httpRequestHandler, isLoggedInData, userContext.token]);
 
 	useEffect(() => {
 		confirmProfileChange();
@@ -45,7 +48,7 @@ const ProfileEditConfirm = () => {
 
 	const goBack = () => {
 		if (success) {
-			result.isLoggedIn = userContext.userData.isLoggedIn;
+			result.isLoggedIn = userContext.token;
 			result.userId = result._id;
 			userContext.login(result);
 		}

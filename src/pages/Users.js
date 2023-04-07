@@ -26,7 +26,10 @@ const Users = ({ section }) => {
 				'http://localhost:5000/api/user/allusers',
 				'POST',
 				JSON.stringify({ section }),
-				{ authorization: `Bearer ${userContext.isLoggedIn}`, 'Content-type': 'application/json' },
+				{
+					authorization: `Bearer ${userContext.token}`,
+					'Content-type': 'application/json',
+				},
 			);
 			if (consult.error) {
 				setError(true);

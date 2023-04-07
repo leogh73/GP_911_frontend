@@ -8,16 +8,17 @@ import useUser from './hooks/useUser';
 import useRoutes from './hooks/useRoutes';
 
 import UserContext from './context/UserContext';
+import Loading from './components/Loading';
 
 const App = () => {
-	const { userData, isLoggedIn, login, logout } = useUser();
-	const { routes, state, dispatch } = useRoutes(isLoggedIn, userData);
+	const { token, userData, login, logout, loading } = useUser();
+	const { routes, state, dispatch } = useRoutes(token, userData);
 
 	return (
 		<UserContext.Provider
 			value={{
 				userData,
-				isLoggedIn,
+				token,
 				login,
 				logout,
 				state,
@@ -26,7 +27,13 @@ const App = () => {
 		>
 			<NavBar />
 			<IconContext.Provider value={{ style: { color: 'slategray', backgroundColor: 'none' } }}>
-				<div className="layout">{routes}</div>
+				{loading ? (
+					<div className="spinner-container-main">
+						<Loading type={'closed'} />
+					</div>
+				) : (
+					<div className="layout">{routes}</div>
+				)}
 			</IconContext.Provider>
 			<ToastContainer />
 			{/* <IdleTimer isLoggedIn={isLoggedIn} /> */}

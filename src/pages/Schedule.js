@@ -39,7 +39,7 @@ const Schedule = ({ type }) => {
 					'GET',
 					null,
 					{
-						authorization: `Bearer ${userContext.isLoggedIn}`,
+						authorization: `Bearer ${userContext.token}`,
 					},
 				);
 			if (type === 'search' && !!selectedDate)
@@ -48,7 +48,7 @@ const Schedule = ({ type }) => {
 					'POST',
 					JSON.stringify({ date: selectedDate }),
 					{
-						authorization: `Bearer ${userContext.isLoggedIn}`,
+						authorization: `Bearer ${userContext.token}`,
 						'Content-type': 'Application/json',
 					},
 				);

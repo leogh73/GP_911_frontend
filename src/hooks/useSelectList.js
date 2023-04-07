@@ -55,11 +55,11 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 					'GET',
 					null,
 					{
-						authorization: `Bearer ${userContext.isLoggedIn}`,
+						authorization: `Bearer ${userContext.token}`,
 					},
 				);
 			} catch (error) {
-				toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
+				return toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
 			}
 		} else {
 			for (let i = 1; i <= 200; i++) data.push(i.toString().padStart(3, 0));
@@ -68,7 +68,7 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 			type: 'load start data',
 			payload: { items: data },
 		});
-	}, [httpRequestHandler, type, userContext.isLoggedIn]);
+	}, [httpRequestHandler, type, userContext.token]);
 
 	useEffect(() => {
 		loadStartData();

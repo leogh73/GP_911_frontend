@@ -1,155 +1,103 @@
-import { useState, useCallback } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'react-toastify';
-// import useHttpConnection from './useHttpConnection';
+import useHttpConnection from './useHttpConnection';
+import { useNavigate } from 'react-router-dom';
 
-// let sessionLogoutTime;
+let sessionLogoutTime;
 
 const useUser = () => {
+	const [token, setToken] = useState();
 	const [userData, setUserData] = useState();
-	const [isLoggedIn, setIsLoggedIn] = useState(false);
-	// const [expirationTokenTime, setExpirationTokenTime] = useState(false);
-	// const { httpRequestHandler } = useHttpConnection();
+	const [loading, setLoading] = useState();
+	const { httpRequestHandler } = useHttpConnection();
+	const [expirationTokenTime, setExpirationTokenTime] = useState();
+	const navigate = useNavigate();
 
-	// const navigate = useNavigate();
-
-	// const storeUser = (userData) => {
-	// 	const {
-	// 		userId,
-	// 		username,
-	// 		firstName,
-	// 		lastName,
-	// 		ni,
-	// 		hierarchy,
-	// 		section,
-	// 		guardId,
-	// 		email,
-	// 		superior,
-	// 		admin,
-	// 	} = userData;
-	// 	localStorage.setItem(
-	// 		'userData',
-	// 		JSON.stringify({
-	// 			userId,
-	// 			username,
-	// 			firstName,
-	// 			lastName,
-	// 			ni,
-	// 			hierarchy,
-	// 			section,
-	// 			guardId,
-	// 			email,
-	// 			superior,
-	// 			admin,
-	// 		}),
-	// 	);
-	// };
-
-	// const storeToken = (renew, isLoggedIn, expirationDate) => {
-	// 	if (renew) localStorage.removeItem('userToken');
-	// 	localStorage.setItem(
-	// 		'userToken',
-	// 		JSON.stringify({
-	// 			isLoggedIn: isLoggedIn,
-	// 			expirationDate: expirationDate.toISOString(),
-	// 		}),
-	// 	);
-	// };
-
-	const login = useCallback((userData, expirationTokenTime) => {
-		setIsLoggedIn(true);
+	const login = (userData, sessionLogoutTime) => {
+		setToken(userData.token);
 		setUserData(userData);
-		// const expirationDateToken =
-		// 	expirationTokenTime || new Date(new Date().getTime() + 1000 * 60 * 59);
-		// setExpirationTokenTime(expirationDateToken);
-		// storeUser(userData);
-		// storeToken(false, userData.isLoggedIn, expirationDateToken);
-	}, []);
-
-	const logout = (expiredSession) => {
-		// setToken(null);
-		setUserData(null);
-		if (expiredSession) toast('Por su seguridad, vuelva a iniciar sesión.', { type: 'warning' });
-		localStorage.removeItem('userData');
-		localStorage.removeItem('userToken');
+		const expirationDateToken = sessionLogoutTime || new Date(new Date().getTime() + 1000 * 50);
+		setExpirationTokenTime(expirationDateToken);
 	};
 
-	// const renewToken = useCallback(async () => {
-	// 	try {
-	// 		let renovation = await httpRequestHandler(
-	// 			'http://localhost:5000/api/user/renewisLoggedIn',
-	// 			'POST',
-	// 			{},
-	// 			{
-	// 				authorization: `Bearer ${isLoggedIn}`,
-	// 			},
-	// 		);
-	// 		setToken(null);
-	// 		setExpirationTokenTime(null);
-	// 		const newExpirationDate = new Date(new Date().getTime() + 1000 * 60 * 59);
-	// 		setToken(isLoggedIn);
-	// 		setExpirationTokenTime(newExpirationDate);
-	// 		storeToken(true, renovation.isLoggedIn, newExpirationDate);
-	// 	} catch (error) {
-	// 		logout(true);
-	// 		console.log(error);
-	// 	}
-	// }, [httpRequestHandler, isLoggedIn, logout, storeToken]);
+	const logout = useCallback(
+		async (expiredSession) => {
+			if (!expiredSession) {
+				setLoading(true);
+				let response = await httpRequestHandler(
+					'http://localhost:5000/api/session/logout',
+					'GET',
+					null,
+					{
+						authorization: `Bearer ${token}`,
+					},
+				);
+				setLoading(false);
+				if (response.message) {
+					setToken(null);
+					setUserData(null);
+					return;
+				} else {
+					return toast('No se pudo completar el proceso.', { type: 'error' });
+				}
+			}
+			setToken(null);
+			setUserData(null);
+			return toast('Por su seguridad, vuelva a iniciar sesión.', { type: 'warning' });
+		},
+		[token, httpRequestHandler],
+	);
 
-	// useEffect(() => {
-	// 	if (isLoggedIn && expirationTokenTime) {
-	// 		const remainingTime = expirationTokenTime.getTime() - new Date().getTime();
-	// 		sessionLogoutTime = setTimeout(async () => await renewToken(), remainingTime);
-	// 	} else {
-	// 		clearTimeout(sessionLogoutTime);
-	// 	}
-	// }, [isLoggedIn, expirationTokenTime, renewToken]);
+	const refreshSession = useCallback(async () => {
+		let response = await httpRequestHandler(
+			'http://localhost:5000/api/session/refresh-session',
+			'GET',
+			null,
+			{},
+		);
+		if (!response.error) {
+			setToken(response.token);
+			setUserData(response);
+			setExpirationTokenTime(new Date(new Date().getTime() + 1000 * 50));
+		}
+	}, [httpRequestHandler]);
 
-	// useEffect(() => {
-	// 	const storedUserData = JSON.parse(localStorage.getItem('userData'));
-	// 	const storedTokenData = JSON.parse(localStorage.getItem('userToken'));
-	// 	if (
-	// 		storedUserData &&
-	// 		storedTokenData &&
-	// 		storedTokenData.isLoggedIn &&
-	// 		new Date(storedTokenData.expirationDate) > new Date()
-	// 	) {
-	// 		const {
-	// 			userId,
-	// 			username,
-	// 			firstName,
-	// 			lastName,
-	// 			ni,
-	// 			hierarchy,
-	// 			section,
-	// 			guardId,
-	// 			email,
-	// 			superior,
-	// 			admin,
-	// 		} = storedUserData;
-	// 		const userData = {
-	// 			isLoggedIn: storedTokenData.isLoggedIn,
-	// 			userId,
-	// 			username,
-	// 			firstName,
-	// 			lastName,
-	// 			ni,
-	// 			hierarchy,
-	// 			section,
-	// 			guardId,
-	// 			email,
-	// 			superior,
-	// 			admin,
-	// 		};
-	// 		login(userData, new Date(storedTokenData.expirationDate));
-	// 	}
-	// }, [login]);
+	useEffect(() => {
+		refreshSession();
+	}, [refreshSession]);
+
+	const refreshToken = useCallback(async () => {
+		try {
+			let response = await httpRequestHandler(
+				'http://localhost:5000/api/session/refresh-token',
+				'GET',
+				null,
+				{},
+			);
+			setToken(response.accessToken);
+			setExpirationTokenTime(new Date(new Date().getTime() + 1000 * 50));
+		} catch (error) {
+			console.log(error);
+			await logout(false);
+			navigate('/');
+		}
+	}, [httpRequestHandler, logout, navigate]);
+
+	useEffect(() => {
+		if (!!token && expirationTokenTime) {
+			const remainingTime = expirationTokenTime.getTime() - new Date().getTime();
+			sessionLogoutTime = setTimeout(async () => await refreshToken(), remainingTime);
+		} else {
+			clearTimeout(sessionLogoutTime);
+		}
+	}, [token, expirationTokenTime, refreshToken]);
 
 	return {
+		token,
 		userData,
-		isLoggedIn,
 		login,
 		logout,
+		loading,
 	};
 };
 
