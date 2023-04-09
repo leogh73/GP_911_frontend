@@ -17,7 +17,7 @@ import { FiSun, FiMoon } from 'react-icons/fi';
 import UserContext from '../context/UserContext';
 import './NavBar.css';
 
-const NavBar = () => {
+const NavBar = ({ token }) => {
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -66,7 +66,7 @@ const NavBar = () => {
 		const burger = document.querySelector('.burger');
 		const navLinks = document.querySelector('.nav-links');
 		const layout = document.querySelector('.layout');
-		const userMenu = userContext.token ? document.querySelector('.user-toggle') : null;
+		const userMenu = token ? document.querySelector('.user-toggle') : null;
 		const navLinksList = document.querySelectorAll('.nav-links li');
 
 		const body = document.querySelector('body');
@@ -86,7 +86,7 @@ const NavBar = () => {
 			body.classList.toggle('body-navbar-overflow');
 		};
 
-		if (userContext.token) {
+		if (token) {
 			burger.addEventListener('click', () => {
 				toggleNavBar();
 				if (userMenu.classList.contains('active')) userMenu.classList.toggle('active');
@@ -119,7 +119,7 @@ const NavBar = () => {
 		});
 
 		return () => {
-			if (userContext.token) {
+			if (token) {
 				userMenu.removeEventListener('click', () => {});
 				burger.removeEventListener('click', () => {
 					navLinks.classList.toggle('nav-links');
@@ -138,10 +138,10 @@ const NavBar = () => {
 				});
 			}
 		};
-	}, [userContext.token]);
+	}, [token]);
 
 	useEffect(() => {
-		if (userContext.token) {
+		if (token) {
 			const navLinksList = document.querySelectorAll('.nav-links li');
 			navLinksList.forEach((link) => {
 				if (link.classList.contains('clicked')) link.classList.remove('clicked');
@@ -150,7 +150,7 @@ const NavBar = () => {
 			let activeLink = document.getElementById(clickedUrl);
 			if (!!activeLink) activeLink.classList.add('clicked');
 		}
-	}, [userContext.token, location.pathname]);
+	}, [token, location.pathname]);
 
 	const modeButton = () => (
 		<>
@@ -175,10 +175,6 @@ const NavBar = () => {
 			let activeLink = document.getElementById(clickedUrl);
 			activeLink.classList.add('clicked');
 		}
-		// userContext.dispatch({
-		// 	type: 'load active tab',
-		// 	payload: { tab: `/users/${section.toLowerCase()}` },
-		// });
 	};
 
 	return (
@@ -191,7 +187,7 @@ const NavBar = () => {
 				<div className="logo">
 					<h4>Guardias 911</h4>
 				</div>
-				{userContext.token ? (
+				{token ? (
 					<>
 						<ul className="nav-links" onClick={navLinksClickHandler}>
 							<li id={'/schedule'}>
@@ -224,7 +220,7 @@ const NavBar = () => {
 									</Link>
 								</div>
 							</li>
-							{userContext.userData.admin && (
+							{userContext.userData?.admin && (
 								<li id={'/users'}>
 									<div className="link-container">
 										<Link
@@ -249,7 +245,7 @@ const NavBar = () => {
 								<Link className="user-link" to="/profile">
 									<h3 className="user-header">
 										<FaUserCircle size={32} />
-										<div className="user-name">{`${userContext.userData.firstName} ${userContext.userData.lastName}`}</div>
+										<div className="user-name">{`${userContext.userData?.firstName} ${userContext.userData?.lastName}`}</div>
 									</h3>
 								</Link>
 								<div className="usermenu-separator"></div>

@@ -182,13 +182,13 @@ const useChangeLoad = (resultData, startData) => {
 		try {
 			dispatch({ type: 'loading', payload: { status: true } });
 			let consult = startData
-				? await httpRequestHandler(
+				? httpRequestHandler(
 						'http://localhost:5000/api/item/edit',
 						'POST',
 						JSON.stringify(body),
 						headers,
 				  )
-				: await httpRequestHandler(
+				: httpRequestHandler(
 						'http://localhost:5000/api/item/new',
 						'POST',
 						JSON.stringify(body),

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { IconContext } from 'react-icons';
 import './App.css';
@@ -11,21 +12,22 @@ import UserContext from './context/UserContext';
 import Loading from './components/Loading';
 
 const App = () => {
-	const { token, userData, login, logout, loading } = useUser();
-	const { routes, state, dispatch } = useRoutes(token, userData);
+	const [navBar, setNavBar] = useState(<NavBar token={null} key={'01'} />);
+	const { token, userData, login, logout, loading } = useUser(setNavBar);
+	const { routes, state, dispatch } = useRoutes(userData);
 
 	return (
 		<UserContext.Provider
 			value={{
-				userData,
 				token,
+				userData,
 				login,
 				logout,
 				state,
 				dispatch,
 			}}
 		>
-			<NavBar />
+			{navBar}
 			<IconContext.Provider value={{ style: { color: 'slategray', backgroundColor: 'none' } }}>
 				{loading ? (
 					<div className="spinner-container-main">

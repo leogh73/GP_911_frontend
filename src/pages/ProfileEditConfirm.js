@@ -5,26 +5,27 @@ import { FaUserCheck, FaUserTimes } from 'react-icons/fa';
 
 import 'react-calendar/dist/Calendar.css';
 
-import useHttpConnection from '../hooks/useHttpConnection';
 import UserContext from '../context/UserContext';
+
 import Loading from '../components/Loading';
+import useHttpConnection from '../hooks/useHttpConnection';
 
 const ProfileEditConfirm = () => {
-	const { httpRequestHandler } = useHttpConnection();
 	const [success, setSuccess] = useState();
 	const [loading, setLoading] = useState(true);
 	const [result, setResult] = useState();
+	const { httpRequestHandler } = useHttpConnection();
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 	const location = useLocation();
-	const isLoggedInData = location.pathname.split('/isLoggedIn=')[1];
+	const tokenData = location.pathname.split('/isLoggedIn=')[1];
 
 	const confirmProfileChange = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/user/profile-edit',
 				'POST',
-				JSON.stringify({ changeToken: isLoggedInData }),
+				JSON.stringify({ changeToken: tokenData }),
 				{
 					authorization: `Bearer ${userContext.token}`,
 					'Content-type': 'application/json',
@@ -39,7 +40,7 @@ const ProfileEditConfirm = () => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, isLoggedInData, userContext.token]);
+	}, [httpRequestHandler, tokenData, userContext.token]);
 
 	useEffect(() => {
 		confirmProfileChange();

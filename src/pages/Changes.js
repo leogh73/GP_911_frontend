@@ -5,15 +5,15 @@ import Loading from '../components/Loading';
 import Message from '../components/Message';
 import Table from '../components/Table';
 import UserContext from '../context/UserContext';
-import useHttpConnection from '../hooks/useHttpConnection';
 
 import './Changes.css';
+import useHttpConnection from '../hooks/useHttpConnection';
 
 const Changes = ({ type }) => {
-	const { httpRequestHandler } = useHttpConnection();
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
 	const [dataList, setDataList] = useState();
+	const { httpRequestHandler } = useHttpConnection();
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -36,7 +36,12 @@ const Changes = ({ type }) => {
 					return navigate('/');
 				}
 			}
-			setDataList(consult);
+			setDataList(consult.result);
+			if (consult.newAccessToken) {
+				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
+				userContext.login(newUserData);
+				console.log('TOKEN REFRESHED!');
+			}
 		} catch (error) {
 			console.log(error);
 			setError(true);

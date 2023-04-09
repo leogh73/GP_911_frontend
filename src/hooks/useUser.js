@@ -1,23 +1,20 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
-import { useNavigate } from 'react-router-dom';
+import NavBar from '../components/NavBar';
 
-let sessionLogoutTime;
-
-const useUser = () => {
+const useUser = (setNavBar) => {
 	const [token, setToken] = useState();
 	const [userData, setUserData] = useState();
 	const [loading, setLoading] = useState();
 	const { httpRequestHandler } = useHttpConnection();
-	const [expirationTokenTime, setExpirationTokenTime] = useState();
-	const navigate = useNavigate();
+	const userContext = useContext(UserContext);
 
-	const login = (userData, sessionLogoutTime) => {
+	const login = (userData) => {
 		setToken(userData.token);
 		setUserData(userData);
-		const expirationDateToken = sessionLogoutTime || new Date(new Date().getTime() + 1000 * 50);
-		setExpirationTokenTime(expirationDateToken);
+		setNavBar(<NavBar token={userData.token} key={userData.token} />);
 	};
 
 	const logout = useCallback(
@@ -25,17 +22,18 @@ const useUser = () => {
 			if (!expiredSession) {
 				setLoading(true);
 				let response = await httpRequestHandler(
-					'http://localhost:5000/api/session/logout',
+					'http://localhost:5000/api/user/logout',
 					'GET',
 					null,
 					{
-						authorization: `Bearer ${token}`,
+						authorization: `Bearer ${userContext.token}`,
 					},
 				);
 				setLoading(false);
 				if (response.message) {
 					setToken(null);
 					setUserData(null);
+
 					return;
 				} else {
 					return toast('No se pudo completar el proceso.', { type: 'error' });
@@ -43,54 +41,36 @@ const useUser = () => {
 			}
 			setToken(null);
 			setUserData(null);
+			setNavBar(<NavBar token={null} key={'01'} />);
 			return toast('Por su seguridad, vuelva a iniciar sesión.', { type: 'warning' });
 		},
-		[token, httpRequestHandler],
+		[httpRequestHandler, userContext.token, setNavBar],
 	);
 
 	const refreshSession = useCallback(async () => {
-		let response = await httpRequestHandler(
-			'http://localhost:5000/api/session/refresh-session',
-			'GET',
-			null,
-			{},
-		);
-		if (!response.error) {
-			setToken(response.token);
-			setUserData(response);
-			setExpirationTokenTime(new Date(new Date().getTime() + 1000 * 50));
-		}
-	}, [httpRequestHandler]);
-
-	useEffect(() => {
-		refreshSession();
-	}, [refreshSession]);
-
-	const refreshToken = useCallback(async () => {
 		try {
+			setLoading(true);
 			let response = await httpRequestHandler(
-				'http://localhost:5000/api/session/refresh-token',
+				'http://localhost:5000/api/user/refresh-session',
 				'GET',
 				null,
 				{},
 			);
-			setToken(response.accessToken);
-			setExpirationTokenTime(new Date(new Date().getTime() + 1000 * 50));
+			if (!response.error) {
+				setToken(response.token);
+				setUserData(response);
+				setNavBar(<NavBar token={response.token} key={response.token} />);
+			}
 		} catch (error) {
-			console.log(error);
-			await logout(false);
-			navigate('/');
+			logout(true);
+		} finally {
+			setLoading(false);
 		}
-	}, [httpRequestHandler, logout, navigate]);
+	}, [httpRequestHandler, logout, setNavBar]);
 
 	useEffect(() => {
-		if (!!token && expirationTokenTime) {
-			const remainingTime = expirationTokenTime.getTime() - new Date().getTime();
-			sessionLogoutTime = setTimeout(async () => await refreshToken(), remainingTime);
-		} else {
-			clearTimeout(sessionLogoutTime);
-		}
-	}, [token, expirationTokenTime, refreshToken]);
+		refreshSession();
+	}, [refreshSession]);
 
 	return {
 		token,

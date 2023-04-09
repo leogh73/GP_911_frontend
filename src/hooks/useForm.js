@@ -10,12 +10,12 @@ import { BiCommentDetail } from 'react-icons/bi';
 
 const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 	const { loadUser } = useRememberMe();
-	const { httpRequestHandler } = useHttpConnection();
 	const userContext = useContext(UserContext);
+	const { httpRequestHandler } = useHttpConnection();
 	const storedUser = loadUser();
 	const navigate = useNavigate();
 
-	let ownProfile = profileData?.userId === userContext?.userData?.userId ? true : false;
+	let ownProfile = profileData?.userId === userContext.userData?.userId ? true : false;
 
 	const [state, dispatch] = useReducer(reducer, {
 		inputs: [],

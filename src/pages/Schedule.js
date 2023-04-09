@@ -15,11 +15,11 @@ import UserContext from '../context/UserContext';
 import useHttpConnection from '../hooks/useHttpConnection';
 
 const Schedule = ({ type }) => {
-	const { httpRequestHandler } = useHttpConnection();
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
 	const [dataList, setDataList] = useState();
 	const userContext = useContext(UserContext);
+	const { httpRequestHandler } = useHttpConnection();
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [selectedDate, setSelectedDate] = useState(null);

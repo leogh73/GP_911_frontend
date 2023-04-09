@@ -5,16 +5,17 @@ import Loading from '../components/Loading';
 import Message from '../components/Message';
 import Table from '../components/Table';
 
-import UserContext from '../context/UserContext';
 import useHttpConnection from '../hooks/useHttpConnection';
+
+import UserContext from '../context/UserContext';
 
 import '../pages/Changes';
 
 const Affected = () => {
-	const { httpRequestHandler } = useHttpConnection();
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
 	const [dataList, setDataList] = useState();
+	const { httpRequestHandler } = useHttpConnection();
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 
@@ -37,7 +38,7 @@ const Affected = () => {
 				}
 				return;
 			}
-			setDataList(consult);
+			setDataList(consult.result);
 		} catch (error) {
 			console.log(error);
 			setError(true);

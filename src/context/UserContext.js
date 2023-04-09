@@ -1,8 +1,9 @@
 import { createContext } from 'react';
 
 const UserContext = createContext({
-	userData: {},
 	token: null,
+	setToken: () => {},
+	userData: {},
 	login: () => {},
 	logout: () => {},
 	state: {},

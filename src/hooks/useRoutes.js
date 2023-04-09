@@ -15,7 +15,7 @@ import ProfileEdit from '../pages/ProfileEdit';
 import ProfileEditConfirm from '../pages/ProfileEditConfirm';
 import RecoverPassword from '../pages/RecoverPassword';
 
-const useRoutes = (token, userData) => {
+const useRoutes = (userData) => {
 	const [state, dispatch] = useReducer(reducer, {
 		activeEditRoute: false,
 		changeData: {},
@@ -77,7 +77,7 @@ const useRoutes = (token, userData) => {
 
 	if (!!userData && userData.admin) adminRoutes.forEach((route) => userRoutes.push(route));
 
-	const routes = token ? (
+	const routes = userData?.token ? (
 		<Routes>
 			<Route path="/" element={<Navigate to="/changes/agreed" />} />
 			<Route path="/changes" element={<Navigate to="/changes/agreed" />} />

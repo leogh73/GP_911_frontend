@@ -4,19 +4,20 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import Table from '../components/Table';
-import SectionContext from '../context/SectionContext';
 
+import SectionContext from '../context/SectionContext';
 import UserContext from '../context/UserContext';
+
 import useHttpConnection from '../hooks/useHttpConnection';
 
 import './Changes.css';
 
 const Users = ({ section }) => {
-	const { httpRequestHandler } = useHttpConnection();
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
 	const [dataList, setDataList] = useState();
 	const userContext = useContext(UserContext);
+	const { httpRequestHandler } = useHttpConnection();
 	const navigate = useNavigate();
 	const location = useLocation();
 

@@ -8,16 +8,17 @@ import { MdDeleteForever } from 'react-icons/md';
 import { IoMdClose } from 'react-icons/io';
 import { RiRotateLockFill } from 'react-icons/ri';
 import UserContext from '../context/UserContext';
-import useHttpConnection from '../hooks/useHttpConnection';
+
 import Changelog from './Changelog';
 import Modal from './Modal';
 import './OptionsButtons.css';
 
 import CommentContext from '../context/CommentContext';
+import useHttpConnection from '../hooks/useHttpConnection';
 
 const OptionsButtons = ({ type, data, callbackFn }) => {
-	const { httpRequestHandler } = useHttpConnection();
 	const userContext = useContext(UserContext);
+	const { httpRequestHandler } = useHttpConnection();
 	const commentContext = useContext(CommentContext);
 	const fullName = `${userContext.userData.lastName} ${userContext.userData.firstName}`;
 	const navigate = useNavigate();
@@ -221,6 +222,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					'Content-type': 'application/json',
 				},
 			);
+			if (consult.newAccessToken) userContext.setToken(consult.newAccessToken);
 			if (consult.error === 'Token expired') {
 				userContext.logout(true);
 				navigate('/');

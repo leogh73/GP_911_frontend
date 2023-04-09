@@ -6,26 +6,26 @@ import { FaUserCheck, FaUserLock, FaUserTimes } from 'react-icons/fa';
 
 import 'react-calendar/dist/Calendar.css';
 
-import useHttpConnection from '../hooks/useHttpConnection';
 import Loading from '../components/Loading';
+import useHttpConnection from '../hooks/useHttpConnection';
 
 const RecoverPassword = () => {
-	const { httpRequestHandler } = useHttpConnection();
 	const [isLoggedInIsValid, setTokenIsValid] = useState();
 	const [errorPassword, setErrorPassword] = useState();
 	const [successPassword, setSuccessPassword] = useState();
+	const { httpRequestHandler } = useHttpConnection();
 	const [userId, setUserId] = useState();
 	const [loadingForm, setLoadingForm] = useState(true);
 	const navigate = useNavigate();
 	const location = useLocation();
-	const isLoggedIn = location.pathname.split('/isLoggedIn=')[1];
+	const token = location.pathname.split('/token=')[1];
 
 	const checkToken = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
 				'http://localhost:5000/api/user/forgot-password',
 				'POST',
-				JSON.stringify({ isLoggedIn }),
+				JSON.stringify({ token }),
 				{ 'Content-type': 'application/json' },
 			);
 			if (consult.error) return setTokenIsValid(false);
@@ -36,7 +36,7 @@ const RecoverPassword = () => {
 		} finally {
 			setLoadingForm(false);
 		}
-	}, [httpRequestHandler, isLoggedIn]);
+	}, [httpRequestHandler, token]);
 
 	const processResult = (result) => {
 		result.result._id ? setSuccessPassword(true) : setErrorPassword(true);
