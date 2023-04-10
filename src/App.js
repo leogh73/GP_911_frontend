@@ -12,8 +12,8 @@ import UserContext from './context/UserContext';
 import Loading from './components/Loading';
 
 const App = () => {
-	const [navBar, setNavBar] = useState(<NavBar token={null} key={'01'} />);
-	const { token, userData, login, logout, loading } = useUser(setNavBar);
+	const [navBarState, setNavBarState] = useState({ isLoggedIn: false, isAdmin: false });
+	const { token, userData, login, logout, loading } = useUser(setNavBarState);
 	const { routes, state, dispatch } = useRoutes(userData);
 
 	return (
@@ -27,7 +27,7 @@ const App = () => {
 				dispatch,
 			}}
 		>
-			{navBar}
+			<NavBar navBarState={navBarState} />
 			<IconContext.Provider value={{ style: { color: 'slategray', backgroundColor: 'none' } }}>
 				{loading ? (
 					<div className="spinner-container-main">

@@ -222,11 +222,14 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					'Content-type': 'application/json',
 				},
 			);
-			if (consult.newAccessToken) userContext.setToken(consult.newAccessToken);
 			if (consult.error === 'Token expired') {
 				userContext.logout(true);
 				navigate('/');
 				return;
+			}
+			if (consult.newAccessToken) {
+				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
+				userContext.login(newUserData);
 			}
 			callbackFn(status, consult);
 		} catch (error) {

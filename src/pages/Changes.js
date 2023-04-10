@@ -40,7 +40,6 @@ const Changes = ({ type }) => {
 			if (consult.newAccessToken) {
 				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
 				userContext.login(newUserData);
-				console.log('TOKEN REFRESHED!');
 			}
 		} catch (error) {
 			console.log(error);

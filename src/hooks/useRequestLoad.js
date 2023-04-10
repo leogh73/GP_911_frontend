@@ -106,6 +106,10 @@ const useRequestLoad = (sendResult) => {
 				}
 				return;
 			}
+			if (consult.newAccessToken) {
+				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
+				userContext.login(newUserData);
+			}
 			sendResult(consult);
 		} catch (error) {
 			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });

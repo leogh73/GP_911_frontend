@@ -170,6 +170,10 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 		let extraData;
 		if (pageName === 'login') extraData = formData.usernameOrEmail;
 		if (pageName === 'profile-edit') extraData = ownProfile;
+		if (resultData.newAccessToken) {
+			const newUserData = { ...userContext.userData, token: resultData.newAccessToken };
+			userContext.login(newUserData);
+		}
 		sendUserForm(resultData, extraData);
 	};
 

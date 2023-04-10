@@ -34,13 +34,17 @@ const ProfileEditConfirm = () => {
 			if (consult.error) return setSuccess(false);
 			setResult(consult.result);
 			setSuccess(true);
+			if (consult.newAccessToken) {
+				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
+				userContext.login(newUserData);
+			}
 		} catch (error) {
 			console.log(error);
 			setSuccess(false);
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, tokenData, userContext.token]);
+	}, [httpRequestHandler, tokenData, userContext]);
 
 	useEffect(() => {
 		confirmProfileChange();

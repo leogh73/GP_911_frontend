@@ -61,6 +61,10 @@ const Schedule = ({ type }) => {
 				return;
 			}
 			setDataList(consult);
+			if (consult.newAccessToken) {
+				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
+				userContext.login(newUserData);
+			}
 		} catch (error) {
 			console.log(error);
 			setError(true);

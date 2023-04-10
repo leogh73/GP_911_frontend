@@ -46,7 +46,7 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 	});
 
 	const loadStartData = useCallback(async () => {
-		let data = [];
+		let data = {};
 		dispatch({ type: 'loading', payload: { status: true } });
 		if (type === 'users') {
 			try {
@@ -62,13 +62,17 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 				return toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
 			}
 		} else {
-			for (let i = 1; i <= 200; i++) data.push(i.toString().padStart(3, 0));
+			for (let i = 1; i <= 200; i++) data.items.push(i.toString().padStart(3, 0));
+		}
+		if (data.newAccessToken) {
+			const newUserData = { ...userContext.userData, token: data.newAccessToken };
+			userContext.login(newUserData);
 		}
 		dispatch({
 			type: 'load start data',
-			payload: { items: data },
+			payload: { items: data.items },
 		});
-	}, [httpRequestHandler, type, userContext.token]);
+	}, [httpRequestHandler, type, userContext]);
 
 	useEffect(() => {
 		loadStartData();

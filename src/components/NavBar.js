@@ -17,7 +17,7 @@ import { FiSun, FiMoon } from 'react-icons/fi';
 import UserContext from '../context/UserContext';
 import './NavBar.css';
 
-const NavBar = ({ token }) => {
+const NavBar = ({ navBarState }) => {
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -66,7 +66,7 @@ const NavBar = ({ token }) => {
 		const burger = document.querySelector('.burger');
 		const navLinks = document.querySelector('.nav-links');
 		const layout = document.querySelector('.layout');
-		const userMenu = token ? document.querySelector('.user-toggle') : null;
+		const userMenu = navBarState.isLoggedIn ? document.querySelector('.user-toggle') : null;
 		const navLinksList = document.querySelectorAll('.nav-links li');
 
 		const body = document.querySelector('body');
@@ -86,7 +86,7 @@ const NavBar = ({ token }) => {
 			body.classList.toggle('body-navbar-overflow');
 		};
 
-		if (token) {
+		if (navBarState.isLoggedIn) {
 			burger.addEventListener('click', () => {
 				toggleNavBar();
 				if (userMenu.classList.contains('active')) userMenu.classList.toggle('active');
@@ -119,7 +119,7 @@ const NavBar = ({ token }) => {
 		});
 
 		return () => {
-			if (token) {
+			if (navBarState.isLoggedIn) {
 				userMenu.removeEventListener('click', () => {});
 				burger.removeEventListener('click', () => {
 					navLinks.classList.toggle('nav-links');
@@ -138,10 +138,10 @@ const NavBar = ({ token }) => {
 				});
 			}
 		};
-	}, [token]);
+	}, [navBarState.isLoggedIn]);
 
 	useEffect(() => {
-		if (token) {
+		if (navBarState.isLoggedIn) {
 			const navLinksList = document.querySelectorAll('.nav-links li');
 			navLinksList.forEach((link) => {
 				if (link.classList.contains('clicked')) link.classList.remove('clicked');
@@ -150,7 +150,7 @@ const NavBar = ({ token }) => {
 			let activeLink = document.getElementById(clickedUrl);
 			if (!!activeLink) activeLink.classList.add('clicked');
 		}
-	}, [token, location.pathname]);
+	}, [navBarState.isLoggedIn, location.pathname]);
 
 	const modeButton = () => (
 		<>
@@ -187,7 +187,7 @@ const NavBar = ({ token }) => {
 				<div className="logo">
 					<h4>Guardias 911</h4>
 				</div>
-				{token ? (
+				{navBarState.isLoggedIn ? (
 					<>
 						<ul className="nav-links" onClick={navLinksClickHandler}>
 							<li id={'/schedule'}>
@@ -220,7 +220,7 @@ const NavBar = ({ token }) => {
 									</Link>
 								</div>
 							</li>
-							{userContext.userData?.admin && (
+							{navBarState.isAdmin && (
 								<li id={'/users'}>
 									<div className="link-container">
 										<Link

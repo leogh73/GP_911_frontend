@@ -2,20 +2,25 @@ import { useState, useCallback, useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
-import NavBar from '../components/NavBar';
 
-const useUser = (setNavBar) => {
+const useUser = (setNavBarState) => {
 	const [token, setToken] = useState();
 	const [userData, setUserData] = useState();
 	const [loading, setLoading] = useState();
 	const { httpRequestHandler } = useHttpConnection();
 	const userContext = useContext(UserContext);
 
-	const login = (userData) => {
-		setToken(userData.token);
-		setUserData(userData);
-		setNavBar(<NavBar token={userData.token} key={userData.token} />);
-	};
+	const login = useCallback(
+		(userData) => {
+			setToken(userData.token);
+			setUserData(userData);
+			setNavBarState({
+				isLoggedIn: true,
+				isAdmin: userData.admin,
+			});
+		},
+		[setNavBarState],
+	);
 
 	const logout = useCallback(
 		async (expiredSession) => {
@@ -33,7 +38,7 @@ const useUser = (setNavBar) => {
 				if (response.message) {
 					setToken(null);
 					setUserData(null);
-
+					setNavBarState({ isLoggedIn: false, isAdmin: false });
 					return;
 				} else {
 					return toast('No se pudo completar el proceso.', { type: 'error' });
@@ -41,10 +46,10 @@ const useUser = (setNavBar) => {
 			}
 			setToken(null);
 			setUserData(null);
-			setNavBar(<NavBar token={null} key={'01'} />);
+			setNavBarState({ isLoggedIn: false, isAdmin: false });
 			return toast('Por su seguridad, vuelva a iniciar sesión.', { type: 'warning' });
 		},
-		[httpRequestHandler, userContext.token, setNavBar],
+		[httpRequestHandler, userContext.token, setNavBarState],
 	);
 
 	const refreshSession = useCallback(async () => {
@@ -56,17 +61,14 @@ const useUser = (setNavBar) => {
 				null,
 				{},
 			);
-			if (!response.error) {
-				setToken(response.token);
-				setUserData(response);
-				setNavBar(<NavBar token={response.token} key={response.token} />);
-			}
+			if (response.error) logout(true);
+			if (response.userId) login(response);
 		} catch (error) {
 			logout(true);
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, logout, setNavBar]);
+	}, [httpRequestHandler, logout, login]);
 
 	useEffect(() => {
 		refreshSession();

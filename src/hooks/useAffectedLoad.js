@@ -135,7 +135,11 @@ const useAffectedLoad = (sendResult) => {
 				navigate('/');
 				return;
 			}
-			sendResult(consult);
+			if (consult.newAccessToken) {
+				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
+				userContext.login(newUserData);
+			}
+			sendResult(consult.result);
 		} catch (error) {
 			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
 			console.log(error);

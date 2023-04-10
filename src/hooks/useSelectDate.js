@@ -113,12 +113,14 @@ const useSelectDate = (sendDate, name) => {
 				navigate('/');
 				return;
 			}
-
+			if (consult.newAccessToken) {
+				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
+				userContext.login(newUserData);
+			}
 			dispatch({
 				type: 'date guards',
 				payload: { data: consult },
 			});
-
 			if (state.data.shift !== '-') {
 				let index = consult.findIndex((s) => s.shift === state.data.shift);
 				dispatch({
