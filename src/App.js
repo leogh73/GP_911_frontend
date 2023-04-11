@@ -10,6 +10,7 @@ import useRoutes from './hooks/useRoutes';
 
 import UserContext from './context/UserContext';
 import Loading from './components/Loading';
+import IdleTimer from './components/IdleTimer';
 
 const App = () => {
 	const [navBarState, setNavBarState] = useState({ isLoggedIn: false, isAdmin: false });
@@ -38,12 +39,12 @@ const App = () => {
 				)}
 			</IconContext.Provider>
 			<ToastContainer />
-			{/* <IdleTimer isLoggedIn={isLoggedIn} /> */}
+			<IdleTimer isLoggedIn={navBarState.isLoggedIn} />
 			<footer className="footer">
 				<div className="ft-logo">
 					<img alt="" src={'./logo-911.png'}></img>
 				</div>
-				<div className="ft-text">© 2022</div>
+				<div className="ft-text">© 2023</div>
 			</footer>
 		</UserContext.Provider>
 	);

@@ -39,6 +39,10 @@ const Affected = () => {
 				return;
 			}
 			setDataList(consult.result);
+			if (consult.newAccessToken) {
+				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
+				userContext.login(newUserData);
+			}
 		} catch (error) {
 			console.log(error);
 			setError(true);
