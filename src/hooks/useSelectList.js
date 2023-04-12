@@ -46,11 +46,11 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 	});
 
 	const loadStartData = useCallback(async () => {
-		let data = {};
+		let data = { items: [] };
 		dispatch({ type: 'loading', payload: { status: true } });
 		if (type === 'users') {
 			try {
-				data = await httpRequestHandler(
+				let consult = await httpRequestHandler(
 					'http://localhost:5000/api/spreadsheet/users',
 					'GET',
 					null,
@@ -58,6 +58,7 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 						authorization: `Bearer ${userContext.token}`,
 					},
 				);
+				data.items = consult.usersList;
 			} catch (error) {
 				return toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
 			}

@@ -85,6 +85,7 @@ const Row = ({ type, data, modifyCallback }) => {
 						columnName: '#',
 						rowData: data.priorityId,
 					},
+					{ columnName: 'Superior', rowData: data.superior },
 					{ columnName: 'Personal', rowData: data.name },
 					{
 						columnName: 'Afectado',

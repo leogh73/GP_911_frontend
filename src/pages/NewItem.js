@@ -37,6 +37,7 @@ const NewItem = ({ type }) => {
 	};
 
 	const resultNewChange = (result) => {
+		console.log(result);
 		if (type === 'change') navigate('/changes/agreed');
 		if (type === 'request') navigate('/changes/requested');
 		if (type === 'affected') navigate('/affected');
@@ -56,7 +57,6 @@ const NewItem = ({ type }) => {
 				break;
 		}
 	};
-
 
 	return <>{loadForm(type)}</>;
 };

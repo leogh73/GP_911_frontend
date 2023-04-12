@@ -113,6 +113,9 @@ const useTableData = (dataList, rowType) => {
 					case '#': {
 						return sortByPriority();
 					}
+					case 'Superior': {
+						return listData.sort((a, b) => a.name.localeCompare(b.name));
+					}
 					case 'Personal': {
 						return listData.sort((a, b) => a.name.localeCompare(b.name));
 					}
@@ -265,9 +268,9 @@ const useTableData = (dataList, rowType) => {
 			let newItemsList = { ...listData };
 			let indexFetched = newItemsList.fetched.findIndex((i) => i._id === id);
 			if (removeItem) {
-				indexFetched && newItemsList.fetched.splice(indexFetched, 1);
+				indexFetched !== -1 && newItemsList.fetched.splice(indexFetched, 1);
 				let indexFilter = newItemsList.filter.findIndex((i) => i._id === id);
-				indexFilter && newItemsList.filter.splice(indexFilter, 1);
+				indexFilter !== -1 && newItemsList.filter.splice(indexFilter, 1);
 			} else {
 				newItemsList.fetched[indexFetched].status = newStatus;
 				newItemsList.fetched[indexFetched].changelog.push(changelog);
@@ -283,11 +286,11 @@ const useTableData = (dataList, rowType) => {
 					false,
 					action.payload.changelog,
 				);
-				return { ...newList };
+				return newList;
 			}
 			case 'delete': {
 				let newList = modifyList(action.payload.id, null, true, null);
-				return { ...newList };
+				return newList;
 			}
 			case 'header': {
 				return listData.header === action.payload.value

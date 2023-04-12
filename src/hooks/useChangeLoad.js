@@ -181,26 +181,24 @@ const useChangeLoad = (resultData, startData) => {
 			: { coverData: state.data.coverData, returnData: state.data.returnData, type: 'change' };
 		try {
 			dispatch({ type: 'loading', payload: { status: true } });
-			let consult = startData
-				? httpRequestHandler(
-						'http://localhost:5000/api/item/edit',
-						'POST',
-						JSON.stringify(body),
-						headers,
-				  )
-				: httpRequestHandler(
-						'http://localhost:5000/api/item/new',
-						'POST',
-						JSON.stringify(body),
-						headers,
-				  );
+			let consult = await httpRequestHandler(
+				`http://localhost:5000/api/item/${startData ? 'edit' : 'new'}`,
+				'POST',
+				JSON.stringify(body),
+				headers,
+			);
 			dispatch({ type: 'loading', payload: { status: false } });
 			if (consult.error === 'Token expired') {
 				userContext.logout(true);
 				navigate('/');
 				return;
 			}
-			resultData(consult);
+			if (consult.newAccessToken) {
+				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
+				userContext.login(newUserData);
+			}
+			console.log(consult);
+			resultData(consult.result);
 		} catch (error) {
 			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
 			console.log(error);

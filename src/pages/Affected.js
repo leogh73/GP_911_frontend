@@ -74,11 +74,12 @@ const Affected = () => {
 					id={Math.random() * 10000}
 					headersList={[
 						{ key: 0, title: '#' },
-						{ key: 1, title: 'Personal' },
-						{ key: 2, title: 'Afectado' },
-						{ key: 3, title: 'Desafectado' },
-						{ key: 4, title: 'Comentario' },
-						{ key: 5, title: 'Foja' },
+						{ key: 1, title: 'Superior' },
+						{ key: 2, title: 'Personal' },
+						{ key: 3, title: 'Afectado' },
+						{ key: 4, title: 'Desafectado' },
+						{ key: 5, title: 'Comentario' },
+						{ key: 6, title: 'Foja' },
 					]}
 					rowType={'affected'}
 					dataList={dataList}

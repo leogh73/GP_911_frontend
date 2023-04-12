@@ -7,6 +7,7 @@ const Register = ({ section }) => {
 	const navigate = useNavigate();
 
 	const registerResult = (result) => {
+		console.log(result);
 		navigate(`/users/${section.toLowerCase()}`);
 		result.result._id
 			? toast('Personal registrado correctamente.', { type: 'success' })

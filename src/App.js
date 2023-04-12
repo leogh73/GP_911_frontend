@@ -39,7 +39,7 @@ const App = () => {
 				)}
 			</IconContext.Provider>
 			<ToastContainer />
-			<IdleTimer isLoggedIn={navBarState.isLoggedIn} />
+			{/* <IdleTimer isLoggedIn={navBarState.isLoggedIn} /> */}
 			<footer className="footer">
 				<div className="ft-logo">
 					<img alt="" src={'./logo-911.png'}></img>

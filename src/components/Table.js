@@ -21,7 +21,24 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 	const navigate = useNavigate();
 	const { listData, dispatch } = useTableData(dataList, rowType);
 
+	const resultMessage = (action, newStatus) => {
+		let item;
+		let message = 'No se pudo completar el proceso.';
+		if (rowType === 'change') item = 'Cambio';
+		if (rowType === 'request') item = 'Pedido';
+		if (rowType === 'affected') item = 'Cambio de servicio';
+		if (rowType === 'user') item = 'Usuario';
+		if (action === 'delete') message = item + ' eliminado correctamente.';
+		if (action === 'modify') {
+			if (rowType !== 'user') message = `${item} ${newStatus.toLowerCase()}`;
+			if (rowType === 'user') message = 'Contraseña restablecida';
+			message = message + ' correctamente.';
+		}
+		return message;
+	};
+
 	const resultModifyRow = (status, consult) => {
+		console.log(consult);
 		if (consult.result && consult.result._id) {
 			if (!status) {
 				dispatch({
@@ -30,7 +47,7 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 						id: consult.result._id,
 					},
 				});
-				toast(`${rowType === 'change' ? 'Cambio' : 'Usuario'} eliminado correctamente.`, {
+				toast(resultMessage('delete'), {
 					type: 'success',
 				});
 			} else {
@@ -42,12 +59,7 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 						changelog: consult.changelogItem,
 					},
 				});
-				toast(
-					`${
-						rowType === 'change' ? `Cambio ${status.new.toLowerCase()}` : 'Contraseña restablecida'
-					} correctamente`,
-					{ type: 'success' },
-				);
+				toast(resultMessage('modify', status.new), { type: 'success' });
 			}
 		}
 		if (!consult || consult.error) {
@@ -56,7 +68,7 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 					type: 'error',
 				},
 			});
-			toast('No se pudo completar el proceso.', { type: 'error' });
+			toast(resultMessage(), { type: 'error' });
 		}
 	};
 
