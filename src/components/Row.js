@@ -128,7 +128,7 @@ const Row = ({ type, data, modifyCallback }) => {
 					},
 					{
 						columnName: 'Guardia',
-						rowData: data.guardId ?? '-',
+						rowData: data.guardId,
 					},
 					{
 						columnName: 'Usuario',

@@ -14,10 +14,94 @@ const Modal = ({
 	actionFunction,
 	closeText,
 	closeFunction,
-	error,
+	type,
 	comment,
 }) => {
 	const commentContext = useContext(CommentContext);
+
+	const modalContent = () => {
+		let content = (
+			<>
+				<div className="modal-header">
+					<h5 className="modal-title">{title}</h5>
+					<IoMdClose
+						style={{ cursor: 'pointer', color: 'black' }}
+						size={25}
+						onClick={closeModal}
+					/>
+				</div>
+				<p className="modal-divider" />
+				<div className="modal-body">{body}</div>
+				<p className="modal-divider" />
+				{comment && (
+					<>
+						<div className="comment-modal">
+							<input
+								name={'comment-modal'}
+								id={`${id.slice(0, 4)}`}
+								onChange={commentChangeHandler}
+								value={commentContext.comment}
+								placeholder={'Comentario (opcional)'}
+							/>
+						</div>
+						<p className="modal-divider" />
+					</>
+				)}
+				<div className="modal-footer">
+					{actionFunction != null && (
+						<div className="modal-btn">
+							<Button
+								width={120}
+								text="Si"
+								onClick={() => {
+									actionFunction();
+									closeModal();
+								}}
+							/>
+						</div>
+					)}
+					<div className="modal-btn">
+						<Button width={120} text={closeText} onClick={closeModal} />
+					</div>
+				</div>
+			</>
+		);
+
+		if (type === 'error')
+			content = (
+				<div
+					style={{
+						height: '210px',
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'space-around',
+						alignItems: 'center',
+					}}
+				>
+					<Title text={title} icon={<FaExclamationTriangle />} />
+					<p style={{ paddingBottom: '10px' }}>{body}</p>
+					<Button text={'CERRAR'} width={250} onClick={closeModal} />
+				</div>
+			);
+
+		if (type === 'timer')
+			content = (
+				<div
+					style={{
+						height: '210px',
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'space-around',
+						alignItems: 'center',
+					}}
+				>
+					<Title text={title} icon={<FaExclamationTriangle />} />
+					{body}
+				</div>
+			);
+
+		return content;
+	};
 
 	const openModal = useCallback(() => {
 		document.getElementById(id).classList.add('active');
@@ -57,68 +141,7 @@ const Modal = ({
 					if (e.target.className === `modal-bg active`) closeModal();
 				}}
 			>
-				<div className="modal-content">
-					{error ? (
-						<div
-							style={{
-								height: '210px',
-								display: 'flex',
-								flexDirection: 'column',
-								justifyContent: 'space-around',
-								alignItems: 'center',
-							}}
-						>
-							<Title text={title} icon={<FaExclamationTriangle />} />
-							<p style={{ paddingBottom: '10px' }}>{body}</p>
-							<Button text={'CERRAR'} width={250} onClick={closeModal} />
-						</div>
-					) : (
-						<>
-							<div className="modal-header">
-								<h5 className="modal-title">{title}</h5>
-								<IoMdClose
-									style={{ cursor: 'pointer', color: 'black' }}
-									size={25}
-									onClick={closeModal}
-								/>
-							</div>
-							<p className="modal-divider" />
-							<div className="modal-body">{body}</div>
-							<p className="modal-divider" />
-							{comment && (
-								<>
-									<div className="comment-modal">
-										<input
-											name={'comment-modal'}
-											id={`${id.slice(0, 4)}`}
-											onChange={commentChangeHandler}
-											value={commentContext.comment}
-											placeholder={'Comentario (opcional)'}
-										/>
-									</div>
-									<p className="modal-divider" />
-								</>
-							)}
-							<div className="modal-footer">
-								{actionFunction != null && (
-									<div className="modal-btn">
-										<Button
-											width={120}
-											text="Si"
-											onClick={() => {
-												actionFunction();
-												closeModal();
-											}}
-										/>
-									</div>
-								)}
-								<div className="modal-btn">
-									<Button width={120} text={closeText} onClick={closeModal} />
-								</div>
-							</div>
-						</>
-					)}
-				</div>
+				<div className="modal-content">{modalContent()}</div>
 			</div>
 		</>
 	);

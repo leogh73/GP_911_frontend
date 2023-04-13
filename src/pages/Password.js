@@ -78,7 +78,7 @@ const Password = ({ type }) => {
 					body={'El correo electrónico ingresado no corresponde a ningún usuario registrado.'}
 					closeText={'Cerrar'}
 					closeFunction={() => setEmailIsValid(true)}
-					error={emailIsValid}
+					type={'error'}
 				/>
 			)}
 		</>

@@ -5,7 +5,7 @@ import Modal from './Modal';
 
 const IdleTimer = ({ isLoggedIn }) => {
 	const [showModal, setShowModal] = useState(false);
-	const [modalRemainingTime, setModalRemainingTime] = useState(10);
+	const [modalRemainingTime, setModalRemainingTime] = useState(15);
 	const navigate = useNavigate();
 	const userContext = useContext(UserContext);
 
@@ -26,15 +26,14 @@ const IdleTimer = ({ isLoggedIn }) => {
 
 		window.addEventListener('mousemove', () => {
 			setShowModal(false);
-			setModalRemainingTime(10);
+			setModalRemainingTime(15);
 		});
 
 		return () => {
-			console.log('clear modal timeout');
 			if (modalTimeout) clearTimeout(modalTimeout);
 			window.removeEventListener('mousemove', () => {
 				setShowModal(false);
-				setModalRemainingTime(10);
+				setModalRemainingTime(15);
 			});
 		};
 	}, [modalRemainingTime, showModal, userContext, navigate]);
@@ -47,7 +46,7 @@ const IdleTimer = ({ isLoggedIn }) => {
 			if (idleTimeout) clearTimeout(idleTimeout);
 			idleTimeout = setTimeout(() => {
 				setShowModal(true);
-			}, 1000 * 10);
+			}, 1000 * 60 * 5);
 		};
 
 		restartAutoReset();
@@ -56,7 +55,6 @@ const IdleTimer = ({ isLoggedIn }) => {
 
 		return () => {
 			if (idleTimeout) {
-				console.log('clear idle timeout');
 				clearTimeout(idleTimeout);
 				window.removeEventListener('mousemove', restartAutoReset);
 			}
@@ -69,9 +67,29 @@ const IdleTimer = ({ isLoggedIn }) => {
 				<Modal
 					id="login-error"
 					title={'¿Sigue allí?'}
-					body={`Su sesión se cerrará automáticamente en ${modalRemainingTime} segundos`}
+					body={
+						<div
+							style={{
+								display: 'flex',
+								flexDirection: 'column',
+								justifyContent: 'space-around',
+								alignItems: 'center',
+							}}
+						>
+							<div
+								style={{
+									fontSize: '17px',
+									paddingBottom: '10px',
+								}}
+							>
+								{'Su sesión se cerrará automáticamente en'}
+							</div>
+							<div style={{ fontSize: '25px' }}>{`${modalRemainingTime} segundos`}</div>
+						</div>
+					}
 					closeText={'Si'}
 					closeFunction={() => setShowModal(false)}
+					type={'timer'}
 				/>
 			)}
 		</>

@@ -123,7 +123,7 @@ const Form = ({
 					body={'Usuario y/o contraseña incorrectos.'}
 					closeText={'Cerrar'}
 					closeFunction={() => closeErrorModal('login')}
-					error={state.loginError}
+					type={'error'}
 				/>
 			)}
 			{state.registerError && (
@@ -133,7 +133,7 @@ const Form = ({
 					body={'El usuario ya estaría registrado. Verifique los datos ingresados.'}
 					closeText={'Cerrar'}
 					closeFunction={() => closeErrorModal('register')}
-					error={state.registerError}
+					type={'error'}
 				/>
 			)}
 			{state.serverError && (
@@ -143,7 +143,7 @@ const Form = ({
 					body={'Error de conexión al servidor.'}
 					closeText={'Cerrar'}
 					closeFunction={() => closeErrorModal('server')}
-					error={state.serverError}
+					type={'error'}
 				/>
 			)}
 			{state.passwordError && (
@@ -153,7 +153,7 @@ const Form = ({
 					body={'La contraseña actual es inválida.'}
 					closeText={'Cerrar'}
 					closeFunction={() => closeErrorModal('password')}
-					error={state.passwordError}
+					type={'error'}
 				/>
 			)}
 		</div>
