@@ -10,12 +10,12 @@ import Loading from '../components/Loading';
 import useHttpConnection from '../hooks/useHttpConnection';
 
 const RecoverPassword = () => {
-	const [isLoggedInIsValid, setTokenIsValid] = useState();
+	const [tokenIsValid, setTokenIsValid] = useState(false);
+	const [loadingForm, setLoadingForm] = useState(true);
 	const [errorPassword, setErrorPassword] = useState();
 	const [successPassword, setSuccessPassword] = useState();
 	const { httpRequestHandler } = useHttpConnection();
-	const [userId, setUserId] = useState();
-	const [loadingForm, setLoadingForm] = useState(true);
+	const [userId, setUserId] = useState(null);
 	const navigate = useNavigate();
 	const location = useLocation();
 	const token = location.pathname.split('/token=')[1];
@@ -46,8 +46,7 @@ const RecoverPassword = () => {
 		checkToken();
 		return () => {
 			setLoadingForm(true);
-			setSuccessPassword(null);
-			setErrorPassword(null);
+			setTokenIsValid(false);
 		};
 	}, [checkToken]);
 
@@ -57,7 +56,7 @@ const RecoverPassword = () => {
 		<div className="spinner-container-change">
 			<Loading type={'closed'} />
 		</div>
-	) : !isLoggedInIsValid ? (
+	) : !tokenIsValid ? (
 		<div className="new-form">
 			<Message
 				title={'Acceso incorrecto'}

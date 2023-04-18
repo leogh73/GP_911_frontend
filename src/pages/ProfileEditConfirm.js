@@ -18,7 +18,7 @@ const ProfileEditConfirm = () => {
 	const userContext = useContext(UserContext);
 	const navigate = useNavigate();
 	const location = useLocation();
-	const tokenData = location.pathname.split('/isLoggedIn=')[1];
+	const tokenData = location.pathname.split('/token=')[1];
 
 	const confirmProfileChange = useCallback(async () => {
 		try {

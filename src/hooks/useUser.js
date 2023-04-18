@@ -2,12 +2,14 @@ import { useState, useCallback, useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
+import { useLocation } from 'react-router-dom';
 
 const useUser = (setNavBarState) => {
 	const [token, setToken] = useState();
 	const [userData, setUserData] = useState();
 	const [loading, setLoading] = useState();
 	const { httpRequestHandler } = useHttpConnection();
+	const location = useLocation();
 	const userContext = useContext(UserContext);
 
 	const login = useCallback(
@@ -66,8 +68,13 @@ const useUser = (setNavBarState) => {
 	}, [httpRequestHandler, logout, login]);
 
 	useEffect(() => {
-		refreshSession();
-	}, [refreshSession]);
+		if (
+			!token &&
+			!location.pathname.startsWith('/new-password') &&
+			!location.pathname.startsWith('/forgot-password')
+		)
+			refreshSession();
+	}, [refreshSession, token, location.pathname]);
 
 	return {
 		token,

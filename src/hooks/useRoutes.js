@@ -139,8 +139,8 @@ const useRoutes = (userData) => {
 		<Routes>
 			<Route path="/" element={<Login />} />
 			<Route path="*" element={<NotFound />} />
-			<Route path="/forgotpassword" element={<Password type={'forgot'} />} />
-			<Route path="/new-password/:isLoggedIn" element={<RecoverPassword />} />
+			<Route path="/forgot-password" element={<Password type={'forgot'} />} />
+			<Route path="/new-password/:token" element={<RecoverPassword />} />
 		</Routes>
 	);
 

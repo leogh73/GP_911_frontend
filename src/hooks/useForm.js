@@ -174,6 +174,7 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 			const newUserData = { ...userContext.userData, token: resultData.newAccessToken };
 			userContext.login(newUserData);
 		}
+		console.log(resultData);
 		sendUserForm(resultData, extraData);
 	};
 

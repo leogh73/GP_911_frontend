@@ -13,7 +13,7 @@ const Password = ({ type }) => {
 
 	const processResult = (result) => {
 		if (result.error === 'User not found') return setEmailIsValid(true);
-		result._id ? setSuccess(true) : setError(true);
+		result.result._id ? setSuccess(true) : setError(true);
 	};
 
 	const goBack = () => {
