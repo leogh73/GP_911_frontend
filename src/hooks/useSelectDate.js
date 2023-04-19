@@ -99,7 +99,7 @@ const useSelectDate = (sendDate, name) => {
 
 		try {
 			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/spreadsheet/day',
+				`${process.env.REACT_APP_API_URL}/api/spreadsheet/day`,
 				'POST',
 				JSON.stringify({ date: dateData.formattedDate }),
 				{

@@ -22,7 +22,7 @@ const Affected = () => {
 	const fetchListItems = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/item/all',
+				`${process.env.REACT_APP_API_URL}/api/item/all`,
 				'POST',
 				JSON.stringify({ type: 'affected' }),
 				{

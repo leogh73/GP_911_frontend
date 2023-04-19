@@ -28,7 +28,7 @@ const useUser = (setNavBarState) => {
 		async (expiredSession) => {
 			setLoading(true);
 			let response = await httpRequestHandler(
-				'http://localhost:5000/api/user/logout',
+				`${process.env.REACT_APP_API_URL}/api/user/logout`,
 				'GET',
 				null,
 				{
@@ -53,7 +53,7 @@ const useUser = (setNavBarState) => {
 		try {
 			setLoading(true);
 			let response = await httpRequestHandler(
-				'http://localhost:5000/api/user/refresh-session',
+				`${process.env.REACT_APP_API_URL}/api/user/refresh-session`,
 				'GET',
 				null,
 				{},
@@ -68,12 +68,7 @@ const useUser = (setNavBarState) => {
 	}, [httpRequestHandler, logout, login]);
 
 	useEffect(() => {
-		if (
-			!token &&
-			!location.pathname.startsWith('/new-password') &&
-			!location.pathname.startsWith('/forgot-password')
-		)
-			refreshSession();
+		if (!token && !location.pathname.startsWith('/new-password')) refreshSession();
 	}, [refreshSession, token, location.pathname]);
 
 	return {

@@ -35,7 +35,7 @@ const Schedule = ({ type }) => {
 			let consult;
 			if (type === 'month')
 				consult = await httpRequestHandler(
-					`http://localhost:5000/api/spreadsheet/month`,
+					`${process.env.REACT_APP_API_URL}/api/spreadsheet/month`,
 					'GET',
 					null,
 					{
@@ -44,7 +44,7 @@ const Schedule = ({ type }) => {
 				);
 			if (type === 'search' && !!selectedDate)
 				consult = await httpRequestHandler(
-					`http://localhost:5000/api/spreadsheet/search`,
+					`${process.env.REACT_APP_API_URL}/api/spreadsheet/search`,
 					'POST',
 					JSON.stringify({ date: selectedDate }),
 					{

@@ -24,7 +24,7 @@ const Users = ({ section }) => {
 	const fetchListItems = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/user/allusers',
+				`${process.env.REACT_APP_API_URL}/api/user/allusers`,
 				'POST',
 				JSON.stringify({ section }),
 				{
@@ -40,7 +40,7 @@ const Users = ({ section }) => {
 				}
 				return;
 			}
-			setDataList(consult.allUsers);
+			setDataList(consult.usersList);
 		} catch (error) {
 			console.log(error);
 			setError(true);

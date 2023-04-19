@@ -121,7 +121,7 @@ const useAffectedLoad = (sendResult) => {
 		try {
 			dispatch({ type: 'loading', payload: { status: true } });
 			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/item/new',
+				`${process.env.REACT_APP_API_URL}/api/item/new`,
 				'POST',
 				JSON.stringify(state.data),
 				{

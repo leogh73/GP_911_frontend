@@ -141,7 +141,7 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 		if (pageName !== 'login') headers.authorization = `Bearer ${userContext.token}`;
 		dispatch({ type: 'loading', payload: { status: true } });
 		let resultData = await httpRequestHandler(
-			`http://localhost:5000/api/user/${pageName}`,
+			`${process.env.REACT_APP_API_URL}/api/user/${pageName}`,
 			'POST',
 			JSON.stringify(formData),
 			headers,
@@ -174,7 +174,6 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 			const newUserData = { ...userContext.userData, token: resultData.newAccessToken };
 			userContext.login(newUserData);
 		}
-		console.log(resultData);
 		sendUserForm(resultData, extraData);
 	};
 

@@ -23,7 +23,7 @@ const RecoverPassword = () => {
 	const checkToken = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/user/forgot-password',
+				`${process.env.REACT_APP_API_URL}/api/user/forgot-password`,
 				'POST',
 				JSON.stringify({ token }),
 				{ 'Content-type': 'application/json' },

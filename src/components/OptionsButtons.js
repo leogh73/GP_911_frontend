@@ -214,7 +214,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 	const modifyData = async (type, itemId, status) => {
 		try {
 			let consult = await httpRequestHandler(
-				`http://localhost:5000/api/${type === 'user' ? 'user' : 'item'}/modify`,
+				`${process.env.REACT_APP_API_URL}/api/${type === 'user' ? 'user' : 'item'}/modify`,
 				'POST',
 				JSON.stringify({ type, itemId, status, comment: commentContext.comment }),
 				{

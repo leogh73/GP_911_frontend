@@ -23,7 +23,7 @@ const ProfileEditConfirm = () => {
 	const confirmProfileChange = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
-				'http://localhost:5000/api/user/profile-edit',
+				`${process.env.REACT_APP_API_URL}/api/user/profile-edit`,
 				'POST',
 				JSON.stringify({ changeToken: tokenData }),
 				{

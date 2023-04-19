@@ -182,7 +182,7 @@ const useChangeLoad = (resultData, startData) => {
 		try {
 			dispatch({ type: 'loading', payload: { status: true } });
 			let consult = await httpRequestHandler(
-				`http://localhost:5000/api/item/${startData ? 'edit' : 'new'}`,
+				`${process.env.REACT_APP_API_URL}/api/item/${startData ? 'edit' : 'new'}`,
 				'POST',
 				JSON.stringify(body),
 				headers,
@@ -197,7 +197,6 @@ const useChangeLoad = (resultData, startData) => {
 				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
 				userContext.login(newUserData);
 			}
-			console.log(consult);
 			resultData(consult.result);
 		} catch (error) {
 			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });

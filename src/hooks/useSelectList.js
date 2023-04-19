@@ -51,11 +51,12 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 		if (type === 'users') {
 			try {
 				let consult = await httpRequestHandler(
-					'http://localhost:5000/api/spreadsheet/users',
-					'GET',
-					null,
+					`${process.env.REACT_APP_API_URL}/api/user/allusers`,
+					'POST',
+					JSON.stringify({}),
 					{
 						authorization: `Bearer ${userContext.token}`,
+						'Content-type': 'application/json',
 					},
 				);
 				data.items = consult.usersList;
