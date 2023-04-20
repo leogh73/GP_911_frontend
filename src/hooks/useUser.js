@@ -70,6 +70,7 @@ const useUser = (setNavBarState) => {
 	useEffect(() => {
 		if (
 			!token &&
+			location.pathname !== '/' &&
 			!location.pathname.startsWith('/new-password') &&
 			!location.pathname.startsWith('/forgot-password')
 		)
