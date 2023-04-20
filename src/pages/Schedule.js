@@ -36,8 +36,8 @@ const Schedule = ({ type }) => {
 			if (type === 'month')
 				consult = await httpRequestHandler(
 					`${process.env.REACT_APP_API_URL}/api/spreadsheet/month`,
-					'GET',
-					null,
+					'POST',
+					JSON.stringify({}),
 					{
 						authorization: `Bearer ${userContext.token}`,
 					},
