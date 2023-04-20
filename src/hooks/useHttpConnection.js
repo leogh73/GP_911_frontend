@@ -15,6 +15,7 @@ const useHttpConnection = () => {
 					headers,
 					signal: abortConnection.signal,
 					credentials: 'include',
+					mode: 'cors',
 				});
 
 				const responseData = await response.json();

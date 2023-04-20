@@ -29,8 +29,8 @@ const useUser = (setNavBarState) => {
 			setLoading(true);
 			let response = await httpRequestHandler(
 				`${process.env.REACT_APP_API_URL}/api/user/logout`,
-				'GET',
-				null,
+				'POST',
+				JSON.stringify({}),
 				{
 					authorization: `Bearer ${userContext.token}`,
 				},
@@ -54,8 +54,8 @@ const useUser = (setNavBarState) => {
 			setLoading(true);
 			let response = await httpRequestHandler(
 				`${process.env.REACT_APP_API_URL}/api/user/refresh-session`,
-				'GET',
-				null,
+				'POST',
+				JSON.stringify({}),
 				{},
 			);
 			if (response.error) logout(true);
