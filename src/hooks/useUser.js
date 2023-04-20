@@ -70,9 +70,9 @@ const useUser = (setNavBarState) => {
 	useEffect(() => {
 		if (
 			!token &&
-			(location.pathname === `${process.env.REACT_APP_API_URL}` ||
-				!location.pathname.startsWith('/new-password') ||
-				!location.pathname.startsWith('/forgot-password'))
+			location.pathname !== '/' &&
+			!location.pathname.startsWith('/new-password') &&
+			!location.pathname.startsWith('/forgot-password')
 		)
 			refreshSession();
 	}, [refreshSession, token, location.pathname]);
