@@ -58,7 +58,7 @@ const useUser = (setNavBarState) => {
 				JSON.stringify({}),
 				{},
 			);
-			if (response.error) logout(true);
+			if (response.error) return logout(true);
 			if (response.userId) login(response);
 		} catch (error) {
 			logout(true);
@@ -68,7 +68,13 @@ const useUser = (setNavBarState) => {
 	}, [httpRequestHandler, logout, login]);
 
 	useEffect(() => {
-		if (!token && !location.pathname.startsWith('/new-password')) refreshSession();
+		if (
+			!token &&
+			(location.pathname === `${process.env.REACT_APP_API_URL}` ||
+				!location.pathname.startsWith('/new-password') ||
+				!location.pathname.startsWith('/forgot-password'))
+		)
+			refreshSession();
 	}, [refreshSession, token, location.pathname]);
 
 	return {
