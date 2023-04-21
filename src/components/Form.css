@@ -43,7 +43,7 @@ form {
 }
 
 .form.login {
-	width: 370px;
+	width: 420px;
 	padding: 20px;
 }
 
@@ -61,6 +61,12 @@ form {
 	justify-content: center;
 }
 
+.inputs-group {
+	width: 360px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
 @media only screen and (max-width: 730px) {
 	.inputs-container.register,
 	.inputs-container.profile-edit {
@@ -72,12 +78,16 @@ form {
 	.form.profile-edit {
 		width: 430px;
 	}
-}
 
-.inputs-group {
-	width: 335px;
-	padding-left: 10px;
-	padding-right: 10px;
+	.form.login {
+		width: 365px;
+	}
+
+	.inputs-group {
+		width: 350px;
+		padding-left: 15px;
+		padding-right: 15px;
+	}
 }
 
 .form-footer,
