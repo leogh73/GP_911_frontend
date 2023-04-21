@@ -43,7 +43,8 @@ form {
 }
 
 .form.login {
-	width: 450px;
+	width: 370px;
+	padding: 20px;
 }
 
 .form.login.loading,
@@ -74,7 +75,7 @@ form {
 }
 
 .inputs-group {
-	width: 360px;
+	width: 335px;
 	padding-left: 10px;
 	padding-right: 10px;
 }

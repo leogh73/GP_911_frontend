@@ -115,6 +115,7 @@ h4 {
 
 	.nav-links {
 		/* overflow-x: show; */
+		overflow-y: hidden;
 		position: absolute;
 		z-index: 2;
 		list-style: none;
