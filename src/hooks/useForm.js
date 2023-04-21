@@ -51,7 +51,7 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 		}
 		if (pageName === 'login') {
 			registeredData = {
-				usernameOrEmail: state.inputs[0].value,
+				usernameOrEmail: state.inputs[0].value.trim(),
 				password: state.inputs[1].value,
 			};
 		}
