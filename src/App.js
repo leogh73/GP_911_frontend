@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 import { IconContext } from 'react-icons';
 import './App.css';
@@ -16,6 +16,7 @@ const App = () => {
 	const [navBarState, setNavBarState] = useState({ isLoggedIn: false, isAdmin: false });
 	const { token, userData, login, logout, loading } = useUser(setNavBarState);
 	const { routes, state, dispatch } = useRoutes(userData);
+	const footerLogo = useRef(<img alt="" src={'./911-logo.png'}></img>);
 
 	return (
 		<UserContext.Provider
@@ -41,9 +42,7 @@ const App = () => {
 			<ToastContainer />
 			<IdleTimer isLoggedIn={navBarState.isLoggedIn} />
 			<footer className="footer">
-				<div className="ft-logo">
-					<img alt="" src={`${process.env.REACT_APP_API_URL}/911-logo.png`}></img>
-				</div>
+				<div className="ft-logo">{footerLogo.current}</div>
 				<div className="ft-text">© 2023</div>
 			</footer>
 		</UserContext.Provider>
