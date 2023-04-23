@@ -42,7 +42,7 @@ const App = () => {
 			<IdleTimer isLoggedIn={navBarState.isLoggedIn} />
 			<footer className="footer">
 				<div className="ft-logo">
-					<img alt="" src={'https://guardias911.vercel.app/911-logo.png'}></img>
+					<img alt="" src={'https://guardias911.pages.dev/911-logo.png'}></img>
 				</div>
 				<div className="ft-text">© 2023</div>
 			</footer>
