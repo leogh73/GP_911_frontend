@@ -79,7 +79,7 @@ const Modal = ({
 					}}
 				>
 					<Title text={title} icon={<FaExclamationTriangle />} />
-					<p style={{ paddingBottom: '10px' }}>{body}</p>
+					<div style={{ paddingBottom: '10px', textAlign: 'center' }}>{body}</div>
 					<Button text={'CERRAR'} width={250} onClick={closeModal} />
 				</div>
 			);

@@ -3,23 +3,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import Message from '../components/Message';
 import Form from '../components/Form';
 import { FaUserCheck, FaUserLock, FaUserTimes } from 'react-icons/fa';
-import Modal from '../components/Modal';
 
 const Password = ({ type }) => {
 	const [success, setSuccess] = useState();
 	const [error, setError] = useState();
-	const [emailIsValid, setEmailIsValid] = useState(false);
 	const navigate = useNavigate();
 
-	const processResult = (result) => {
-		if (result.error === 'User not found') return setEmailIsValid(true);
-		result.result._id ? setSuccess(true) : setError(true);
-	};
+	const processResult = (result) => (result._id[0] ? setSuccess(true) : setError(true));
 
 	const goBack = () => {
 		setError(false);
 		setSuccess(false);
-		setEmailIsValid(false);
 		navigate('/');
 	};
 
@@ -71,16 +65,6 @@ const Password = ({ type }) => {
 					)
 				}
 			/>
-			{emailIsValid && (
-				<Modal
-					id="login-error"
-					title={'Error'}
-					body={'El correo electrónico ingresado no corresponde a ningún usuario registrado.'}
-					closeText={'Cerrar'}
-					closeFunction={() => setEmailIsValid(true)}
-					type={'error'}
-				/>
-			)}
 		</>
 	);
 };

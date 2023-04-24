@@ -41,13 +41,8 @@ const Form = ({
 	};
 
 	const closeErrorModal = (type) => {
-		let dispatchType;
-		if (type === 'login') dispatchType = 'login error';
-		if (type === 'register') dispatchType = 'register error';
-		if (type === 'server') dispatchType = 'server error';
-		if (type === 'password') dispatchType = 'password error';
 		dispatch({
-			type: dispatchType,
+			type,
 			payload: { status: false },
 		});
 	};
@@ -122,7 +117,7 @@ const Form = ({
 					title={'Error'}
 					body={'Usuario y/o contraseña incorrectos.'}
 					closeText={'Cerrar'}
-					closeFunction={() => closeErrorModal('login')}
+					closeFunction={() => closeErrorModal('login error')}
 					type={'error'}
 				/>
 			)}
@@ -132,7 +127,7 @@ const Form = ({
 					title={'Error'}
 					body={'El usuario ya estaría registrado. Verifique los datos ingresados.'}
 					closeText={'Cerrar'}
-					closeFunction={() => closeErrorModal('register')}
+					closeFunction={() => closeErrorModal('register error')}
 					type={'error'}
 				/>
 			)}
@@ -142,7 +137,7 @@ const Form = ({
 					title={'Error'}
 					body={'Error de conexión al servidor.'}
 					closeText={'Cerrar'}
-					closeFunction={() => closeErrorModal('server')}
+					closeFunction={() => closeErrorModal('server error')}
 					type={'error'}
 				/>
 			)}
@@ -152,7 +147,17 @@ const Form = ({
 					title={'Error'}
 					body={'La contraseña actual es inválida.'}
 					closeText={'Cerrar'}
-					closeFunction={() => closeErrorModal('password')}
+					closeFunction={() => closeErrorModal('password error')}
+					type={'error'}
+				/>
+			)}
+			{state.userEmailError && (
+				<Modal
+					id="login-error"
+					title={'Error'}
+					body={'El correo electrónico ingresado no corresponde a ningún usuario registrado.'}
+					closeText={'Cerrar'}
+					closeFunction={() => closeErrorModal('user email error')}
 					type={'error'}
 				/>
 			)}

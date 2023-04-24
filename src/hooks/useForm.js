@@ -26,6 +26,7 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 		registerError: false,
 		passwordError: false,
 		newPasswordError: false,
+		userEmailError: false,
 	});
 
 	useEffect(() => {
@@ -162,6 +163,9 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 		if (resultData.error === 'Token expired') {
 			userContext.profileData.logout(true);
 			return navigate('/');
+		}
+		if (resultData.error === 'User not found') {
+			return dispatch({ type: 'user email error', payload: { status: true } });
 		}
 		state.inputs.forEach((i) => {
 			i.value = '';
@@ -399,6 +403,13 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 				return {
 					...state,
 					passwordError: action.payload.status,
+					formIsValid: false,
+				};
+			}
+			case 'user email error': {
+				return {
+					...state,
+					userEmailError: action.payload.status,
 					formIsValid: false,
 				};
 			}
