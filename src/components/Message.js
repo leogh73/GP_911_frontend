@@ -14,7 +14,6 @@ const Message = ({ title, icon, body, buttonText, onClick }) => {
 				alignItems: 'center',
 				justifyContent: 'space-evenly',
 				minHeight: '250px',
-				minWidth: '400px',
 				maxWidth: '600px',
 				animation: 'bgFadeIn 0.6s ease',
 			}}

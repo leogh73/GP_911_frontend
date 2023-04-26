@@ -42,7 +42,8 @@ form {
 	width: 800px;
 }
 
-.form.login {
+.form.login,
+.form.forgot-password {
 	width: 420px;
 	padding: 20px;
 }
@@ -79,7 +80,9 @@ form {
 		width: 430px;
 	}
 
-	.form.login {
+	.form.login,
+	.form.forgot-password,
+	.form.new-password {
 		width: 350px;
 	}
 
