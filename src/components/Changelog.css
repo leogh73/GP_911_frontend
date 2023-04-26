@@ -33,14 +33,10 @@
 	margin: 5px;
 	display: flex;
 	flex-direction: row;
-}
-
-.data-container {
-	padding-top: 2px;
+	align-items: center;
 }
 
 .changelog-text {
-	margin-top: 0px;
 	text-align: left;
 }
 
