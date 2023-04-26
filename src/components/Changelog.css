@@ -9,7 +9,7 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: space-around;
-	margin: 10px;
+	margin: 5 5 10 0;
 }
 
 .event-border {
@@ -33,6 +33,15 @@
 	margin: 5px;
 	display: flex;
 	flex-direction: row;
+}
+
+.data-container {
+	padding-top: 2px;
+}
+
+.changelog-text {
+	margin-top: 2px;
+	text-align: left;
 }
 
 .date-time {

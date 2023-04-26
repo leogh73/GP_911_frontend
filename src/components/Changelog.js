@@ -25,13 +25,13 @@ const Changelog = ({ log }) => {
 									<div className="icon-container">
 										<BsCalendarDate />
 									</div>
-									{l.date}
+									<div className="changelog-text">{l.date}</div>
 								</div>
 								<div className="data-container" style={{ width: '50%' }}>
 									<div className="icon-container">
-										<BiTime />
+										<BiTime size={22} />
 									</div>
-									{l.time}
+									<div className="changelog-text">{l.time} </div>
 								</div>
 							</div>
 							<div className="data-container">
@@ -41,7 +41,7 @@ const Changelog = ({ log }) => {
 								<div className="detail-list">
 									{l.details.map((d) => (
 										<div className="detail" key={generateRandomId()}>
-											{d.toString()}
+											<div className="changelog-text">{d.toString()} </div>
 										</div>
 									))}
 								</div>
@@ -51,7 +51,7 @@ const Changelog = ({ log }) => {
 									<div className="icon-container">
 										<BiCommentDetail />
 									</div>
-									{l.comment}
+									<div className="changelog-text">{l.comment}</div>
 								</div>
 							)}
 							<div className="data-container">
