@@ -12,7 +12,7 @@
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	border-radius: 1rem;
 	outline: 0;
-	/* min-width: 95vmin; */
+	min-width: 99vmin;
 	/* max-height: 60em; */
 	display: flex;
 	flex-direction: column;
