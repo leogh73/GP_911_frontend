@@ -40,7 +40,7 @@
 }
 
 .changelog-text {
-	margin-top: 2px;
+	margin-top: 0px;
 	text-align: left;
 }
 
@@ -52,6 +52,10 @@
 
 .icon-container {
 	padding-right: 15px;
+}
+
+.icon-container.time {
+	padding-right: 10px;
 }
 
 .icon-container svg {

@@ -23,13 +23,13 @@ const Changelog = ({ log }) => {
 							<div className="date-time">
 								<div className="data-container" style={{ width: '50%' }}>
 									<div className="icon-container">
-										<BsCalendarDate />
+										<BsCalendarDate size={19} />
 									</div>
 									<div className="changelog-text">{l.date}</div>
 								</div>
 								<div className="data-container" style={{ width: '50%' }}>
-									<div className="icon-container">
-										<BiTime size={22} />
+									<div className="icon-container time">
+										<BiTime size={19} />
 									</div>
 									<div className="changelog-text">{l.time} </div>
 								</div>
@@ -56,9 +56,9 @@ const Changelog = ({ log }) => {
 							)}
 							<div className="data-container">
 								<div className="icon-container">
-									<FaUserAlt />
+									<FaUserAlt size={18} />
 								</div>
-								{l.user}
+								<div className="changelog-text">{l.user}</div>
 							</div>
 						</div>
 						{i + 1 !== log.length && <div className="event-border"></div>}
