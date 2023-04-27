@@ -54,10 +54,6 @@
 	padding-right: 10px;
 }
 
-.icon-container svg {
-	margin-top: 3px;
-}
-
 .log-container::-webkit-scrollbar {
 	width: 10px;
 }
