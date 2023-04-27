@@ -38,7 +38,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		navigate('/profile/edit-user');
 	};
 
-	const button = (icon, idModal, title, body, actionFunction, closeText, comment) => (
+	const button = (icon, idModal, title, body, actionFunction, closeText, comment, changelog) => (
 		<div className="option-container">
 			<Modal
 				id={idModal}
@@ -48,6 +48,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 				actionFunction={actionFunction}
 				closeText={closeText}
 				comment={comment}
+				changelog={changelog}
 			/>
 		</div>
 	);
@@ -65,6 +66,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							() => modifyData(type, data._id, { previous: data.status, new: 'Autorizado' }),
 							'No',
 							true,
+							false,
 						)}
 						{button(
 							<MdOutlineClose size={24} />,
@@ -74,6 +76,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							() => modifyData(type, data._id, { previous: data.status, new: 'No autorizado' }),
 							'No',
 							true,
+							false,
 						)}
 					</>
 				);
@@ -88,6 +91,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							() => modifyData(type, data._id, { previous: data.status, new: 'Anulado' }),
 							'No',
 							true,
+							false,
 						)}
 					</>
 				);
@@ -101,6 +105,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							`¿Eliminar cambio de servicio para ${data.name}?`,
 							() => modifyData(type, data._id, null),
 							'No',
+							false,
 							false,
 						)}
 					</>
@@ -122,6 +127,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 						() => modifyData(type, data._id, 'password'),
 						'No',
 						true,
+						false,
 					)}
 					{button(
 						<MdDeleteForever size={24} />,
@@ -130,6 +136,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 						`¿Eliminar usuario?`,
 						() => modifyData(type, data._id, null),
 						'No',
+						false,
 						false,
 					)}
 				</>
@@ -157,6 +164,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 						() => modifyData(type, data._id, { previous: data.status, new: 'Cancelado' }),
 						'No',
 						true,
+						false,
 					)}
 				</>
 			);
@@ -177,6 +185,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 						() => modifyData(type, data._id, { previous: data.status, new: 'Cancelado' }),
 						'No',
 						true,
+						false,
 					)}
 				</>
 			);
@@ -191,6 +200,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 						() => modifyData(type, data._id, null),
 						'No',
 						false,
+						false,
 					)}
 				</>
 			);
@@ -201,9 +211,10 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 						<MdDeleteForever size={24} />,
 						generateRandomId(),
 						'Confirmar eliminar pedido',
-						`¿Eliminar pedido de cambio para el ${data.requestData.date}?`,
+						<div className="modal-body-padding">{`¿Eliminar pedido de cambio para el ${data.requestData.date}?`}</div>,
 						() => modifyData(type, data._id, null),
 						'No',
+						false,
 						false,
 					)}
 				</>
@@ -238,16 +249,6 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		}
 	};
 
-	const changelogButton = button(
-		<MdHistory size={30} />,
-		generateRandomId(),
-		'Historial de edición',
-		<Changelog log={data.changelog} />,
-		null,
-		'Cerrar',
-		false,
-	);
-
 	return (
 		<IconContext.Provider
 			value={{
@@ -256,7 +257,17 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		>
 			<div className="option-buttons">
 				{optionButtons()}
-				{(type === 'change' || type === 'user') && changelogButton}
+				{(type === 'change' || type === 'user') &&
+					button(
+						<MdHistory size={30} />,
+						generateRandomId(),
+						'Historial de edición',
+						<Changelog log={data.changelog} />,
+						null,
+						'Cerrar',
+						false,
+						true,
+					)}
 			</div>
 		</IconContext.Provider>
 	);

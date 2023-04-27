@@ -55,10 +55,13 @@
 }
 
 .modal-body {
-	padding-top: 10px;
-	padding-bottom: 10px;
 	font-size: 18px;
 	text-align: center;
+}
+
+.modal-body-padding {
+	padding-top: 15px;
+	padding-bottom: 15px;
 }
 
 .modal-title {

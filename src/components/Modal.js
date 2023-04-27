@@ -16,6 +16,7 @@ const Modal = ({
 	closeFunction,
 	type,
 	comment,
+	changelog,
 }) => {
 	const commentContext = useContext(CommentContext);
 
@@ -31,7 +32,9 @@ const Modal = ({
 					/>
 				</div>
 				<p className="modal-divider" />
-				<div className="modal-body">{body}</div>
+				<div className="modal-body">
+					<div className={`${!changelog ? 'modal-body-padding' : ''}`}>{body}</div>
+				</div>
 				<p className="modal-divider" />
 				{comment && (
 					<>

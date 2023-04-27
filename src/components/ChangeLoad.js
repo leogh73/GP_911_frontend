@@ -184,6 +184,7 @@ const ChangeLoad = ({ sendResult, startData }) => {
 						closeText={'No'}
 						closeFunction={() => setShowModal(false)}
 						actionFunction={sendChangeData}
+						changelog={false}
 					/>
 				)}
 				<ToastContainer />
