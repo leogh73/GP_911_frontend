@@ -32,10 +32,7 @@
 	padding-right: 2px;
 	margin: 5px;
 	display: flex;
-	flex-direction: row;
 	align-items: center;
-	padding-top: 3px;
-	padding-bottom: 3px;
 }
 
 .changelog-text {

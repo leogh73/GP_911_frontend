@@ -29,7 +29,7 @@ const Changelog = ({ log }) => {
 								</div>
 								<div className="data-container" style={{ width: '50%' }}>
 									<div className="icon-container time">
-										<BiTime size={20} />
+										<BiTime size={21} />
 									</div>
 									<div className="changelog-text">{l.time} </div>
 								</div>
