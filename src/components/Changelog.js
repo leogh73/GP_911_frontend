@@ -23,13 +23,13 @@ const Changelog = ({ log }) => {
 							<div className="date-time">
 								<div className="data-container" style={{ width: '50%' }}>
 									<div className="icon-container">
-										<BsCalendarDate size={19} />
+										<BsCalendarDate size={20} />
 									</div>
 									<div className="changelog-text">{l.date}</div>
 								</div>
 								<div className="data-container" style={{ width: '50%' }}>
 									<div className="icon-container time">
-										<BiTime size={21} />
+										<BiTime size={22} />
 									</div>
 									<div className="changelog-text">{l.time} </div>
 								</div>
