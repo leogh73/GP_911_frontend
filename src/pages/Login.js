@@ -44,7 +44,7 @@ const Login = () => {
 				formTitle="Iniciar sesión"
 				icon={<FaSignInAlt />}
 				buttonText="INGRESAR"
-				// profileView={false}
+				profile={{ view: false }}
 				rememberMe={
 					<div className="remember-me" onClick={rememberMeClickHandler}>
 						<input

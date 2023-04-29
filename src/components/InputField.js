@@ -50,22 +50,13 @@ const InputField = ({
 							disabled={disabled}
 						/>
 					)}
-					{password ? (
+					{password && (
 						<span className="input-pass" onClick={togglerPassword}>
 							{showPassword ? <FaEye /> : <FaEyeSlash />}
 						</span>
-					) : (
-						''
 					)}
 				</div>
 				<div className="text-error">{errorMessage}</div>
-				{/* {errorMessage.map((error) => {
-				return (
-					<div key={Math.random() * 1000} className="text-danger">
-						{error}
-					</div>
-				);
-			})} */}
 			</div>
 		</IconContext.Provider>
 	);

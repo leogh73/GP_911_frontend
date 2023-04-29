@@ -100,21 +100,24 @@ const ScheduleTable = ({ splitted, data }) => {
 			{showModal && (
 				<Modal
 					id={Math.random() * 10000}
-					title={'Detalle de guardia'}
-					body={
-						<>
-							{detailData.map((name) => (
-								<div className="data-container" key={name}>
-									<div className="icon-container">
-										<FaUserAlt />
+					texts={{
+						title: 'Detalle de guardia',
+						body: (
+							<>
+								{detailData.map((name) => (
+									<div className="data-container" key={name}>
+										<div className="icon-container">
+											<FaUserAlt />
+										</div>
+										{name}
 									</div>
-									{name}
-								</div>
-							))}
-						</>
-					}
-					closeText={'Cerrar'}
-					closeFunction={() => setShowModal(false)}
+								))}
+							</>
+						),
+						close: 'Cerrar',
+						comment: false,
+					}}
+					functions={{ close: () => setShowModal(false) }}
 				/>
 			)}
 		</>

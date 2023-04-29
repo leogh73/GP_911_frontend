@@ -90,7 +90,7 @@ const useRequestLoad = (sendResult) => {
 		try {
 			dispatch({ type: 'loading', payload: { status: true } });
 			let consult = await httpRequestHandler(
-				`${process.env.REACT_APP_API_URL}api/item/new`,
+				`${process.env.REACT_APP_API_URL}/api/item/new`,
 				'POST',
 				JSON.stringify(state.data),
 				{
@@ -110,7 +110,7 @@ const useRequestLoad = (sendResult) => {
 				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
 				userContext.login(newUserData);
 			}
-			sendResult(consult);
+			sendResult(consult.result);
 		} catch (error) {
 			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
 			console.log(error);

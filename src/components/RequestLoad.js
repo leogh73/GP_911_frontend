@@ -81,11 +81,13 @@ const RequestLoad = ({ sendResult }) => {
 				{showModal && (
 					<Modal
 						id="change-modal"
-						title="Confirmar nuevo pedido"
-						body={`¿Enviar nuevo pedido para el ${state.data.requestData.date}?`}
-						closeText={'No'}
-						closeFunction={() => setShowModal(false)}
-						actionFunction={sendNewChange}
+						texts={{
+							title: 'Confirmar nuevo pedido',
+							body: `¿Enviar nuevo pedido para el ${state.data.requestData.date}?`,
+							close: 'No',
+							comment: false,
+						}}
+						functions={{ action: sendNewChange, close: () => setShowModal(false) }}
 					/>
 				)}
 				<ToastContainer />

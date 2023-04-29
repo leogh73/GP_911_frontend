@@ -8,25 +8,19 @@ import UserContext from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { BiCommentDetail } from 'react-icons/bi';
 
-const useForm = (pageName, sendUserForm, profileData, section, userId) => {
+const useForm = (sendUserForm, pageName, profile) => {
 	const { loadUser } = useRememberMe();
 	const userContext = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
 	const storedUser = loadUser();
 	const navigate = useNavigate();
 
-	let ownProfile = profileData?.userId === userContext.userData?.userId ? true : false;
+	let ownProfile = profile?.data?._id === userContext.userData?._id ? true : false;
 
 	const [state, dispatch] = useReducer(reducer, {
 		inputs: [],
 		formIsValid: false,
-		loading: false,
-		loginError: false,
-		serverError: false,
-		registerError: false,
-		passwordError: false,
-		newPasswordError: false,
-		userEmailError: false,
+		error: { status: false, type: null },
 	});
 
 	useEffect(() => {
@@ -42,7 +36,7 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 				firstName: state.inputs[2].value,
 				ni: state.inputs[3].value,
 				hierarchy: state.inputs[4].value,
-				section,
+				section: profile.section,
 				guardId: state.inputs[5].value,
 				superior: state.inputs[6].value,
 				email: state.inputs[7].value,
@@ -64,48 +58,48 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 			};
 		}
 		if (pageName === 'profile-edit') {
-			let superior = profileData.superior ? 'Si' : 'No';
+			let superior = profile.data.superior ? 'Si' : 'No';
 			registeredData = {
-				userId: profileData.userId,
+				userId: profile.data._id,
 				changeToken: null,
 				username: {
-					previous: profileData.username,
-					new: state.inputs[0].value !== profileData.username ? state.inputs[0].value : null,
+					previous: profile.data.username,
+					new: state.inputs[0].value !== profile.data.username ? state.inputs[0].value : null,
 				},
 				lastName: {
-					previous: profileData.lastName,
-					new: state.inputs[1].value !== profileData.lastName ? state.inputs[1].value : null,
+					previous: profile.data.lastName,
+					new: state.inputs[1].value !== profile.data.lastName ? state.inputs[1].value : null,
 				},
 				firstName: {
-					previous: profileData.firstName,
-					new: state.inputs[2].value !== profileData.firstName ? state.inputs[2].value : null,
+					previous: profile.data.firstName,
+					new: state.inputs[2].value !== profile.data.firstName ? state.inputs[2].value : null,
 				},
 				ni: {
-					previous: profileData.ni,
-					new: state.inputs[3].value !== profileData.ni ? state.inputs[3].value : null,
+					previous: profile.data.ni,
+					new: state.inputs[3].value !== profile.data.ni ? state.inputs[3].value : null,
 				},
 				hierarchy: {
-					previous: profileData.hierarchy,
-					new: state.inputs[4].value !== profileData.hierarchy ? state.inputs[4].value : null,
+					previous: profile.data.hierarchy,
+					new: state.inputs[4].value !== profile.data.hierarchy ? state.inputs[4].value : null,
 				},
 				section: {
-					previous: userSection(profileData.section),
+					previous: userSection(profile.data.section),
 					new:
-						state.inputs[5].value !== userSection(profileData.section)
+						state.inputs[5].value !== userSection(profile.data.section)
 							? state.inputs[5].value
 							: null,
 				},
 				guardId: {
-					previous: profileData.guardId,
-					new: state.inputs[6].value !== profileData.guardId ? state.inputs[6].value : null,
+					previous: profile.data.guardId,
+					new: state.inputs[6].value !== profile.data.guardId ? state.inputs[6].value : null,
 				},
 				superior: {
-					previous: profileData.superior ? 'Si' : 'No',
+					previous: profile.data.superior ? 'Si' : 'No',
 					new: state.inputs[7].value !== superior ? state.inputs[7].value : null,
 				},
 				email: {
-					previous: profileData.email,
-					new: state.inputs[8].value !== profileData.email ? state.inputs[8].value : null,
+					previous: profile.data.email,
+					new: state.inputs[8].value !== profile.data.email ? state.inputs[8].value : null,
 				},
 				comment: state.inputs[9].value,
 			};
@@ -117,7 +111,7 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 		}
 		if (pageName === 'new-password') {
 			registeredData = {
-				userId,
+				userId: profile.userId,
 				newPassword: state.inputs[0].value,
 			};
 		}
@@ -148,24 +142,11 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 			headers,
 		);
 		dispatch({ type: 'loading', payload: { status: false } });
-		if (resultData.error === 'server') {
-			return dispatch({ type: 'server error', payload: { status: true } });
-		}
-		if (pageName === 'login' && resultData.error) {
-			return dispatch({ type: 'login error', payload: { status: true } });
-		}
-		if (pageName === 'register' && resultData.error) {
-			return dispatch({ type: 'register error', payload: { status: true } });
-		}
-		if (pageName === 'change-password' && resultData.error) {
-			return dispatch({ type: 'password error', payload: { status: true } });
-		}
+		if (resultData.error)
+			return dispatch({ type: 'error', payload: { status: true, type: resultData.error } });
 		if (resultData.error === 'Token expired') {
-			userContext.profileData.logout(true);
+			userContext.profile.data.logout(true);
 			return navigate('/');
-		}
-		if (resultData.error === 'User not found') {
-			return dispatch({ type: 'user email error', payload: { status: true } });
 		}
 		state.inputs.forEach((i) => {
 			i.value = '';
@@ -300,17 +281,17 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 					isValid = false;
 			});
 			if (pageName === 'profile-edit') {
-				let superior = profileData.superior ? 'Si' : 'No';
+				let superior = profile.data.superior ? 'Si' : 'No';
 				if (
-					inputs[0].value === profileData.username &&
-					inputs[1].value === profileData.lastName &&
-					inputs[2].value === profileData.firstName &&
-					inputs[3].value === profileData.ni &&
-					inputs[4].value === profileData.hierarchy &&
-					inputs[5].value === userSection(profileData.section) &&
-					inputs[6].value === profileData.guardId &&
+					inputs[0].value === profile.data.username &&
+					inputs[1].value === profile.data.lastName &&
+					inputs[2].value === profile.data.firstName &&
+					inputs[3].value === profile.data.ni &&
+					inputs[4].value === profile.data.hierarchy &&
+					inputs[5].value === userSection(profile.section) &&
+					inputs[6].value === profile.data.guardId &&
 					inputs[7].value === superior &&
-					inputs[8].value === profileData.email
+					inputs[8].value === profile.data.email
 				)
 					isValid = false;
 			}
@@ -340,15 +321,15 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 				if (pageName === 'profile-edit') {
 					formInputs = [...registerInputs];
 					formInputs.splice(9, 2);
-					formInputs[0].value = profileData.username;
-					formInputs[1].value = profileData.lastName;
-					formInputs[2].value = profileData.firstName;
-					formInputs[3].value = profileData.ni;
-					formInputs[4].value = profileData.hierarchy;
-					formInputs[5].value = userSection(profileData.section);
-					formInputs[6].value = !!profileData.guardId ? profileData.guardId : '-';
-					formInputs[7].value = profileData.superior ? 'Si' : 'No';
-					formInputs[8].value = profileData.email;
+					formInputs[0].value = profile.data.username;
+					formInputs[1].value = profile.data.lastName;
+					formInputs[2].value = profile.data.firstName;
+					formInputs[3].value = profile.data.ni;
+					formInputs[4].value = profile.data.hierarchy;
+					formInputs[5].value = userSection(profile.data.section);
+					formInputs[6].value = !!profile.data.guardId ? profile.data.guardId : '-';
+					formInputs[7].value = profile.data.superior ? 'Si' : 'No';
+					formInputs[8].value = profile.data.email;
 					if (!userContext.userData.admin && ownProfile) {
 						formInputs[3].disabled = true;
 						formInputs[4].disabled = true;
@@ -385,36 +366,15 @@ const useForm = (pageName, sendUserForm, profileData, section, userId) => {
 			case 'loading': {
 				return { ...state, loading: action.payload.status };
 			}
-			case 'login error': {
+			case 'error': {
 				return {
 					...state,
-					loginError: action.payload.status,
+					error: {
+						status: action.payload.status,
+						type: action.payload.type,
+					},
 					formIsValid: false,
 				};
-			}
-			case 'register error': {
-				return {
-					...state,
-					registerError: action.payload.status,
-					formIsValid: false,
-				};
-			}
-			case 'password error': {
-				return {
-					...state,
-					passwordError: action.payload.status,
-					formIsValid: false,
-				};
-			}
-			case 'user email error': {
-				return {
-					...state,
-					userEmailError: action.payload.status,
-					formIsValid: false,
-				};
-			}
-			case 'server error': {
-				return { ...state, serverError: action.payload.status };
 			}
 			default:
 				break;

@@ -22,7 +22,7 @@ const Register = ({ section }) => {
 			rememberMe=""
 			buttonText="REGISTRAR"
 			pageName="register"
-			section={section}
+			profile={{ section: section, view: false }}
 		/>
 	);
 };

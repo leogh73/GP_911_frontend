@@ -68,11 +68,9 @@ const ProfileEdit = ({ startData }) => {
 			sendUserForm={editResult}
 			formTitle="Editar perfil"
 			icon={<FaUserEdit />}
-			rememberMe=""
 			buttonText="GUARDAR"
 			pageName="profile-edit"
-			profileData={startData}
-			profileView={true}
+			profile={{ data: startData, view: true }}
 		/>
 	);
 };

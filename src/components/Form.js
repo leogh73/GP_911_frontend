@@ -10,25 +10,15 @@ import Modal from './Modal';
 
 const Form = ({
 	sendUserForm,
+	pageName,
 	formTitle,
-	inputTitle,
 	icon,
 	rememberMe,
-	pageName,
 	buttonText,
 	footer,
-	section,
-	profileData,
-	profileView,
-	userId,
+	profile,
 }) => {
-	const { state, submitForm, dispatch } = useForm(
-		pageName,
-		sendUserForm,
-		profileData,
-		section,
-		userId,
-	);
+	const { state, submitForm, dispatch } = useForm(sendUserForm, pageName, profile);
 
 	const changeHandler = (e) => {
 		dispatch({
@@ -40,11 +30,50 @@ const Form = ({
 		});
 	};
 
-	const closeErrorModal = (type) => {
-		dispatch({
-			type,
-			payload: { status: false },
-		});
+	const showModal = (errorType) => {
+		const generateModal = (texts, type) => (
+			<Modal
+				id={'login-error'}
+				texts={texts}
+				functions={{
+					close: () => dispatch({ type: 'error', payload: { status: false, type: null } }),
+				}}
+				type={type}
+			/>
+		);
+		if (errorType === 'login')
+			return generateModal(
+				{ title: 'Error', body: 'Usuario y/o contraseña incorrectos.', close: 'Cerrar' },
+				'error',
+			);
+		if (errorType === 'register')
+			return generateModal(
+				{
+					title: 'Error',
+					body: 'El usuario ya estaría registrado. Verifique los datos ingresados.',
+					close: 'Cerrar',
+				},
+				'error',
+			);
+		if (errorType === 'server')
+			return generateModal(
+				{ title: 'Error', body: 'Error de conexión al servidor.', close: 'Cerrar' },
+				'error',
+			);
+		if (errorType === 'password')
+			return generateModal(
+				{ title: 'Error', body: 'La contraseña actual es inválida', close: 'Cerrar' },
+				'error',
+			);
+		if (errorType === 'user email')
+			return generateModal(
+				{
+					title: 'Error',
+					body: 'El correo electrónico ingresado no corresponde a ningún usuario registrado.',
+					close: 'Cerrar',
+				},
+				'error',
+			);
 	};
 
 	return (
@@ -59,7 +88,6 @@ const Form = ({
 									i < 5 && (
 										<InputField
 											key={f.key}
-											showTitle={inputTitle}
 											name={f.name}
 											optionsList={f.optionsList}
 											password={f.password}
@@ -69,7 +97,7 @@ const Form = ({
 											onChange={changeHandler}
 											placeHolder={f.placeHolder}
 											disabled={f.disabled}
-											profileView={profileView}
+											profileView={profile.view}
 										/>
 									),
 							)}
@@ -81,7 +109,6 @@ const Form = ({
 										i >= 5 && (
 											<InputField
 												key={f.key}
-												showTitle={inputTitle}
 												name={f.name}
 												optionsList={f.optionsList}
 												password={f.password}
@@ -91,7 +118,7 @@ const Form = ({
 												onChange={changeHandler}
 												placeHolder={f.placeHolder}
 												disabled={f.disabled}
-												profileView={profileView}
+												profileView={profile.view}
 											/>
 										),
 								)}
@@ -111,56 +138,7 @@ const Form = ({
 					{footer}
 				</form>
 			</div>
-			{state.loginError && (
-				<Modal
-					id="login-error"
-					title={'Error'}
-					body={'Usuario y/o contraseña incorrectos.'}
-					closeText={'Cerrar'}
-					closeFunction={() => closeErrorModal('login error')}
-					type={'error'}
-				/>
-			)}
-			{state.registerError && (
-				<Modal
-					id="login-error"
-					title={'Error'}
-					body={'El usuario ya estaría registrado. Verifique los datos ingresados.'}
-					closeText={'Cerrar'}
-					closeFunction={() => closeErrorModal('register error')}
-					type={'error'}
-				/>
-			)}
-			{state.serverError && (
-				<Modal
-					id="login-error"
-					title={'Error'}
-					body={'Error de conexión al servidor.'}
-					closeText={'Cerrar'}
-					closeFunction={() => closeErrorModal('server error')}
-					type={'error'}
-				/>
-			)}
-			{state.passwordError && (
-				<Modal
-					id="login-error"
-					title={'Error'}
-					body={'La contraseña actual es inválida.'}
-					closeText={'Cerrar'}
-					closeFunction={() => closeErrorModal('password error')}
-					type={'error'}
-				/>
-			)}
-			{state.userEmailError && (
-				<Modal
-					id="login-error"
-					title={'Error'}
-					body={'El correo electrónico ingresado no corresponde a ningún usuario registrado.'}
-					closeText={'Cerrar'}
-					closeFunction={() => closeErrorModal('user email error')}
-					type={'error'}
-				/>
-			)}
+			{state.error.status && showModal(state.error.type)}
 		</div>
 	);
 };

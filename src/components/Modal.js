@@ -6,25 +6,14 @@ import { FaExclamationTriangle } from 'react-icons/fa';
 import Title from './Title';
 import CommentContext from '../context/CommentContext';
 
-const Modal = ({
-	id,
-	clickComponent,
-	title,
-	body,
-	actionFunction,
-	closeText,
-	closeFunction,
-	type,
-	comment,
-	changelog,
-}) => {
+const Modal = ({ id, clickComponent, texts, functions, type }) => {
 	const commentContext = useContext(CommentContext);
 
 	const modalContent = () => {
 		let content = (
 			<>
 				<div className="modal-header">
-					<h5 className="modal-title">{title}</h5>
+					<h5 className="modal-title">{texts.title}</h5>
 					<IoMdClose
 						style={{ cursor: 'pointer', color: 'black' }}
 						size={25}
@@ -33,10 +22,10 @@ const Modal = ({
 				</div>
 				<p className="modal-divider" />
 				<div className="modal-body">
-					<div className={`${!changelog ? 'modal-body-padding' : ''}`}>{body}</div>
+					<div className={`${type !== 'changelog' ? 'modal-body-padding' : ''}`}>{texts.body}</div>
 				</div>
 				<p className="modal-divider" />
-				{comment && (
+				{texts.comment && (
 					<>
 						<div className="comment-modal">
 							<input
@@ -51,20 +40,20 @@ const Modal = ({
 					</>
 				)}
 				<div className="modal-footer">
-					{actionFunction != null && (
+					{functions.action && (
 						<div className="modal-btn">
 							<Button
 								width={120}
 								text="Si"
 								onClick={() => {
-									actionFunction();
+									functions.action();
 									closeModal();
 								}}
 							/>
 						</div>
 					)}
 					<div className="modal-btn">
-						<Button width={120} text={closeText} onClick={closeModal} />
+						<Button width={120} text={texts.close} onClick={closeModal} />
 					</div>
 				</div>
 			</>
@@ -81,8 +70,8 @@ const Modal = ({
 						alignItems: 'center',
 					}}
 				>
-					<Title text={title} icon={<FaExclamationTriangle />} />
-					<div style={{ paddingBottom: '10px', textAlign: 'center' }}>{body}</div>
+					<Title text={texts.title} icon={<FaExclamationTriangle />} />
+					<div style={{ paddingBottom: '10px', textAlign: 'center' }}>{texts.body}</div>
 					<Button text={'CERRAR'} width={250} onClick={closeModal} />
 				</div>
 			);
@@ -98,8 +87,8 @@ const Modal = ({
 						alignItems: 'center',
 					}}
 				>
-					<Title text={title} icon={<FaExclamationTriangle />} />
-					{body}
+					<Title text={texts.title} icon={<FaExclamationTriangle />} />
+					{texts.body}
 				</div>
 			);
 
@@ -115,7 +104,7 @@ const Modal = ({
 
 	const closeModal = () => {
 		setTimeout(() => {
-			if (closeFunction) closeFunction();
+			if (functions.close) functions.close();
 			document.getElementById(id)?.classList.remove('active');
 			commentContext.loadComment('');
 		}, 300);

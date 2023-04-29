@@ -175,16 +175,15 @@ const ChangeLoad = ({ sendResult, startData }) => {
 				{showModal && (
 					<Modal
 						id="modalChange"
-						title={'Confirmar'}
-						body={
-							startData
+						texts={{
+							title: 'Confirmar',
+							body: startData
 								? '¿Guardar cambios? Si no está más su nombre, no podrá editarlo nuevamente.'
-								: `¿Enviar nuevo cambio con ${state.data.returnData.name}?`
-						}
-						closeText={'No'}
-						closeFunction={() => setShowModal(false)}
-						actionFunction={sendChangeData}
-						changelog={false}
+								: `¿Enviar nuevo cambio con ${state.data.returnData.name}?`,
+							close: 'No',
+						}}
+						functions={{ action: sendChangeData, close: () => setShowModal(false) }}
+						title={'Confirmar'}
 					/>
 				)}
 				<ToastContainer />

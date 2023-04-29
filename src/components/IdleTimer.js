@@ -66,29 +66,31 @@ const IdleTimer = ({ isLoggedIn }) => {
 			{showModal && (
 				<Modal
 					id="login-error"
-					title={'¿Sigue allí?'}
-					body={
-						<div
-							style={{
-								display: 'flex',
-								flexDirection: 'column',
-								justifyContent: 'space-around',
-								alignItems: 'center',
-							}}
-						>
+					texts={{
+						title: '¿Sigue allí?',
+						body: (
 							<div
 								style={{
-									fontSize: '17px',
-									paddingBottom: '10px',
+									display: 'flex',
+									flexDirection: 'column',
+									justifyContent: 'space-around',
+									alignItems: 'center',
 								}}
 							>
-								{'Su sesión se cerrará automáticamente en'}
+								<div
+									style={{
+										fontSize: '17px',
+										paddingBottom: '10px',
+									}}
+								>
+									{'Su sesión se cerrará automáticamente en'}
+								</div>
+								<div style={{ fontSize: '25px' }}>{`${modalRemainingTime} segundos`}</div>
 							</div>
-							<div style={{ fontSize: '25px' }}>{`${modalRemainingTime} segundos`}</div>
-						</div>
-					}
-					closeText={'Si'}
-					closeFunction={() => setShowModal(false)}
+						),
+						close: 'Si',
+					}}
+					functions={{ close: () => setShowModal(false) }}
 					type={'timer'}
 				/>
 			)}

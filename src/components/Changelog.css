@@ -10,7 +10,7 @@
 	flex-direction: column;
 	justify-content: space-around;
 	margin: 10 5 10 0;
-	height: 6.5em;
+	max-height: 7.5em;
 }
 
 .event-border {

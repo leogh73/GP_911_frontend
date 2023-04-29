@@ -31,6 +31,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 	};
 
 	const editProfilePage = () => {
+		console.log(data);
 		userContext.dispatch({
 			type: 'load profile edit data',
 			payload: { profile: data, editRoute: true },
@@ -38,17 +39,14 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		navigate('/profile/edit-user');
 	};
 
-	const button = (icon, idModal, title, body, actionFunction, closeText, comment, changelog) => (
+	const button = (icon, idModal, texts, functions, type) => (
 		<div className="option-container">
 			<Modal
 				id={idModal}
-				title={title}
+				texts={texts}
+				functions={functions}
 				clickComponent={<div className="option-button">{icon}</div>}
-				body={body}
-				actionFunction={actionFunction}
-				closeText={closeText}
-				comment={comment}
-				changelog={changelog}
+				type={type}
 			/>
 		</div>
 	);
@@ -61,22 +59,30 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 						{button(
 							<MdOutlineCheck size={24} />,
 							generateRandomId(),
-							'Confirmar autorizar cambio',
-							`¿Autorizar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
-							() => modifyData(type, data._id, { previous: data.status, new: 'Autorizado' }),
-							'No',
-							true,
-							false,
+							{
+								title: 'Confirmar autorizar cambio',
+								body: `¿Autorizar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
+								close: 'No',
+								comment: true,
+							},
+							{
+								action: () =>
+									modifyData(type, data._id, { previous: data.status, new: 'Autorizado' }),
+							},
 						)}
 						{button(
 							<MdOutlineClose size={24} />,
 							generateRandomId(),
-							'Confirmar no autorizar cambio',
-							`¿No autorizar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
-							() => modifyData(type, data._id, { previous: data.status, new: 'No autorizado' }),
-							'No',
-							true,
-							false,
+							{
+								title: 'Confirmar no autorizar cambio',
+								body: `¿No autorizar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
+								close: 'No',
+								comment: true,
+							},
+							{
+								action: () =>
+									modifyData(type, data._id, { previous: data.status, new: 'No autorizado' }),
+							},
 						)}
 					</>
 				);
@@ -86,12 +92,16 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 						{button(
 							<CgUnavailable size={32} />,
 							generateRandomId(),
-							'Confirmar anular cambio',
-							`¿Anular cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
-							() => modifyData(type, data._id, { previous: data.status, new: 'Anulado' }),
-							'No',
-							true,
-							false,
+							{
+								title: 'Confirmar anular cambio',
+								body: `¿Anular cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
+								close: 'No',
+								comment: true,
+							},
+							{
+								action: () =>
+									modifyData(type, data._id, { previous: data.status, new: 'Anulado' }),
+							},
 						)}
 					</>
 				);
@@ -101,12 +111,13 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 						{button(
 							<MdDeleteForever size={24} />,
 							generateRandomId(),
-							'Confirmar eliminar cambio',
-							`¿Eliminar cambio de servicio para ${data.name}?`,
-							() => modifyData(type, data._id, null),
-							'No',
-							false,
-							false,
+							{
+								title: 'Confirmar eliminar cambio',
+								body: `¿Eliminar cambio de servicio para ${data.name}?`,
+								close: 'No',
+								comment: false,
+							},
+							{ action: () => modifyData(type, data._id, null) },
 						)}
 					</>
 				);
@@ -122,22 +133,24 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					{button(
 						<RiRotateLockFill size={28} />,
 						generateRandomId(),
-						'Confirmar reestablecer contraseña',
-						`¿Reestrablecer contraseña para ${data.firstName} ${data.lastName}? Será reestablecida a "12345"`,
-						() => modifyData(type, data._id, 'password'),
-						'No',
-						true,
-						false,
+						{
+							title: 'Confirmar reestablecer contraseña',
+							body: `¿Reestrablecer contraseña para ${data.firstName} ${data.lastName}? Será reestablecida a "12345"`,
+							close: 'No',
+							comment: true,
+						},
+						{ action: () => modifyData(type, data._id, 'password') },
 					)}
 					{button(
 						<MdDeleteForever size={24} />,
 						generateRandomId(),
-						'Confirmar eliminar usuario',
-						`¿Eliminar usuario?`,
-						() => modifyData(type, data._id, null),
-						'No',
-						false,
-						false,
+						{
+							title: 'Confirmar eliminar usuario',
+							body: '¿Eliminar usuario?',
+							close: 'No',
+							comment: false,
+						},
+						{ action: () => modifyData(type, data._id, null) },
 					)}
 				</>
 			);
@@ -157,14 +170,18 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					{button(
 						<IoMdClose size={28} />,
 						generateRandomId(),
-						'Confirmar cancelar cambio',
-						`¿Cancelar cambio con ${
-							fullName === data.coverData.name ? data.returnData.name : data.coverData.name
-						}?`,
-						() => modifyData(type, data._id, { previous: data.status, new: 'Cancelado' }),
-						'No',
-						true,
-						false,
+						{
+							title: 'Confirmar cancelar cambio',
+							body: `¿Cancelar cambio con ${
+								fullName === data.coverData.name ? data.returnData.name : data.coverData.name
+							}?`,
+							close: 'No',
+							comment: true,
+						},
+						{
+							action: () =>
+								modifyData(type, data._id, { previous: data.status, new: 'Cancelado' }),
+						},
 					)}
 				</>
 			);
@@ -178,14 +195,18 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					{button(
 						<IoMdClose size={28} />,
 						generateRandomId(),
-						'Confirmar cancelar cambio',
-						`¿Cancelar cambio con ${
-							fullName === data.coverData.name ? data.returnData.name : data.coverData.name
-						}?`,
-						() => modifyData(type, data._id, { previous: data.status, new: 'Cancelado' }),
-						'No',
-						true,
-						false,
+						{
+							title: 'Confirmar cancelar cambio',
+							body: `¿Cancelar cambio con ${
+								fullName === data.coverData.name ? data.returnData.name : data.coverData.name
+							}?`,
+							close: 'No',
+							comment: true,
+						},
+						{
+							action: () =>
+								modifyData(type, data._id, { previous: data.status, new: 'Cancelado' }),
+						},
 					)}
 				</>
 			);
@@ -195,12 +216,13 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					{button(
 						<MdDeleteForever size={28} />,
 						generateRandomId(),
-						'Confirmar eliminar cambio',
-						`¿Eliminar cambio con ${data.returnData.name}?`,
-						() => modifyData(type, data._id, null),
-						'No',
-						false,
-						false,
+						{
+							title: 'Confirmar eliminar cambio',
+							body: `¿Eliminar cambio con ${data.returnData.name}?`,
+							close: 'No',
+							comment: false,
+						},
+						{ action: () => modifyData(type, data._id, null) },
 					)}
 				</>
 			);
@@ -210,12 +232,15 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					{button(
 						<MdDeleteForever size={24} />,
 						generateRandomId(),
-						'Confirmar eliminar pedido',
-						<div className="modal-body-padding">{`¿Eliminar pedido de cambio para el ${data.requestData.date}?`}</div>,
-						() => modifyData(type, data._id, null),
-						'No',
-						false,
-						false,
+						{
+							title: 'Confirmar eliminar pedido',
+							body: (
+								<div className="modal-body-padding">{`¿Eliminar pedido de cambio para el ${data.requestData.date}?`}</div>
+							),
+							close: 'No',
+							comment: false,
+						},
+						{ action: () => modifyData(type, data._id, null) },
 					)}
 				</>
 			);
@@ -261,12 +286,14 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					button(
 						<MdHistory size={30} />,
 						generateRandomId(),
-						'Historial de edición',
-						<Changelog log={data.changelog} />,
-						null,
-						'Cerrar',
-						false,
-						true,
+						{
+							title: 'Historial de edición',
+							body: <Changelog log={data.changelog} />,
+							close: 'Cerrar',
+							comment: false,
+						},
+						{ action: null },
+						'changelog',
 					)}
 			</div>
 		</IconContext.Provider>
