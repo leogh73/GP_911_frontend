@@ -66,11 +66,13 @@ const ProfileEdit = ({ startData }) => {
 	) : (
 		<Form
 			sendUserForm={editResult}
-			formTitle="Editar perfil"
-			icon={<FaUserEdit />}
-			buttonText="GUARDAR"
 			pageName="profile-edit"
-			profile={{ data: startData, view: true }}
+			formData={{
+				title: 'Editar perfil',
+				icon: <FaUserEdit />,
+				buttonText: 'GUARDAR',
+				profile: { data: startData, view: true },
+			}}
 		/>
 	);
 };

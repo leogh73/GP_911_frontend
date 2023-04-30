@@ -9,7 +9,7 @@ import 'react-calendar/dist/Calendar.css';
 import Loading from '../components/Loading';
 import useHttpConnection from '../hooks/useHttpConnection';
 
-const RecoverPassword = () => {
+const NewPassword = () => {
 	const [tokenIsValid, setTokenIsValid] = useState(false);
 	const [loadingForm, setLoadingForm] = useState(true);
 	const [errorPassword, setErrorPassword] = useState();
@@ -91,24 +91,24 @@ const RecoverPassword = () => {
 	) : (
 		<Form
 			sendUserForm={processResult}
-			formTitle={'Nueva contraseña'}
-			icon={<FaUserLock />}
-			rememberMe=""
-			buttonText="ENVIAR"
 			pageName={'new-password'}
-			userId={userId}
-			footer={
-				<>
+			formData={{
+				title: 'Nueva contraseña',
+				icon: <FaUserLock />,
+				rememberMe: '',
+				buttonText: 'ENVIAR',
+				profile: { userId: userId },
+				footer: (
 					<div className="form-footer">
 						<div className="separator" />
 						<Link className="text-center" to="/">
 							Volver
 						</Link>
 					</div>
-				</>
-			}
+				),
+			}}
 		/>
 	);
 };
 
-export default RecoverPassword;
+export default NewPassword;

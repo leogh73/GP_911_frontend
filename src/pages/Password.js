@@ -47,23 +47,24 @@ const Password = ({ type }) => {
 		<>
 			<Form
 				sendUserForm={processResult}
-				formTitle={type === 'change' ? 'Cambio de contraseña' : 'Recuperación de contraseña'}
-				icon={<FaUserLock />}
-				rememberMe=""
-				buttonText="ENVIAR"
 				pageName={type === 'change' ? 'change-password' : 'forgot-password'}
-				footer={
-					type === 'change' ? null : (
-						<>
-							<div className="form-footer">
-								<div className="separator" />
-								<Link className="text-center" to="/">
-									Volver
-								</Link>
-							</div>
-						</>
-					)
-				}
+				formData={{
+					title: type === 'change' ? 'Cambio de contraseña' : 'Recuperación de contraseña',
+					icon: <FaUserLock />,
+					rememberMe: '',
+					buttonText: 'ENVIAR',
+					footer:
+						type === 'change' ? null : (
+							<>
+								<div className="form-footer">
+									<div className="separator" />
+									<Link className="text-center" to="/">
+										Volver
+									</Link>
+								</div>
+							</>
+						),
+				}}
 			/>
 		</>
 	);

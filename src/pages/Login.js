@@ -41,31 +41,33 @@ const Login = () => {
 			<Form
 				sendUserForm={userLogin}
 				pageName="login"
-				formTitle="Iniciar sesión"
-				icon={<FaSignInAlt />}
-				buttonText="INGRESAR"
-				profile={{ view: false }}
-				rememberMe={
-					<div className="remember-me" onClick={rememberMeClickHandler}>
-						<input
-							className="form-check-input"
-							name="remember-me"
-							type="checkbox"
-							defaultChecked={rememberMe.current}
-						/>
-						<label className="check-space" form="rememberPasswordCheck">
-							Recordarme
-						</label>
-					</div>
-				}
-				footer={
-					<div className="form-footer">
-						<div className="separator" />
-						<Link className="text-center" to="/forgot-password">
-							¿Olvidó su contraseña?
-						</Link>
-					</div>
-				}
+				formData={{
+					title: 'Iniciar sesión',
+					icon: <FaSignInAlt />,
+					buttonText: 'INGRESAR',
+					profile: { view: false },
+					rememberMe: (
+						<div className="remember-me" onClick={rememberMeClickHandler}>
+							<input
+								className="form-check-input"
+								name="remember-me"
+								type="checkbox"
+								defaultChecked={rememberMe.current}
+							/>
+							<label className="check-space" form="rememberPasswordCheck">
+								Recordarme
+							</label>
+						</div>
+					),
+					footer: (
+						<div className="form-footer">
+							<div className="separator" />
+							<Link className="text-center" to="/forgot-password">
+								¿Olvidó su contraseña?
+							</Link>
+						</div>
+					),
+				}}
 			/>
 		</>
 	);

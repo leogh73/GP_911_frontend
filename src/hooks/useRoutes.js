@@ -13,7 +13,7 @@ import Users from '../pages/Users';
 import Profile from '../pages/Profile';
 import ProfileEdit from '../pages/ProfileEdit';
 import ProfileEditConfirm from '../pages/ProfileEditConfirm';
-import RecoverPassword from '../pages/RecoverPassword';
+import NewPassword from '../pages/NewPassword';
 
 const useRoutes = (userData) => {
 	const [state, dispatch] = useReducer(reducer, {
@@ -140,7 +140,7 @@ const useRoutes = (userData) => {
 			<Route path="/" element={<Login />} />
 			<Route path="*" element={<NotFound />} />
 			<Route path="/forgot-password" element={<Password type={'forgot'} />} />
-			<Route path="/new-password/:token" element={<RecoverPassword />} />
+			<Route path="/new-password/:token" element={<NewPassword />} />
 		</Routes>
 	);
 

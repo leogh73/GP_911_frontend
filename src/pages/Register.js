@@ -17,12 +17,14 @@ const Register = ({ section }) => {
 	return (
 		<Form
 			sendUserForm={registerResult}
-			formTitle="Registro de usuario"
-			icon={<FaUserPlus />}
-			rememberMe=""
-			buttonText="REGISTRAR"
 			pageName="register"
-			profile={{ section: section, view: false }}
+			formData={{
+				title: 'Registro de usuario',
+				icon: <FaUserPlus />,
+				rememberMe: '',
+				buttonText: 'REGISTRAR',
+				profile: { section: section, view: false },
+			}}
 		/>
 	);
 };

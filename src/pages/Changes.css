@@ -42,7 +42,7 @@
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	border-radius: 1rem;
 	outline: 0;
-	min-width: 99vmin;
+	min-width: 96vmin;
 	width: 80em;
 	min-height: 83.7vh;
 	animation: bgFadeIn 0.6s ease;

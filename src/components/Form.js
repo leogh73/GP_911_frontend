@@ -8,17 +8,8 @@ import './Form.css';
 
 import Modal from './Modal';
 
-const Form = ({
-	sendUserForm,
-	pageName,
-	formTitle,
-	icon,
-	rememberMe,
-	buttonText,
-	footer,
-	profile,
-}) => {
-	const { state, submitForm, dispatch } = useForm(sendUserForm, pageName, profile);
+const Form = ({ sendUserForm, pageName, formData }) => {
+	const { state, submitForm, dispatch } = useForm(sendUserForm, pageName, formData.profile);
 
 	const changeHandler = (e) => {
 		dispatch({
@@ -79,63 +70,35 @@ const Form = ({
 	return (
 		<div className="new-form">
 			<div className={`form ${pageName}`}>
-				<Title text={formTitle} icon={icon} />
+				<Title text={formData.title} icon={formData.icon} />
 				<form action="" method="" name="register" onSubmit={submitForm}>
 					<div className={`inputs-container ${pageName}`}>
 						<div className="inputs-group">
 							{state.inputs.map(
 								(f, i) =>
-									i < 5 && (
-										<InputField
-											key={f.key}
-											name={f.name}
-											optionsList={f.optionsList}
-											password={f.password}
-											icon={f.icon}
-											errorMessage={f.errorMessage}
-											value={f.value}
-											onChange={changeHandler}
-											placeHolder={f.placeHolder}
-											disabled={f.disabled}
-											profileView={profile.view}
-										/>
-									),
+									i < 5 && <InputField key={f.key} inputData={f} onChange={changeHandler} />,
 							)}
 						</div>
 						{state.inputs.length > 4 && (
 							<div className="inputs-group">
 								{state.inputs.map(
 									(f, i) =>
-										i >= 5 && (
-											<InputField
-												key={f.key}
-												name={f.name}
-												optionsList={f.optionsList}
-												password={f.password}
-												icon={f.icon}
-												errorMessage={f.errorMessage}
-												value={f.value}
-												onChange={changeHandler}
-												placeHolder={f.placeHolder}
-												disabled={f.disabled}
-												profileView={profile.view}
-											/>
-										),
+										i >= 5 && <InputField key={f.key} inputData={f} onChange={changeHandler} />,
 								)}
 							</div>
 						)}
 					</div>
-					{rememberMe}
+					{formData.rememberMe}
 					<div style={{ padding: '7px' }}>
 						<Button
 							className="button"
-							text={buttonText}
+							text={formData.buttonText}
 							width={220}
 							disabled={!state.formIsValid}
 							loading={state.loading}
 						/>
 					</div>
-					{footer}
+					{formData.footer}
 				</form>
 			</div>
 			{state.error.status && showModal(state.error.type)}

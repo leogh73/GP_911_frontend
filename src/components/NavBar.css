@@ -109,19 +109,17 @@ h4 {
 }
 
 @media screen and (max-width: 1000px) {
-	body {
-		overflow-x: hidden;
-	}
-
 	.nav-links {
 		/* overflow-x: show; */
-		overflow-y: hidden;
-		overflow-x: hidden;
-		position: absolute;
+		/* overflow-y: hidden; */
+		/* overflow: hidden; */
+		right: 0px;
+		width: 90%;
+		height: 100%;
+		position: fixed;
 		z-index: 2;
 		list-style: none;
 		color: var(--nav-secondary-color);
-		right: 0px;
 		top: 58px;
 		height: calc(100vh - 58px);
 		background-color: var(--nav-color);
@@ -131,7 +129,6 @@ h4 {
 		/* border-left: 1px solid rgba(0, 0, 0, 0.3); */
 		border-top: none;
 		padding-right: 14px;
-		width: 40ch;
 		/* animation: navLinkFade 0.5s ease; */
 		/* transform: translateX(100%); */
 		transition: transform 0.5s ease-in;

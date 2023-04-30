@@ -4,19 +4,20 @@ import './InputField.css';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import DropdownMenu from './Dropdown';
 
-const InputField = ({
-	name,
-	optionsList,
-	password,
-	icon,
-	errorMessage,
-	value,
-	onChange,
-	placeHolder,
-	disabled,
-	profileView,
-}) => {
+const InputField = ({ inputData, onChange }) => {
 	const [showPassword, setShowPassword] = useState(false);
+
+	const {
+		name,
+		optionsList,
+		password,
+		icon,
+		errorMessage,
+		value,
+		placeHolder,
+		disabled,
+		profileView,
+	} = inputData;
 
 	const togglerPassword = () => {
 		setShowPassword(!showPassword);

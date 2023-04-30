@@ -39,7 +39,7 @@
 
 .calendar-dropdown-button {
 	/* cursor: pointer; */
-	/* height: 44px; */
+	height: 70px;
 	/* width: 77%; */
 	display: flex;
 	flex-direction: row;
