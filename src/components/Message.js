@@ -8,12 +8,12 @@ const Message = ({ title, icon, body, buttonText, onClick }) => {
 	return (
 		<div
 			style={{
-				padding: '20px',
+				padding: '1em',
 				display: 'flex',
 				flexDirection: 'column',
 				alignItems: 'center',
 				justifyContent: 'space-evenly',
-				minHeight: '250px',
+				maxHeight: '270px',
 				maxWidth: '600px',
 				animation: 'bgFadeIn 0.6s ease',
 			}}
