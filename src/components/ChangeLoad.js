@@ -118,7 +118,7 @@ const ChangeLoad = ({ sendResult, startData }) => {
 				returnUser: state.data.returnData.name ?? null,
 			}}
 		>
-			<div className="new-form new-change">
+			<div className="new-form" style={{ padding: '2em' }}>
 				{startData ? (
 					<Title icon={<FaEdit />} text={'Editar cambio'} />
 				) : (
