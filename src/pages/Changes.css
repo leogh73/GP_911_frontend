@@ -91,10 +91,9 @@
 
 .tab.selected {
 	border-bottom: 3px solid var(--nav-color);
-	/* width: 100%; */
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 440px) {
 	.changes-list {
 		min-width: 99.9vmin;
 		overflow: hidden;

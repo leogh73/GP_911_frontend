@@ -1,7 +1,7 @@
 .changes-filters {
 	margin: 10px;
 	/* height: 50px; */
-	flex-wrap: wrap;
+	/* flex-wrap: wrap; */
 	width: 100%;
 	display: flex;
 	flex-direction: row;
@@ -96,9 +96,12 @@ tr td.row-data.shift {
 	td:nth-child(1) {
 		clear: both;
 	}
+
 	.changes-filters {
 		flex-direction: column;
-		margin-right: 10px;
+		/* justify-content: center; */
+		/* margin-right: 10px; */
+		width: 94%;
 	}
 
 	.changes-search-box {
@@ -276,18 +279,25 @@ and also iPads specifically.
 
 	.data-col {
 		width: 65%;
+		/* display: -webkit-box; */
+		max-width: 51vmin;
+		/* -webkit-line-clamp: 2; */
+		/* -webkit-box-orient: vertical; */
+		overflow: hidden;
+		/* max-width: fit-content; */
 	}
 
 	.row-data {
 		display: flex;
 		flex-direction: row;
 		align-items: center;
+		/* width: 90%; */
 	}
 
 	.col-name {
 		display: flex;
 		margin-left: 10px;
-		margin-right: 20px;
+		margin-right: 15px;
 		width: 30%;
 	}
 
