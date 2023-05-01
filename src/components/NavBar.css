@@ -105,11 +105,6 @@ h4 {
 @media screen and (max-width: 1000px) {
 	.nav-links {
 		width: 40%;
-	}
-}
-
-@media screen and (max-width: 1000px) {
-	.nav-links {
 		/* overflow-x: show; */
 		/* overflow-y: hidden; */
 		/* overflow: hidden; */
