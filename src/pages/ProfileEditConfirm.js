@@ -65,7 +65,7 @@ const ProfileEditConfirm = () => {
 			<Loading type={'closed'} />
 		</div>
 	) : success ? (
-		<div className="new-form">
+		<div className="changes-list">
 			<Message
 				title={'Cambio confirmado'}
 				icon={<FaUserCheck />}
@@ -75,7 +75,7 @@ const ProfileEditConfirm = () => {
 			/>
 		</div>
 	) : (
-		<div className="new-form">
+		<div className="changes-list">
 			<Message
 				title={'Solicitud fallida'}
 				icon={<FaUserTimes />}

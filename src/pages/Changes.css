@@ -31,10 +31,7 @@
 	display: -ms-flexbox;
 	-ms-flex-direction: row;
 	flex-direction: row; */
-	padding-left: 1em;
-	padding-right: 1em;
-	padding-bottom: 1em;
-	padding-top: 1em;
+	padding: 1em;
 	/* width: 85%; */
 	/* pointer-events: auto; */
 	background-color: var(--text-color);

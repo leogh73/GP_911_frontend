@@ -42,7 +42,7 @@ const ProfileEdit = ({ startData }) => {
 	};
 
 	return error ? (
-		<div className="new-form">
+		<div className="changes-list">
 			<Message
 				title={'Edición fallida'}
 				icon={<FaUserTimes />}
@@ -52,7 +52,7 @@ const ProfileEdit = ({ startData }) => {
 			/>
 		</div>
 	) : success ? (
-		<div className="new-form">
+		<div className="changes-list">
 			<Message
 				title={'Solicitud correcta'}
 				icon={<FaUserCheck />}

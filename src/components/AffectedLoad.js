@@ -32,7 +32,7 @@ const AffectedLoad = ({ sendResult }) => {
 				coverUser: state.data.name,
 			}}
 		>
-			<div className="new-change">
+			<div className="new-form">
 				<Title icon={<FaUserClock />} text={'Nuevo afectado'} />
 				<div className="new-change-data">
 					<div className="user-change-section">

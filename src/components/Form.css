@@ -1,11 +1,6 @@
 .new-form {
-	/* z-index: 1; */
-	/* position: relative;
-	display: -ms-flexbox;
-	-ms-flex-direction: row;
-	flex-direction: row; */
-	padding: 20px;
-	/* width: 100%; */
+	padding: 1em;
+	width: 50em;
 	/* pointer-events: auto; */
 	background-color: var(--text-color);
 	background-clip: padding-box;
@@ -34,8 +29,13 @@ form {
 .form.change-password,
 .form.new-password,
 .form.forgot-password {
-	padding: 20px;
+	padding: 10px;
 }
+
+.new-form.new-change {
+	padding: 2em;
+}
+/*  */
 
 .form.profile-edit,
 .form.register {
@@ -68,7 +68,12 @@ form {
 	padding-right: 10px;
 }
 
-@media only screen and (max-width: 730px) {
+@media only screen and (max-width: 440px) {
+	.new-form {
+		min-width: 99.9vmin;
+		overflow: hidden;
+	}
+
 	.inputs-container.register,
 	.inputs-container.profile-edit {
 		display: flex;
@@ -77,7 +82,7 @@ form {
 
 	.form.register,
 	.form.profile-edit {
-		width: 430px;
+		width: 100%;
 	}
 
 	.form.login,

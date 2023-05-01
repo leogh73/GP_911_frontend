@@ -18,7 +18,7 @@ const Password = ({ type }) => {
 	};
 
 	return error ? (
-		<div className="new-form">
+		<div className="changes-list">
 			<Message
 				title={type === 'change' ? 'Cambio fallido' : 'Recuperación fallida'}
 				icon={<FaUserTimes />}
@@ -30,7 +30,7 @@ const Password = ({ type }) => {
 			/>
 		</div>
 	) : success ? (
-		<div className="new-form">
+		<div className="changes-list">
 			<Message
 				title={type === 'change' ? 'Contraseña cambiada correctamente.' : 'Solicitud correcta'}
 				icon={<FaUserCheck />}

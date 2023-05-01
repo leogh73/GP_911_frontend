@@ -6,7 +6,18 @@ const NotFound = () => {
 	const navigate = useNavigate();
 
 	return (
-		<div className="content">
+		<div
+			style={{
+				maxWidth: '850px',
+				animation: 'bgFadeIn 0.6s ease',
+				height: 'fit-content',
+				padding: '1em',
+				boxShadow: '0 5px 10px rgb(0 0 0 / 20%)',
+				backgroundColor: 'var(--text-color)',
+				border: '1px solid rgba(0, 0, 0, 0.15)',
+				borderRadius: '1rem',
+			}}
+		>
 			<Message
 				title="Página inexistente"
 				icon={<FaExclamationTriangle />}

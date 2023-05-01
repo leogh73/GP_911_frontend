@@ -29,7 +29,7 @@ const RequestLoad = ({ sendResult }) => {
 				loadOpenedMenu,
 			}}
 		>
-			<div className="new-change">
+			<div className="new-form">
 				<Title icon={<GoRequestChanges />} text={'Nuevo pedido'} />
 				<div className="new-change-data">
 					<div className="user-change-section">

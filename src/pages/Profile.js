@@ -70,7 +70,7 @@ const Profile = () => {
 	);
 
 	return (
-		<div className="new-change">
+		<div className="new-form">
 			<Title icon={<CgProfile />} text={'Perfil'} />
 			<div className="new-change-data">
 				<div className="user-change-section">
