@@ -1,6 +1,6 @@
 .new-form {
-	padding: 1em;
-	width: 50em;
+	padding: 2em;
+	/* width: 100%; */
 	/* pointer-events: auto; */
 	background-color: var(--text-color);
 	background-clip: padding-box;
@@ -23,19 +23,14 @@ form {
 	justify-content: center;
 }
 
-.form.login,
+/* .form.login,
 .form.register,
 .form.profile-edit,
 .form.change-password,
 .form.new-password,
 .form.forgot-password {
 	padding: 10px;
-}
-
-.new-form.new-change {
-	padding: 2em;
-}
-/*  */
+} */
 
 .form.profile-edit,
 .form.register {
