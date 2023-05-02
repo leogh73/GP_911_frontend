@@ -100,6 +100,7 @@ const NavBar = ({ navBarState }) => {
 				if (navLinks.classList.contains('nav-active')) toggleNavBar();
 				if (userMenu.classList.contains('active')) userMenu.classList.toggle('active');
 			});
+			window.onscroll = () => navLinks.classList.contains('nav-active') && toggleNavBar();
 		}
 
 		const modeToggle = document.querySelector('.dark-light');
