@@ -44,7 +44,8 @@ h4 {
 .user-menu a {
 	color: var(--nav-secondary-color);
 	text-decoration: none;
-	padding: 12px;
+	/* padding: 12px; */
+	/* display: flex; */
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-around;
@@ -55,6 +56,9 @@ h4 {
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
+	padding-top: 1px;
+	padding-left: 12px;
+	padding-right: 12px;
 	height: 40px;
 	white-space: nowrap;
 }
@@ -274,7 +278,7 @@ h3 svg {
 .usermenu-separator {
 	/* max-width: 600px; */
 	width: 260px;
-	margin-bottom: 50px;
+	margin-bottom: 57px;
 	border-bottom: 1px solid #adaeb1;
 }
 
@@ -384,14 +388,23 @@ h3 svg {
 	/* color: var(--nav-secondary-color); */
 	font-size: 17px;
 	letter-spacing: 1px;
-	padding-left: 23px;
-	padding-right: 15px;
+	padding-top: 15px;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	padding-right: 20px;
+	/* display: flex; */
+	/* flex-direction: row;
+	align-items: baseline; */
 	/* padding-top: 12px; */
 }
 
+#root > nav > div.user-toggle.active > div.user-menu > a:nth-child(4) > svg {
+	margin-bottom: -4px !important;
+}
+
 .user-link svg {
-	margin-bottom: -2px !important;
-	margin-right: 17px !important;
+	margin-bottom: -3px !important;
+	margin-right: 18px !important;
 }
 
 .user-toggle.active .user-menu .user-link {

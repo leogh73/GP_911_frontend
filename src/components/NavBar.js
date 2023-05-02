@@ -251,11 +251,11 @@ const NavBar = ({ navBarState }) => {
 								</Link>
 								<div className="usermenu-separator"></div>
 								<Link className="user-link" to="/changepassword">
-									<FaKey />
+									<FaKey size={18} />
 									Cambiar contraseña
 								</Link>
 								<Link className="user-link" to="/" onClick={logout}>
-									<FaSignOutAlt />
+									<FaSignOutAlt size={20} />
 									Cerrar sesión
 								</Link>
 							</div>
