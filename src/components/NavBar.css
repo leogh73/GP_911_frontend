@@ -122,9 +122,10 @@ h4 {
 		flex-direction: column;
 		align-items: center;
 		/* border-left: 1px solid rgba(0, 0, 0, 0.3); */
+		border-bottom: 1px solid var(--border);
 		border-top: none;
 		padding-right: 14px;
-		animation: navLinkBackFade 0.5s ease;
+		animation: navLinkBackFade 0.4s ease;
 		/* transform: translateX(100%); */
 		/* transition: transform 0.5s ease-in; */
 		/* transform: translateX(100%); */
