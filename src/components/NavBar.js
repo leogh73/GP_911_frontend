@@ -75,7 +75,7 @@ const NavBar = ({ navBarState }) => {
 			navLinks.classList.toggle('nav-active');
 			navLinksList.forEach((link, index) => {
 				if (link.style.animation === '') {
-					link.style.animation = `navLinkFade 0.5s ease forwards ${index / 7 + 0.4}s`;
+					link.style.animation = `navLinkFade 0.4s ease forwards ${index / 7 + 0.4}s`;
 				} else link.style.animation = '';
 				link.addEventListener('click', () => {
 					if (navLinks.classList.contains('nav-active')) toggleNavBar();
@@ -83,7 +83,7 @@ const NavBar = ({ navBarState }) => {
 			});
 			burger.classList.toggle('toggle');
 			layout.classList.toggle('body-overlay');
-			body.classList.toggle('body-navbar-overflow');
+			// body.classList.toggle('body-navbar-overflow');
 		};
 
 		if (navBarState.isLoggedIn) {
