@@ -44,11 +44,7 @@ h4 {
 .user-menu a {
 	color: var(--nav-secondary-color);
 	text-decoration: none;
-	padding: 14px;
-	/* padding-top: 10px;
-	padding-bottom: 10px;
-	padding-right: 10px;
-	letter-spacing: 1px; */
+	padding: 12px;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-around;
@@ -59,8 +55,8 @@ h4 {
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	padding: 5px;
-	height: 45px;
+	height: 40px;
+	white-space: nowrap;
 }
 
 .nav-links li a:after {
@@ -103,7 +99,7 @@ h4 {
 	color: var(--nav-secondary-color);
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1150px) {
 	.nav-links {
 		/* overflow-x: show; */
 		/* overflow-y: hidden; */
