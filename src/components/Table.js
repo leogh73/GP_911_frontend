@@ -14,6 +14,7 @@ import './Table.css';
 import useTableData from '../hooks/useTableData';
 import UserContext from '../context/UserContext';
 import SectionContext from '../context/SectionContext';
+// import Toast from './Toast';
 
 const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 	const userContext = useContext(UserContext);
