@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { IconContext } from 'react-icons';
 import { MdEdit, MdHistory, MdOutlineCheck, MdOutlineClose } from 'react-icons/md';
@@ -15,8 +15,10 @@ import './OptionsButtons.css';
 
 import CommentContext from '../context/CommentContext';
 import useHttpConnection from '../hooks/useHttpConnection';
+import Loading from './Loading';
 
 const OptionsButtons = ({ type, data, callbackFn }) => {
+	const [selectedData, setSelectedData] = useState({ id: data._id, button: '' });
 	const userContext = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
 	const commentContext = useContext(CommentContext);
@@ -39,17 +41,27 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		navigate('/profile/edit-user');
 	};
 
-	const button = (icon, idModal, texts, functions, type) => (
-		<div className="option-container">
-			<Modal
-				id={idModal}
-				texts={texts}
-				functions={functions}
-				clickComponent={<div className="option-button">{icon}</div>}
-				type={type}
-			/>
-		</div>
-	);
+	const button = (icon, idModal, texts, functions, type) => {
+		const isSelected = selectedData.id === data._id && texts.id === selectedData.button;
+		return (
+			<div className="option-container">
+				<Modal
+					id={idModal}
+					texts={texts}
+					functions={functions}
+					clickComponent={
+						<div
+							className="option-button"
+							style={{ backgroundColor: `${isSelected ? 'var(--disabled-button)' : ''}` }}
+						>
+							{isSelected ? <Loading type={'opened-button'} /> : icon}
+						</div>
+					}
+					type={type}
+				/>
+			</div>
+		);
+	};
 
 	const optionButtons = () => {
 		if (userContext.userData.superior) {
@@ -64,10 +76,16 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 								body: `¿Autorizar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
 								close: 'No',
 								comment: true,
+								id: 'authorize',
 							},
 							{
 								action: () =>
-									modifyData(type, data._id, { previous: data.status, new: 'Autorizado' }),
+									modifyData(
+										type,
+										data._id,
+										{ previous: data.status, new: 'Autorizado' },
+										'authorize',
+									),
 							},
 						)}
 						{button(
@@ -78,14 +96,21 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 								body: `¿No autorizar cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
 								close: 'No',
 								comment: true,
+								id: 'not authorize',
 							},
 							{
 								action: () =>
-									modifyData(type, data._id, { previous: data.status, new: 'No autorizado' }),
+									modifyData(
+										type,
+										data._id,
+										{ previous: data.status, new: 'No autorizado' },
+										'not authorize',
+									),
 							},
 						)}
 					</>
 				);
+
 			if (type === 'change' && data.status === 'Autorizado')
 				return (
 					<>
@@ -97,10 +122,16 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 								body: `¿Anular cambio entre ${data.returnData.name} y ${data.coverData.name}?`,
 								close: 'No',
 								comment: true,
+								id: 'nullify change',
 							},
 							{
 								action: () =>
-									modifyData(type, data._id, { previous: data.status, new: 'Anulado' }),
+									modifyData(
+										type,
+										data._id,
+										{ previous: data.status, new: 'Anulado' },
+										'nullify change',
+									),
 							},
 						)}
 					</>
@@ -116,8 +147,9 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 								body: `¿Eliminar cambio de servicio para ${data.name}?`,
 								close: 'No',
 								comment: false,
+								id: 'remove affected',
 							},
-							{ action: () => modifyData(type, data._id, null) },
+							{ action: () => modifyData(type, data._id, null, 'remove affected') },
 						)}
 					</>
 				);
@@ -138,8 +170,9 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							body: `¿Reestrablecer contraseña para ${data.firstName} ${data.lastName}? Será reestablecida a "12345"`,
 							close: 'No',
 							comment: true,
+							id: 'restore password',
 						},
-						{ action: () => modifyData(type, data._id, 'password') },
+						{ action: () => modifyData(type, data._id, 'restore password') },
 					)}
 					{button(
 						<MdDeleteForever size={24} />,
@@ -149,8 +182,9 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							body: '¿Eliminar usuario?',
 							close: 'No',
 							comment: false,
+							id: 'remove user',
 						},
-						{ action: () => modifyData(type, data._id, null) },
+						{ action: () => modifyData(type, data._id, null, 'remove user') },
 					)}
 				</>
 			);
@@ -177,10 +211,16 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							}?`,
 							close: 'No',
 							comment: true,
+							id: 'cancel requested change',
 						},
 						{
 							action: () =>
-								modifyData(type, data._id, { previous: data.status, new: 'Cancelado' }),
+								modifyData(
+									type,
+									data._id,
+									{ previous: data.status, new: 'Cancelado' },
+									'cancel requested change',
+								),
 						},
 					)}
 				</>
@@ -202,10 +242,16 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							}?`,
 							close: 'No',
 							comment: true,
+							id: 'cancel authorized change',
 						},
 						{
 							action: () =>
-								modifyData(type, data._id, { previous: data.status, new: 'Cancelado' }),
+								modifyData(
+									type,
+									data._id,
+									{ previous: data.status, new: 'Cancelado' },
+									'cancel authorized change',
+								),
 						},
 					)}
 				</>
@@ -221,8 +267,9 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							body: `¿Eliminar cambio con ${data.returnData.name}?`,
 							close: 'No',
 							comment: false,
+							id: 'remove change',
 						},
-						{ action: () => modifyData(type, data._id, null) },
+						{ action: () => modifyData(type, data._id, null, 'remove change') },
 					)}
 				</>
 			);
@@ -239,16 +286,18 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							),
 							close: 'No',
 							comment: false,
+							id: 'remove request',
 						},
-						{ action: () => modifyData(type, data._id, null) },
+						{ action: () => modifyData(type, data._id, null, 'remove request') },
 					)}
 				</>
 			);
 		}
 	};
 
-	const modifyData = async (type, itemId, status) => {
+	const modifyData = async (type, itemId, status, buttonId) => {
 		try {
+			setSelectedData({ id: data._id, button: buttonId });
 			let consult = await httpRequestHandler(
 				`${process.env.REACT_APP_API_URL}/api/${type === 'user' ? 'user' : 'item'}/modify`,
 				'POST',
@@ -258,6 +307,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					'Content-type': 'application/json',
 				},
 			);
+			setSelectedData({ id: data._id, button: '' });
 			if (consult.error === 'Token expired') {
 				userContext.logout(true);
 				navigate('/');

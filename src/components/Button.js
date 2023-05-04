@@ -11,11 +11,7 @@ const Button = ({ text, width, onClick, disabled, loading }) => {
 				disabled={disabled}
 			>
 				<div className="bt-content">
-					{loading ? (
-						<Loading type={'opened-button'} button={true} />
-					) : (
-						<div className="bt-text">{text}</div>
-					)}
+					{loading ? <Loading type={'opened-button'} /> : <div className="bt-text">{text}</div>}
 				</div>
 			</button>
 		</div>
