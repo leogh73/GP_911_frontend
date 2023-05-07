@@ -10,12 +10,14 @@ import Loading from '../components/Loading';
 import useHttpConnection from '../hooks/useHttpConnection';
 
 const NewPassword = () => {
-	const [tokenIsValid, setTokenIsValid] = useState(false);
-	const [loadingForm, setLoadingForm] = useState(true);
-	const [errorPassword, setErrorPassword] = useState();
-	const [successPassword, setSuccessPassword] = useState();
-	const { httpRequestHandler } = useHttpConnection();
+	// const [tokenIsValid, setTokenIsValid] = useState(false);
+	// const [loadingForm, setLoadingForm] = useState(true);
+	// const [errorPassword, setErrorPassword] = useState();
+	// const [successPassword, setSuccessPassword] = useState();
+
+	const [status, setStatus] = useState('loading');
 	const [userId, setUserId] = useState(null);
+	const { httpRequestHandler } = useHttpConnection();
 	const navigate = useNavigate();
 	const location = useLocation();
 	const token = location.pathname.split('/token=')[1];
@@ -28,87 +30,97 @@ const NewPassword = () => {
 				JSON.stringify({ token }),
 				{ 'Content-type': 'application/json' },
 			);
-			if (consult.error) return setTokenIsValid(false);
-			setTokenIsValid(true);
+			if (consult.error) return setStatus('token not valid');
+			setStatus('');
 			setUserId(consult._id);
 		} catch (error) {
-			setTokenIsValid(false);
-		} finally {
-			setLoadingForm(false);
+			setStatus('token not valid');
 		}
 	}, [httpRequestHandler, token]);
 
 	const processResult = (result) => {
-		result.result._id ? setSuccessPassword(true) : setErrorPassword(true);
+		result.result._id ? setStatus('password success') : setStatus('password error');
 	};
 
 	useEffect(() => {
 		checkToken();
 		return () => {
-			setLoadingForm(true);
-			setTokenIsValid(false);
+			setStatus('loading');
 		};
 	}, [checkToken]);
 
 	const goBack = () => navigate('/');
 
-	return loadingForm ? (
-		<div className="spinner-container-change">
-			<Loading type={'closed'} />
-		</div>
-	) : !tokenIsValid ? (
-		<div className="new-form">
-			<Message
-				title={'Acceso incorrecto'}
-				icon={<FaUserCheck />}
-				body={'Los datos de solicitud son inválidos.'}
-				buttonText="VOLVER"
-				onClick={goBack}
+	const contentHandler = () => {
+		let content = (
+			<Form
+				sendUserForm={processResult}
+				pageName={'new-password'}
+				formData={{
+					title: 'Nueva contraseña',
+					icon: <FaUserLock />,
+					rememberMe: '',
+					buttonText: 'ENVIAR',
+					profile: { userId: userId },
+					footer: (
+						<div className="form-footer">
+							<div className="separator" />
+							<Link className="text-center" to="/">
+								Volver
+							</Link>
+						</div>
+					),
+				}}
 			/>
-		</div>
-	) : errorPassword ? (
-		<div className="new-form">
-			<Message
-				title={'Cambio de contraseña fallido'}
-				icon={<FaUserTimes />}
-				body={`No se pudo completar el proceso de cambio de contraseña.`}
-				buttonText="VOLVER"
-				onClick={goBack}
-			/>
-		</div>
-	) : successPassword ? (
-		<div className="new-form">
-			<Message
-				title={'Nueva contraseña establecida correctamente.'}
-				icon={<FaUserCheck />}
-				body={
-					'Se completó correctamente la recuperación de contraseña. Ya puede iniciar sesión con su nueva contraseña.'
-				}
-				buttonText="VOLVER"
-				onClick={goBack}
-			/>
-		</div>
-	) : (
-		<Form
-			sendUserForm={processResult}
-			pageName={'new-password'}
-			formData={{
-				title: 'Nueva contraseña',
-				icon: <FaUserLock />,
-				rememberMe: '',
-				buttonText: 'ENVIAR',
-				profile: { userId: userId },
-				footer: (
-					<div className="form-footer">
-						<div className="separator" />
-						<Link className="text-center" to="/">
-							Volver
-						</Link>
-					</div>
-				),
-			}}
-		/>
-	);
+		);
+		if (status === 'loading')
+			content = (
+				<div className="spinner-container-change">
+					<Loading type={'closed'} />
+				</div>
+			);
+		if (status === 'token not valid')
+			content = (
+				<div className="new-form">
+					<Message
+						title={'Acceso incorrecto'}
+						icon={<FaUserCheck />}
+						body={'Los datos de solicitud son inválidos.'}
+						buttonText="VOLVER"
+						onClick={goBack}
+					/>
+				</div>
+			);
+		if (status === 'password error')
+			content = (
+				<div className="new-form">
+					<Message
+						title={'Cambio de contraseña fallido'}
+						icon={<FaUserTimes />}
+						body={`No se pudo completar el proceso de cambio de contraseña.`}
+						buttonText="VOLVER"
+						onClick={goBack}
+					/>
+				</div>
+			);
+		if (status === 'password success')
+			return (
+				<div className="new-form">
+					<Message
+						title={'Nueva contraseña establecida correctamente.'}
+						icon={<FaUserCheck />}
+						body={
+							'Se completó correctamente la recuperación de contraseña. Ya puede iniciar sesión con su nueva contraseña.'
+						}
+						buttonText="VOLVER"
+						onClick={goBack}
+					/>
+				</div>
+			);
+		return content;
+	};
+
+	return <>{contentHandler()}</>;
 };
 
 export default NewPassword;
