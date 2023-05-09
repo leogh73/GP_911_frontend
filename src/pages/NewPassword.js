@@ -10,11 +10,6 @@ import Loading from '../components/Loading';
 import useHttpConnection from '../hooks/useHttpConnection';
 
 const NewPassword = () => {
-	// const [tokenIsValid, setTokenIsValid] = useState(false);
-	// const [loadingForm, setLoadingForm] = useState(true);
-	// const [errorPassword, setErrorPassword] = useState();
-	// const [successPassword, setSuccessPassword] = useState();
-
 	const [status, setStatus] = useState('loading');
 	const [userId, setUserId] = useState(null);
 	const { httpRequestHandler } = useHttpConnection();
