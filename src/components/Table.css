@@ -146,18 +146,20 @@ th {
 }
 
 .table-header {
-	padding-left: 5px;
-	padding-right: 5px;
+	padding-left: 15px;
+	/* padding-right: px; */
+	margin-right: 5px;
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	justify-content: center;
 	align-items: center;
 	min-width: 2.7rem;
 }
 
 .arrow-down {
+	margin-left: 2px;
 	display: flex;
-	align-items: flex-end;
+	justify-content: flex-end;
 	pointer-events: none;
 	border: none;
 	background-color: var(--nav-color);
@@ -185,7 +187,7 @@ td,
 th {
 	padding: 8px;
 	border: 1px solid var(--search-text);
-	text-align: left;
+	text-align: center;
 	font-size: 18px;
 }
 
@@ -224,7 +226,7 @@ Max width before this PARTICULAR table gets nasty
 This query will take effect for any screen smaller than 760px
 and also iPads specifically.
 */
-@media only screen and (max-width: 930px),
+@media only screen and (max-width: 1020px),
 	(min-device-width: 768px) and (max-device-width: 1024px) {
 	table {
 		width: 100%;
@@ -239,6 +241,16 @@ and also iPads specifically.
 	tr {
 		display: block;
 		/* z-index: 0; */
+	}
+
+	td,
+	th {
+		text-align: left;
+	}
+
+	.table-header {
+		padding-left: 0;
+		justify-content: space-between;
 	}
 
 	.table-schedule-week {

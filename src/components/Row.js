@@ -2,6 +2,9 @@ import React, { useState, useContext } from 'react';
 import UserContext from '../context/UserContext';
 import CommentContext from '../context/CommentContext';
 import OptionsButtons from './OptionsButtons';
+import button from './ButtonModal';
+import Changelog from './Changelog';
+import { MdHistory } from 'react-icons/md';
 
 const Row = ({ type, data, modifyCallback }) => {
 	const userContext = useContext(UserContext);
@@ -45,6 +48,23 @@ const Row = ({ type, data, modifyCallback }) => {
 					{
 						columnName: 'Estado',
 						rowData: data.status,
+					},
+					{
+						columnName: 'Historial',
+						rowData: button(
+							null,
+							null,
+							<MdHistory size={30} />,
+							(Math.random() + 1).toString(36).substring(4).replace(/\d+/g, ''),
+							{
+								title: 'Historial de edición',
+								body: <Changelog log={data.changelog} />,
+								close: 'Cerrar',
+								comment: false,
+							},
+							{ action: null },
+							'changelog',
+						),
 					},
 					{
 						columnName: 'Opciones',
@@ -103,12 +123,11 @@ const Row = ({ type, data, modifyCallback }) => {
 						columnName: 'Foja del Libro de Guardia',
 						rowData: data.bookPage,
 					},
-				];
-				if (userContext.userData.superior)
-					rowData.push({
+					{
 						columnName: 'Opciones',
 						rowData: optionsButtons,
-					});
+					},
+				];
 				return generateRow(rowData);
 			}
 			case 'user': {
@@ -131,12 +150,21 @@ const Row = ({ type, data, modifyCallback }) => {
 						rowData: data.guardId,
 					},
 					{
-						columnName: 'Usuario',
-						rowData: data.username,
-					},
-					{
-						columnName: 'Correo electrónico',
-						rowData: data.email,
+						columnName: 'Historial',
+						rowData: button(
+							null,
+							null,
+							<MdHistory size={30} />,
+							(Math.random() + 1).toString(36).substring(4).replace(/\d+/g, ''),
+							{
+								title: 'Historial de edición',
+								body: <Changelog log={data.changelog} />,
+								close: 'Cerrar',
+								comment: false,
+							},
+							{ action: null },
+							'changelog',
+						),
 					},
 					{
 						columnName: 'Opciones',

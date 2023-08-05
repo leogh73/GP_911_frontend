@@ -117,8 +117,6 @@ const Users = ({ section }) => {
 							{ key: 2, title: 'NI' },
 							{ key: 3, title: 'Jerarquía' },
 							{ key: 4, title: 'Guardia' },
-							{ key: 5, title: 'Usuario' },
-							{ key: 6, title: 'Correo electrónico' },
 						]}
 						rowType={'user'}
 						dataList={dataList}

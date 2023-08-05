@@ -70,9 +70,10 @@ const useUser = (setNavBarState) => {
 	useEffect(() => {
 		if (
 			!token &&
-			location.pathname !== '/' &&
 			!location.pathname.startsWith('/new-password') &&
-			!location.pathname.startsWith('/forgot-password')
+			!location.pathname.startsWith('/forgot-password') &&
+			!location.pathname.startsWith('/shared') &&
+			location.pathname !== '/'
 		)
 			refreshSession();
 	}, [refreshSession, token, location.pathname]);

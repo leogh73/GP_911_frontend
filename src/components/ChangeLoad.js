@@ -164,6 +164,22 @@ const ChangeLoad = ({ sendResult, startData }) => {
 							/>
 						</div>,
 					)}
+				{userContext.userData.section !== 'Monitoring' &&
+					!startData &&
+					changeSection(
+						'01',
+						null,
+						<BiCommentDetail />,
+						'Motivo',
+						<div className="comment-load">
+							<input
+								name={'comment-load'}
+								id={'03_comment'}
+								onChange={loadComment}
+								value={commentContext.comment ?? ''}
+							/>
+						</div>,
+					)}
 				<Button
 					className="button"
 					text={startData ? 'EDITAR' : 'ENVIAR'}

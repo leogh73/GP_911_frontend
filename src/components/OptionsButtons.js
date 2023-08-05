@@ -2,20 +2,18 @@ import { useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { IconContext } from 'react-icons';
-import { MdEdit, MdHistory, MdOutlineCheck, MdOutlineClose } from 'react-icons/md';
+import { MdEdit, MdOutlineCheck, MdOutlineClose, MdShare } from 'react-icons/md';
 import { CgUnavailable } from 'react-icons/cg';
 import { MdDeleteForever } from 'react-icons/md';
 import { IoMdClose } from 'react-icons/io';
 import { RiRotateLockFill } from 'react-icons/ri';
 import UserContext from '../context/UserContext';
 
-import Changelog from './Changelog';
-import Modal from './Modal';
+import button from './ButtonModal';
 import './OptionsButtons.css';
 
 import CommentContext from '../context/CommentContext';
 import useHttpConnection from '../hooks/useHttpConnection';
-import Loading from './Loading';
 
 const OptionsButtons = ({ type, data, callbackFn }) => {
 	const [selectedData, setSelectedData] = useState({ id: data._id, button: '' });
@@ -41,34 +39,14 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		navigate('/profile/edit-user');
 	};
 
-	const button = (icon, idModal, texts, functions, type) => {
-		const isSelected = selectedData.id === data._id && texts.id === selectedData.button;
-		return (
-			<div className="option-container">
-				<Modal
-					id={idModal}
-					texts={texts}
-					functions={functions}
-					clickComponent={
-						<div
-							className="option-button"
-							style={{ backgroundColor: `${isSelected ? 'var(--disabled-button)' : ''}` }}
-						>
-							{isSelected ? <Loading type={'opened-button'} /> : icon}
-						</div>
-					}
-					type={type}
-				/>
-			</div>
-		);
-	};
-
 	const optionButtons = () => {
 		if (userContext.userData.superior) {
 			if (type === 'change' && data.status === 'Solicitado')
 				return (
 					<>
 						{button(
+							data,
+							selectedData,
 							<MdOutlineCheck size={24} />,
 							generateRandomId(),
 							{
@@ -89,6 +67,8 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 							},
 						)}
 						{button(
+							data,
+							selectedData,
 							<MdOutlineClose size={24} />,
 							generateRandomId(),
 							{
@@ -115,6 +95,8 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 				return (
 					<>
 						{button(
+							data,
+							selectedData,
 							<CgUnavailable size={32} />,
 							generateRandomId(),
 							{
@@ -140,6 +122,8 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 				return (
 					<>
 						{button(
+							data,
+							selectedData,
 							<MdDeleteForever size={24} />,
 							generateRandomId(),
 							{
@@ -157,12 +141,20 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		if (type === 'user' && userContext.userData.admin) {
 			return (
 				<>
-					<div className="option-container">
-						<div className="option-button" onClick={editProfilePage}>
-							{<MdEdit size={24} />}
+					<IconContext.Provider
+						value={{
+							style: { color: 'white' },
+						}}
+					>
+						<div className="option-container">
+							<div className="option-button" onClick={editProfilePage}>
+								{<MdEdit size={24} />}
+							</div>
 						</div>
-					</div>
+					</IconContext.Provider>
 					{button(
+						data,
+						selectedData,
 						<RiRotateLockFill size={28} />,
 						generateRandomId(),
 						{
@@ -175,6 +167,8 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 						{ action: () => modifyData(type, data._id, 'restore password') },
 					)}
 					{button(
+						data,
+						selectedData,
 						<MdDeleteForever size={24} />,
 						generateRandomId(),
 						{
@@ -196,12 +190,20 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		)
 			return (
 				<>
-					<div className="option-container">
-						<div className="option-button" onClick={editChangePage}>
-							{<MdEdit size={24} />}
+					<IconContext.Provider
+						value={{
+							style: { color: 'white' },
+						}}
+					>
+						<div className="option-container">
+							<div className="option-button" onClick={editChangePage}>
+								{<MdEdit size={24} />}
+							</div>
 						</div>
-					</div>
+					</IconContext.Provider>
 					{button(
+						data,
+						selectedData,
 						<IoMdClose size={28} />,
 						generateRandomId(),
 						{
@@ -233,6 +235,8 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 			return (
 				<>
 					{button(
+						data,
+						selectedData,
 						<IoMdClose size={28} />,
 						generateRandomId(),
 						{
@@ -260,6 +264,8 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 			return (
 				<>
 					{button(
+						data,
+						selectedData,
 						<MdDeleteForever size={28} />,
 						generateRandomId(),
 						{
@@ -277,6 +283,8 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 			return (
 				<>
 					{button(
+						data,
+						selectedData,
 						<MdDeleteForever size={24} />,
 						generateRandomId(),
 						{
@@ -307,6 +315,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					'Content-type': 'application/json',
 				},
 			);
+			console.log(consult);
 			setSelectedData({ id: data._id, button: '' });
 			if (consult.error === 'Token expired') {
 				userContext.logout(true);
@@ -324,6 +333,17 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		}
 	};
 
+	const shareHandler = async () => {
+		try {
+			await navigator.clipboard.writeText(
+				`https://guardias911.pages.dev/shared/${type}/${data._id}`,
+			);
+			toast('Enlace copiado', { type: 'info' });
+		} catch (error) {
+			toast('No se pudo copiar el enlace', { type: 'warning' });
+		}
+	};
+
 	return (
 		<IconContext.Provider
 			value={{
@@ -332,19 +352,13 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		>
 			<div className="option-buttons">
 				{optionButtons()}
-				{(type === 'change' || type === 'user') &&
-					button(
-						<MdHistory size={30} />,
-						generateRandomId(),
-						{
-							title: 'Historial de edición',
-							body: <Changelog log={data.changelog} />,
-							close: 'Cerrar',
-							comment: false,
-						},
-						{ action: null },
-						'changelog',
-					)}
+				{type !== 'request' && type !== 'user' && (
+					<div className="option-container">
+						<div className="option-button" onClick={shareHandler}>
+							{<MdShare size={24} />}
+						</div>
+					</div>
+				)}
 			</div>
 		</IconContext.Provider>
 	);

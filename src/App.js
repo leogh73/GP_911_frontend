@@ -10,7 +10,7 @@ import useRoutes from './hooks/useRoutes';
 
 import UserContext from './context/UserContext';
 import Loading from './components/Loading';
-import IdleTimer from './components/IdleTimer';
+// import IdleTimer from './components/IdleTimer';
 
 const App = () => {
 	const [navBarState, setNavBarState] = useState({ isLoggedIn: false, isAdmin: false });
@@ -39,7 +39,7 @@ const App = () => {
 				)}
 			</IconContext.Provider>
 			<ToastContainer />
-			<IdleTimer isLoggedIn={navBarState.isLoggedIn} />
+			{/* <IdleTimer isLoggedIn={navBarState.isLoggedIn} /> */}
 			<footer className="footer">
 				<div className="ft-logo">
 					<img alt="" src={'https://guardias911.pages.dev/911-logo.png'}></img>

@@ -5,9 +5,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import ChangeLoad from '../components/ChangeLoad';
 import RequestLoad from '../components/RequestLoad';
 import AffectedLoad from '../components/AffectedLoad';
+import { useState } from 'react';
+import CommentContext from '../context/CommentContext';
 
 const NewItem = ({ type }) => {
 	const navigate = useNavigate();
+	const [commentString, setCommentString] = useState('');
 
 	const toastMessage = (toast) => {
 		if (toast === 'success') {
@@ -57,7 +60,16 @@ const NewItem = ({ type }) => {
 		}
 	};
 
-	return <>{loadForm(type)}</>;
+	return (
+		<CommentContext.Provider
+			value={{
+				comment: commentString,
+				loadComment: setCommentString,
+			}}
+		>
+			{loadForm(type)}
+		</CommentContext.Provider>
+	);
 };
 
 export default NewItem;

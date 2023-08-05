@@ -193,8 +193,8 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 									</div>
 								</th>
 							))}
-							{((!userContext.userData.superior && rowType !== 'affected') ||
-								(userContext.userData.superior && rowType !== 'request')) && <th>Opciones</th>}
+							{(rowType === 'change' || rowType === 'user') && <th>Historial</th>}
+							<th>Opciones</th>
 						</tr>
 					</thead>
 					<tbody>

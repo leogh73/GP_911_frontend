@@ -14,6 +14,7 @@ import Profile from '../pages/Profile';
 import ProfileEdit from '../pages/ProfileEdit';
 import ProfileEditConfirm from '../pages/ProfileEditConfirm';
 import NewPassword from '../pages/NewPassword';
+import Shared from '../pages/Shared';
 
 const useRoutes = (userData) => {
 	const [state, dispatch] = useReducer(reducer, {
@@ -133,14 +134,16 @@ const useRoutes = (userData) => {
 					</Route>
 				</>
 			)}
+			<Route path="shared/:type/:id" element={<Shared />} />
 			<Route path="*" element={<NotFound />} />
 		</Routes>
 	) : (
 		<Routes>
 			<Route path="/" element={<Login />} />
-			<Route path="*" element={<NotFound />} />
 			<Route path="/forgot-password" element={<Password type={'forgot'} />} />
 			<Route path="/new-password/:token" element={<NewPassword />} />
+			<Route path="shared/:type/:id" element={<Shared />} />
+			<Route path="*" element={<NotFound />} />
 		</Routes>
 	);
 

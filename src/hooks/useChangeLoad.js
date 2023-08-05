@@ -138,7 +138,9 @@ const useChangeLoad = (resultData, startData) => {
 		formData.forEach((data) => {
 			if (data === '-') isValid = false;
 		});
-
+		if (userContext.userData.section !== 'Monitoring' && commentContext.comment === '')
+			isValid = false;
+		console.log(isValid);
 		if (
 			(!!startData &&
 				startData.coverData.name === state.data.coverData.name &&
@@ -148,7 +150,7 @@ const useChangeLoad = (resultData, startData) => {
 			isValid = false;
 		}
 		dispatch({ type: 'data is valid', payload: { status: isValid } });
-	}, [state.data, startData]);
+	}, [state.data, startData, commentContext.comment, userContext.userData.section]);
 
 	useEffect(() => {
 		sendDataCallback();
@@ -178,7 +180,12 @@ const useChangeLoad = (resultData, startData) => {
 					},
 					comment: commentContext.comment,
 			  }
-			: { coverData: state.data.coverData, returnData: state.data.returnData, type: 'change' };
+			: {
+					coverData: state.data.coverData,
+					returnData: state.data.returnData,
+					motive: commentContext.comment,
+					type: 'change',
+			  };
 		try {
 			dispatch({ type: 'loading', payload: { status: true } });
 			let consult = await httpRequestHandler(
