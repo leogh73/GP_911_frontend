@@ -123,9 +123,7 @@ const Modal = ({ id, clickComponent, texts, functions, type }) => {
 
 	return (
 		<>
-			<div style={{ maxWidth: '8.2em' }} onClick={openModal}>
-				{clickComponent}
-			</div>
+			<div onClick={openModal}>{clickComponent}</div>
 			<div
 				id={id}
 				className="modal-bg"

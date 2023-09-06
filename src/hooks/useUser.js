@@ -2,7 +2,7 @@ import { useState, useCallback, useContext, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const useUser = (setNavBarState) => {
 	const [token, setToken] = useState();
@@ -10,6 +10,7 @@ const useUser = (setNavBarState) => {
 	const [loading, setLoading] = useState();
 	const { httpRequestHandler } = useHttpConnection();
 	const location = useLocation();
+	const navigate = useNavigate();
 	const userContext = useContext(UserContext);
 
 	const login = useCallback(
@@ -27,33 +28,28 @@ const useUser = (setNavBarState) => {
 	const logout = useCallback(
 		async (expiredSession) => {
 			setLoading(true);
-			let response = await httpRequestHandler(
-				`${process.env.REACT_APP_API_URL}/api/user/logout`,
-				'POST',
-				JSON.stringify({}),
-				{
+			let response;
+			if (!expiredSession)
+				response = await httpRequestHandler('user/logout', 'POST', JSON.stringify({}), {
 					authorization: `Bearer ${userContext.token}`,
-				},
-			);
+				});
 			setLoading(false);
-			if (response.message) {
-				setToken(null);
-				setUserData(null);
-				setNavBarState({ isLoggedIn: false, isAdmin: false });
-				if (expiredSession)
-					toast('Por su seguridad, vuelva a iniciar sesión.', { type: 'warning' });
-			} else {
-				return toast('No se pudo completar el proceso.', { type: 'error' });
-			}
+			setToken(null);
+			setUserData(null);
+			setNavBarState({ isLoggedIn: false, isAdmin: false });
+			navigate('/');
+			if (expiredSession)
+				return toast('Por su seguridad, vuelva a iniciar sesión.', { type: 'warning' });
+			if (!response.message) toast('No se pudo completar el proceso.', { type: 'error' });
 		},
-		[httpRequestHandler, userContext.token, setNavBarState],
+		[httpRequestHandler, userContext.token, setNavBarState, navigate],
 	);
 
 	const refreshSession = useCallback(async () => {
 		try {
 			setLoading(true);
 			let response = await httpRequestHandler(
-				`${process.env.REACT_APP_API_URL}/api/user/refresh-session`,
+				'user/refresh-session',
 				'POST',
 				JSON.stringify({}),
 				{},

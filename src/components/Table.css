@@ -74,6 +74,10 @@
 	display: none;
 }
 
+.table-schedule-week > table {
+	border: none;
+}
+
 .table-schedule-full tr .row-data,
 .table-schedule-week tr .row-data {
 	cursor: pointer;
@@ -89,29 +93,15 @@ tr td.row-data.shift {
 	cursor: auto;
 }
 
-@media only screen and (max-width: 777px) {
-	td {
-		display: inline-block;
-	}
-	td:nth-child(1) {
-		clear: both;
-	}
+table > thead > {
+	height: 41px;
+}
 
-	.changes-filters {
-		flex-direction: column;
-		/* justify-content: center; */
-		/* margin-right: 10px; */
-		width: 94%;
-	}
-
-	.changes-search-box {
-		width: 70%;
-		margin: 10px;
-	}
-
-	table {
-		text-align: left;
-	}
+.table-change > thead > tr > th:nth-child(7),
+.table-change > thead > tr > th:nth-child(8),
+.table-user > thead > tr > th:nth-child(6),
+.table-user > thead > tr > th:nth-child(7) {
+	text-align: center;
 }
 
 h2 {
@@ -146,20 +136,18 @@ th {
 }
 
 .table-header {
-	padding-left: 15px;
-	/* padding-right: px; */
-	margin-right: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
+	justify-content: space-between;
 	align-items: center;
-	min-width: 2.7rem;
+	/* min-width: 2.7rem; */
 }
 
 .arrow-down {
-	margin-left: 2px;
 	display: flex;
-	justify-content: flex-end;
+	align-items: flex-end;
 	pointer-events: none;
 	border: none;
 	background-color: var(--nav-color);
@@ -187,7 +175,7 @@ td,
 th {
 	padding: 8px;
 	border: 1px solid var(--search-text);
-	text-align: center;
+	text-align: left;
 	font-size: 18px;
 }
 
@@ -196,13 +184,25 @@ th .schedule {
 	font-size: 18px;
 }
 
-.table-change tr:hover {
+.table-schedule-week > table > thead > tr > th,
+.table-schedule-week > table > tbody > tr > td {
+	text-align: center;
+}
+
+.table-change > tbody > tr:hover,
+.table-requested > tbody > tr:hover,
+.table-affected > tbody > tr:hover,
+.table-user > tbody > tr:hover {
 	background-color: #b1dffa;
 }
 
 .table-schedule-full tr td:hover,
 .table-schedule-week tr td:hover {
 	background-color: #b1dffa;
+}
+
+.table-schedule-full tr td {
+	text-align: center;
 }
 
 .change-detail ul {
@@ -221,12 +221,41 @@ th .schedule {
 	display: none;
 }
 
+/* .table-change > thead {
+	height: 80px;
+} */
+
+@media only screen and (max-width: 777px) {
+	td {
+		display: inline-block;
+	}
+	td:nth-child(1) {
+		clear: both;
+	}
+
+	.changes-filters {
+		flex-direction: column;
+		/* justify-content: center; */
+		/* margin-right: 10px; */
+		width: 94%;
+	}
+
+	.changes-search-box {
+		width: 70%;
+		margin: 10px;
+	}
+
+	table {
+		text-align: left;
+	}
+}
+
 /* 
 Max width before this PARTICULAR table gets nasty
 This query will take effect for any screen smaller than 760px
 and also iPads specifically.
 */
-@media only screen and (max-width: 1020px),
+@media only screen and (max-width: 1027px),
 	(min-device-width: 768px) and (max-device-width: 1024px) {
 	table {
 		width: 100%;
@@ -241,16 +270,6 @@ and also iPads specifically.
 	tr {
 		display: block;
 		/* z-index: 0; */
-	}
-
-	td,
-	th {
-		text-align: left;
-	}
-
-	.table-header {
-		padding-left: 0;
-		justify-content: space-between;
 	}
 
 	.table-schedule-week {
@@ -322,6 +341,23 @@ and also iPads specifically.
 	tr td.row-data.shift,
 	tr td.row-data.shift .col-name {
 		color: white;
+	}
+
+	.table-schedule-full > table > thead > tr > th,
+	.table-schedule-full > table > tbody > tr > td {
+		text-align: start;
+	}
+
+	.table-change > thead > tr > th:nth-child(7),
+	.table-change > thead > tr > th:nth-child(8),
+	.table-requested > thead > tr > th:nth-child(6),
+	.table-affected > thead > tr > th:nth-child(8),
+	.table-affected > thead > tr > th:nth-child(8),
+	.table-user > thead > tr > th:nth-child(6),
+	.table-user > thead > tr > th:nth-child(7) {
+		text-align: start;
+		padding-left: 15px;
+		height: 50px;
 	}
 }
 

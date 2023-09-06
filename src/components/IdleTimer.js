@@ -14,7 +14,6 @@ const IdleTimer = ({ isLoggedIn }) => {
 			setShowModal(false);
 			setModalRemainingTime(10);
 			userContext.logout(true);
-			navigate('/');
 		}
 
 		let modalTimeout = null;

@@ -1,20 +1,34 @@
+import { IconContext } from 'react-icons';
 import './Button.css';
 import Loading from './Loading';
 
-const Button = ({ text, width, onClick, disabled, loading }) => {
+const Button = ({ text, width, height, onClick, disabled, loading, icon }) => {
 	return (
-		<div style={{ width: width }} className="btn-container">
-			<button
-				style={{ width: `${width}` }}
-				className={`button ${disabled || loading ? 'disabled' : ''}`}
-				onClick={onClick}
-				disabled={disabled}
-			>
-				<div className="bt-content">
-					{loading ? <Loading type={'opened-button'} /> : <div className="bt-text">{text}</div>}
-				</div>
-			</button>
-		</div>
+		<IconContext.Provider
+			value={{
+				style: { color: 'white' },
+			}}
+		>
+			<div className="btn-container">
+				<button
+					style={{ width: `${width}`, height: `${height}` }}
+					className={`button ${disabled || loading ? 'disabled' : ''}`}
+					onClick={onClick}
+					disabled={disabled}
+				>
+					<div className="bt-content">
+						{loading ? (
+							<Loading type={'opened-button'} />
+						) : (
+							<>
+								<div style={{ marginRight: `${height ? '0px' : '10px'}` }}>{icon}</div>
+								<div className="bt-text">{text}</div>
+							</>
+						)}
+					</div>
+				</button>
+			</div>
+		</IconContext.Provider>
 	);
 };
 

@@ -22,6 +22,11 @@
 	padding: 10px;
 }
 
+.user-section-schedule-search {
+	width: 28em;
+	padding: 10px;
+}
+
 .user-profile-section {
 	padding: 10px;
 	width: 20em;
@@ -57,6 +62,19 @@
 	/* height: 2.5rem; */
 	border: 0.5px solid var(--search-text);
 	border-radius: 10px;
+	/* text-overflow: clip; */
+	/* max-height: 10em; */
+}
+
+.user-section-comment {
+	font-size: 22px;
+	letter-spacing: 1px;
+	padding: 5px;
+	display: flex;
+	flex-direction: row;
+	align-content: center;
+	border: 0.5px solid var(--search-text);
+	border-radius: 10px;
 }
 
 .user-section-profile {
@@ -74,25 +92,24 @@
 	border-radius: 10px;
 }
 
-@media only screen and (max-width: 700px) {
-	.new-change {
-		/* min-width: 99.9vmin; */
-		overflow: hidden;
-	}
+.section-icon-comment {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-size: 19px;
+	padding: 10px;
+	width: 70px;
+}
 
-	.new-change-data {
-		display: flex;
-		flex-direction: column;
-	}
-
-	.form {
-		width: 430px;
-	}
-
-	/* .inputs-col {
-		padding-left: 0px;
-		padding-right: 0px;
-	} */
+.new-change-comment-data {
+	/* width: 80%; */
+	padding-top: 10px;
+	padding-bottom: 10px;
+	padding-left: 20px;
+	padding-right: 20px;
+	text-overflow: clip;
+	/* min-height: 10em; */
 }
 
 .section-text,
@@ -100,6 +117,13 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	font-size: 19px;
+	padding: 10px;
+}
+
+.section-text-comment {
+	/* display: flex; */
+	flex-direction: column;
 	font-size: 19px;
 	padding: 10px;
 }
@@ -118,10 +142,6 @@
 	width: 20%;
 }
 
-.section-text {
-	width: 80%;
-}
-
 .user-section .section-title {
 	font-size: 16px;
 	font-weight: bold;
@@ -132,7 +152,6 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	/* min-height: 300px; */
 	justify-content: space-around;
 }
 
@@ -156,4 +175,47 @@
 	/* font-weight: 400; */
 	/* border: 2px solid rgba(0, 0, 0, 0.2); */
 	/* transition: all 0.3s ease; */
+}
+
+.section-comment-data {
+	text-overflow: hidden;
+}
+
+.section-text-comment {
+	width: 100%;
+}
+
+.new-change-comment-data {
+	width: 44em;
+	padding: 10px;
+}
+
+@media only screen and (max-width: 780px) {
+	.new-change {
+		/* min-width: 99.9vmin; */
+		overflow: hidden;
+	}
+
+	.new-change-data {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.form {
+		width: 430px;
+	}
+
+	/* .inputs-col {
+		padding-left: 0px;
+		padding-right: 0px;
+	} */
+
+	/* .section-icon-comment {
+		width: 30%;
+	} */
+
+	.new-change-comment-data {
+		width: 22em;
+		padding: 10px;
+	}
 }

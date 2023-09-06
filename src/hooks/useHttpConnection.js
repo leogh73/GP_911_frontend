@@ -4,12 +4,12 @@ const useHttpConnection = () => {
 	const activeHttpConnections = useRef([]);
 
 	const httpRequestHandler = useCallback(
-		async (url, method = 'GET', body = null, headers = {}) => {
+		async (endpoint, method = 'GET', body = null, headers = {}) => {
 			try {
 				const abortConnection = new AbortController();
 				activeHttpConnections.current.push(abortConnection);
 
-				const response = await fetch(url, {
+				const response = await fetch(`${process.env.REACT_APP_API_URL}${endpoint}`, {
 					method,
 					body,
 					headers,

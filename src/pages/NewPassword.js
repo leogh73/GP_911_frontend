@@ -20,7 +20,7 @@ const NewPassword = () => {
 	const checkToken = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
-				`${process.env.REACT_APP_API_URL}/api/user/forgot-password`,
+				'user/forgot-password',
 				'POST',
 				JSON.stringify({ token }),
 				{ 'Content-type': 'application/json' },

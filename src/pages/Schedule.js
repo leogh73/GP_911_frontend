@@ -1,9 +1,5 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-
-import { Calendar } from 'react-calendar';
 import { FaExclamationTriangle } from 'react-icons/fa';
-import { AiOutlineSelect } from 'react-icons/ai';
 
 import Loading from '../components/Loading';
 import Message from '../components/Message';
@@ -13,16 +9,19 @@ import './Schedule.css';
 
 import UserContext from '../context/UserContext';
 import useHttpConnection from '../hooks/useHttpConnection';
+import DropdownCalendar from '../components/DropdownCalendar';
+import { BsCalendarDate } from 'react-icons/bs';
+import { MdClose } from 'react-icons/md';
+import Button from '../components/Button';
 
-const Schedule = ({ type }) => {
+const Schedule = () => {
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(false);
 	const [dataList, setDataList] = useState();
 	const userContext = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
-	const navigate = useNavigate();
-	const location = useLocation();
 	const [selectedDate, setSelectedDate] = useState(null);
+	const [calendarKey, setCalendarkey] = useState(Math.floor(Math.random() * 1000));
 
 	const dateHandler = (date) =>
 		`${date.getDate().toString().padStart(2, 0)}/${(date.getMonth() + 1)
@@ -31,20 +30,14 @@ const Schedule = ({ type }) => {
 
 	const fetchData = useCallback(async () => {
 		try {
-			if (type === 'search' && !selectedDate) return;
 			let consult;
-			if (type === 'month')
+			if (!selectedDate) {
+				consult = await httpRequestHandler('spreadsheet/month', 'POST', JSON.stringify({}), {
+					authorization: `Bearer ${userContext.token}`,
+				});
+			} else {
 				consult = await httpRequestHandler(
-					`${process.env.REACT_APP_API_URL}/api/spreadsheet/month`,
-					'POST',
-					JSON.stringify({}),
-					{
-						authorization: `Bearer ${userContext.token}`,
-					},
-				);
-			if (type === 'search' && !!selectedDate)
-				consult = await httpRequestHandler(
-					`${process.env.REACT_APP_API_URL}/api/spreadsheet/search`,
+					'spreadsheet/search',
 					'POST',
 					JSON.stringify({ date: selectedDate }),
 					{
@@ -52,11 +45,11 @@ const Schedule = ({ type }) => {
 						'Content-type': 'Application/json',
 					},
 				);
+			}
 			if (consult.error) {
 				setError(true);
-				if (consult.error === 'Token expired') {
+				if (consult.error === 'Not authorized') {
 					userContext.logout(true);
-					navigate('/');
 				}
 				return;
 			}
@@ -71,59 +64,62 @@ const Schedule = ({ type }) => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, selectedDate, type, navigate, userContext]);
+	}, [httpRequestHandler, selectedDate, userContext]);
 
 	useEffect(() => {
 		fetchData();
-	}, [fetchData, type, selectedDate]);
+	}, [fetchData]);
 
-	useEffect(() => {
-		let tabs = document.querySelectorAll('.tab');
-		let element = document.getElementById(location.pathname);
-		tabs.forEach((tab) => tab.classList.remove('selected'));
-		if (!element.classList.contains('selected')) element.classList.add('selected');
-	}, [location.pathname]);
-
-	const tabClickHandler = (e) => {
-		let elementId = e.target.getAttribute('id');
-		let elementUrl = e.target.getAttribute('href');
-		let url = !!elementId ? elementId : elementUrl;
-		if (!!url && url !== location.pathname) {
-			navigate(url);
-			setLoading(true);
-			setError(false);
-			setSelectedDate(null);
-		}
+	const toggleCalendar = () => {
+		const calendarClassList = document
+			.getElementById('schedule-calendar')
+			.querySelector('.calendar-component').classList;
+		if (calendarClassList.contains('active-search')) calendarClassList.toggle('active-search');
+		const arrowClassList = document.querySelector('.dropdown-arrow').classList;
+		if (arrowClassList.contains('active')) arrowClassList.toggle('active');
 	};
-
-	const monthId = '/schedule/month';
-	const searchId = '/schedule/search';
 
 	return (
 		<div className="changes-list">
-			<div className="tabs-container" onClick={tabClickHandler}>
-				<div className="tabs-list">
-					<div className="tab" id={monthId} index={0}>
-						<Link to={monthId}>Cronograma</Link>
+			<div className="schedule-search-container">
+				<div key={'01'} className="user-section-schedule-search">
+					<div className="user-section-content">
+						<DropdownCalendar
+							key={calendarKey}
+							name={'schedule-calendar'}
+							icon={<BsCalendarDate size={20} />}
+							titleValue={'Buscar fecha'}
+							value={selectedDate ?? 'Seleccionar'}
+							onChange={(date) => {
+								setError(false);
+								setLoading(true);
+								setSelectedDate(dateHandler(new Date(date)));
+								toggleCalendar();
+							}}
+							schedule={true}
+						/>
 					</div>
-					<div className="tab" id={searchId} index={1}>
-						<Link to={searchId}>Buscador</Link>
+				</div>
+				<div className="schedule-close-button-container">
+					<div style={{ paddingRight: '10px' }}>
+						<Button
+							width={60}
+							height={60}
+							icon={<MdClose size={32} />}
+							disabled={selectedDate ? false : true}
+							onClick={() => {
+								setError(false);
+								setLoading(true);
+								setSelectedDate(null);
+								setCalendarkey(Math.floor(Math.random() * 1000));
+								toggleCalendar();
+							}}
+						/>
 					</div>
 				</div>
 			</div>
 			{
 				<>
-					{type === 'search' && (
-						<div className="schedule-calendar">
-							<Calendar
-								onChange={(date) => {
-									setError(false);
-									setLoading(true);
-									setSelectedDate(dateHandler(new Date(date)));
-								}}
-							/>
-						</div>
-					)}
 					{error ? (
 						<div className="loading-error-change">
 							<Message
@@ -144,36 +140,18 @@ const Schedule = ({ type }) => {
 						</div>
 					) : (
 						<>
-							{userContext.state.activeTab === '/schedule/search' && !selectedDate ? (
-								<div className="loading-error-change">
-									<Message
-										title={'Seleccionar fecha'}
-										icon={<AiOutlineSelect />}
-										body={'Seleccione una fecha para ver el cronograma de trabajo.'}
-									/>
-								</div>
-							) : (
-								<>
-									<div
-										style={{ animation: 'bgFadeIn 0.6s ease' }}
-										className={'table-schedule-week'}
-									>
-										{dataList.splittedSchedule.map((week) => (
-											<ScheduleTable key={Math.random() * 1000} splitted={true} data={week} />
-										))}
-									</div>
-									<div
-										style={{ animation: 'bgFadeIn 0.6s ease' }}
-										className={'table-schedule-full'}
-									>
-										<ScheduleTable
-											key={Math.random() * 1000}
-											splitted={false}
-											data={dataList.fullSchedule}
-										/>
-									</div>
-								</>
-							)}
+							<div style={{ animation: 'bgFadeIn 0.6s ease' }} className={'table-schedule-week'}>
+								{dataList.splittedSchedule.map((week) => (
+									<ScheduleTable key={Math.random() * 1000} splitted={true} data={week} />
+								))}
+							</div>
+							<div style={{ animation: 'bgFadeIn 0.6s ease' }} className={'table-schedule-full'}>
+								<ScheduleTable
+									key={Math.random() * 1000}
+									splitted={false}
+									data={dataList.fullSchedule}
+								/>
+							</div>
 						</>
 					)}
 				</>

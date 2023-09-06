@@ -177,13 +177,13 @@ const Table = ({ id, headersList, rowType, dataList, newLink }) => {
 				</div>
 			</div>
 			{listData.filter.length ? (
-				<table className="table-change">
+				<table className={`table-${rowType}`}>
 					<thead>
 						<tr>
 							{headersList.map((h) => (
 								<th key={h.key} onClick={() => headerClickHandler(h.key, h.title)}>
 									<div className="table-header">
-										{h.title}
+										<div className="th-title">{h.title}</div>
 										<div
 											type="button"
 											className={`${h.key === 0 ? 'arrow-down  arrow-active' : 'arrow-down'}`}

@@ -1,10 +1,8 @@
-import React, { useState, useCallback, useEffect, useContext } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { FaExclamationTriangle } from 'react-icons/fa';
-import { Link, useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
-import Table from '../components/Table';
-import UserContext from '../context/UserContext';
 
 import './Changes.css';
 import useHttpConnection from '../hooks/useHttpConnection';
@@ -15,7 +13,6 @@ const Shared = () => {
 	const [error, setError] = useState(false);
 	const [itemData, setItemData] = useState({});
 	const { httpRequestHandler } = useHttpConnection();
-	const userContext = useContext(UserContext);
 
 	const routeParams = useParams();
 	const type = routeParams.type;
@@ -23,11 +20,8 @@ const Shared = () => {
 
 	const fetchData = useCallback(async () => {
 		try {
-			let data = await httpRequestHandler(
-				`${process.env.REACT_APP_API_URL}/api/item/fetch/${type}/${id}`,
-			);
-			console.log(data);
-			if (data.error) setError(true);
+			let data = await httpRequestHandler(`item/fetch/${type}/${id}`);
+			if (data.error) return setError(true);
 			setItemData(data);
 		} catch (error) {
 			console.log(error);
@@ -42,9 +36,9 @@ const Shared = () => {
 	}, [fetchData]);
 
 	return (
-		<div className="changes-list">
+		<div>
 			{error ? (
-				<div className="loading-error-change" style={{ paddingBottom: '3em' }}>
+				<div className="new-form">
 					<Message
 						title={'Error cargando datos'}
 						icon={<FaExclamationTriangle />}
@@ -54,7 +48,7 @@ const Shared = () => {
 					/>
 				</div>
 			) : loading ? (
-				<div className="spinner-container-change">
+				<div className="spinner-container-change" style={{ marginTop: '3.9em' }}>
 					<Loading type={'closed'} />
 				</div>
 			) : (

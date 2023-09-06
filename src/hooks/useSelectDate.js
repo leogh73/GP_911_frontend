@@ -1,12 +1,10 @@
 import { useReducer, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useSelectDate = (sendDate, name) => {
 	const userContext = useContext(UserContext);
-	const navigate = useNavigate();
 	const { httpRequestHandler } = useHttpConnection();
 
 	function reducer(state, action) {
@@ -99,7 +97,7 @@ const useSelectDate = (sendDate, name) => {
 
 		try {
 			let consult = await httpRequestHandler(
-				`${process.env.REACT_APP_API_URL}/api/spreadsheet/day`,
+				'spreadsheet/day',
 				'POST',
 				JSON.stringify({ date: dateData.formattedDate }),
 				{
@@ -108,10 +106,8 @@ const useSelectDate = (sendDate, name) => {
 				},
 			);
 
-			if (consult.error === 'Token expired') {
-				userContext.logout(true);
-				navigate('/');
-				return;
+			if (consult.error === 'Not authorized') {
+				return userContext.logout(true);
 			}
 			if (consult.newAccessToken) {
 				const newUserData = { ...userContext.userData, token: consult.newAccessToken };

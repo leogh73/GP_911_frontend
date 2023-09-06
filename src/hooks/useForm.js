@@ -5,7 +5,6 @@ import registerInputs from '../inputFields/RegisterInputs';
 import useHttpConnection from './useHttpConnection';
 import useRememberMe from './useRememberMe';
 import UserContext from '../context/UserContext';
-import { useNavigate } from 'react-router-dom';
 import { BiCommentDetail } from 'react-icons/bi';
 
 const useForm = (sendUserForm, pageName, profile) => {
@@ -13,7 +12,6 @@ const useForm = (sendUserForm, pageName, profile) => {
 	const userContext = useContext(UserContext);
 	const { httpRequestHandler } = useHttpConnection();
 	const storedUser = loadUser();
-	const navigate = useNavigate();
 
 	let ownProfile = profile?.data?._id === userContext.userData?._id ? true : false;
 
@@ -136,7 +134,7 @@ const useForm = (sendUserForm, pageName, profile) => {
 		if (pageName !== 'login') headers.authorization = `Bearer ${userContext.token}`;
 		dispatch({ type: 'loading', payload: { status: true } });
 		let resultData = await httpRequestHandler(
-			`${process.env.REACT_APP_API_URL}/api/user/${pageName}`,
+			`user/${pageName}`,
 			'POST',
 			JSON.stringify(formData),
 			headers,
@@ -144,9 +142,8 @@ const useForm = (sendUserForm, pageName, profile) => {
 		dispatch({ type: 'loading', payload: { status: false } });
 		if (resultData.error)
 			return dispatch({ type: 'error', payload: { status: true, type: resultData.error } });
-		if (resultData.error === 'Token expired') {
-			userContext.profile.data.logout(true);
-			return navigate('/');
+		if (resultData.error === 'Not authorized') {
+			return userContext.profile.data.logout(true);
 		}
 		state.inputs.forEach((i) => {
 			i.value = '';

@@ -164,13 +164,12 @@ const ChangeLoad = ({ sendResult, startData }) => {
 							/>
 						</div>,
 					)}
-				{userContext.userData.section !== 'Monitoring' &&
-					!startData &&
+				{!startData &&
 					changeSection(
 						'01',
 						null,
 						<BiCommentDetail />,
-						'Motivo',
+						'Motivo (opcional)',
 						<div className="comment-load">
 							<input
 								name={'comment-load'}

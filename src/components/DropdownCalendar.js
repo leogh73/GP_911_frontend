@@ -6,13 +6,19 @@ import './DropdownCalendar.css';
 import 'react-calendar/dist/Calendar.css';
 import SendNewContext from '../context/SendNewContext';
 
-const DropdownCalendar = ({ name, icon, titleValue, value, onChange }) => {
+const DropdownCalendar = ({ name, icon, titleValue, value, onChange, schedule }) => {
 	const sendNewContext = useContext(SendNewContext);
 
 	const toggleMenu = useCallback(() => {
-		document.getElementById(name).querySelector('.calendar-component').classList.toggle('active');
+		document
+			.getElementById(name)
+			.querySelector('.calendar-component')
+			.classList.toggle(schedule ? 'active-search' : 'active');
 		document.getElementById(name).querySelector('.dropdown-arrow').classList.toggle('active');
-	}, [name]);
+		if (schedule) {
+			document.getElementById(name).querySelector('.react-calendar').classList.toggle('search');
+		}
+	}, [name, schedule]);
 
 	const selectedOption = () => {
 		document

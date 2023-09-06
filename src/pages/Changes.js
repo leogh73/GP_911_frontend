@@ -20,21 +20,16 @@ const Changes = ({ type }) => {
 
 	const fetchListItems = useCallback(async () => {
 		try {
-			let consult = await httpRequestHandler(
-				`${process.env.REACT_APP_API_URL}/api/item/all`,
-				'POST',
-				JSON.stringify({ type }),
-				{
-					authorization: `Bearer ${userContext.token}`,
-					'Content-type': 'application/json',
-				},
-			);
+			let consult = await httpRequestHandler('item/all', 'POST', JSON.stringify({ type }), {
+				authorization: `Bearer ${userContext.token}`,
+				'Content-type': 'application/json',
+			});
 			if (consult.error) {
 				setError(true);
-				if (consult.error === 'Token expired') {
+				if (consult.error === 'Not authorized') {
 					userContext.logout(true);
-					return navigate('/');
 				}
+				return;
 			}
 			setDataList(consult.result);
 			if (consult.newAccessToken) {
@@ -47,7 +42,7 @@ const Changes = ({ type }) => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, type, userContext, navigate]);
+	}, [httpRequestHandler, type, userContext]);
 
 	useEffect(() => {
 		fetchListItems();

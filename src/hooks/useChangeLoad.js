@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useContext, useReducer } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import CommentContext from '../context/CommentContext';
 import UserContext from '../context/UserContext';
@@ -7,7 +6,6 @@ import useHttpConnection from './useHttpConnection';
 
 const useChangeLoad = (resultData, startData) => {
 	const userContext = useContext(UserContext);
-	const navigate = useNavigate();
 	const commentContext = useContext(CommentContext);
 	const { httpRequestHandler } = useHttpConnection();
 
@@ -140,7 +138,6 @@ const useChangeLoad = (resultData, startData) => {
 		});
 		if (userContext.userData.section !== 'Monitoring' && commentContext.comment === '')
 			isValid = false;
-		console.log(isValid);
 		if (
 			(!!startData &&
 				startData.coverData.name === state.data.coverData.name &&
@@ -189,16 +186,13 @@ const useChangeLoad = (resultData, startData) => {
 		try {
 			dispatch({ type: 'loading', payload: { status: true } });
 			let consult = await httpRequestHandler(
-				`${process.env.REACT_APP_API_URL}/api/item/${startData ? 'edit' : 'new'}`,
+				`item/${startData ? 'edit' : 'new'}`,
 				'POST',
 				JSON.stringify(body),
 				headers,
 			);
-			dispatch({ type: 'loading', payload: { status: false } });
-			if (consult.error === 'Token expired') {
-				userContext.logout(true);
-				navigate('/');
-				return;
+			if (consult.error === 'Not authorized') {
+				return userContext.logout(true);
 			}
 			if (consult.newAccessToken) {
 				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
@@ -208,6 +202,8 @@ const useChangeLoad = (resultData, startData) => {
 		} catch (error) {
 			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
 			console.log(error);
+		} finally {
+			dispatch({ type: 'loading', payload: { status: false } });
 		}
 	};
 

@@ -50,15 +50,10 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 		dispatch({ type: 'loading', payload: { status: true } });
 		if (type === 'users') {
 			try {
-				let consult = await httpRequestHandler(
-					`${process.env.REACT_APP_API_URL}/api/user/allusers`,
-					'POST',
-					JSON.stringify({}),
-					{
-						authorization: `Bearer ${userContext.token}`,
-						'Content-type': 'application/json',
-					},
-				);
+				let consult = await httpRequestHandler('user/allusers', 'POST', JSON.stringify({}), {
+					authorization: `Bearer ${userContext.token}`,
+					'Content-type': 'application/json',
+				});
 				data.items = consult.usersList;
 			} catch (error) {
 				return toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });

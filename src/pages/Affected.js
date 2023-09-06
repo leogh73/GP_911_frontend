@@ -1,12 +1,10 @@
 import React, { useState, useCallback, useEffect, useContext } from 'react';
 import { FaExclamationTriangle } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 import Loading from '../components/Loading';
 import Message from '../components/Message';
 import Table from '../components/Table';
 
 import useHttpConnection from '../hooks/useHttpConnection';
-
 import UserContext from '../context/UserContext';
 
 import '../pages/Changes';
@@ -17,12 +15,11 @@ const Affected = () => {
 	const [dataList, setDataList] = useState();
 	const { httpRequestHandler } = useHttpConnection();
 	const userContext = useContext(UserContext);
-	const navigate = useNavigate();
 
 	const fetchListItems = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
-				`${process.env.REACT_APP_API_URL}/api/item/all`,
+				'item/all',
 				'POST',
 				JSON.stringify({ type: 'affected' }),
 				{
@@ -32,9 +29,8 @@ const Affected = () => {
 			);
 			if (consult.error) {
 				setError(true);
-				if (consult.error === 'Token expired') {
+				if (consult.error === 'Not authorized') {
 					userContext.logout(true);
-					navigate('/');
 				}
 				return;
 			}
@@ -49,7 +45,7 @@ const Affected = () => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, userContext, navigate]);
+	}, [httpRequestHandler, userContext]);
 
 	useEffect(() => {
 		fetchListItems();

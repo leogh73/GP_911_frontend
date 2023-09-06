@@ -24,7 +24,7 @@ const Users = ({ section }) => {
 	const fetchListItems = useCallback(async () => {
 		try {
 			let consult = await httpRequestHandler(
-				`${process.env.REACT_APP_API_URL}/api/user/allusers`,
+				'user/allusers',
 				'POST',
 				JSON.stringify({ section }),
 				{
@@ -34,9 +34,8 @@ const Users = ({ section }) => {
 			);
 			if (consult.error) {
 				setError(true);
-				if (consult.error === 'Token expired') {
+				if (consult.error === 'Not authorized') {
 					userContext.logout(true);
-					navigate('/');
 				}
 				return;
 			}
@@ -47,7 +46,7 @@ const Users = ({ section }) => {
 		} finally {
 			setLoading(false);
 		}
-	}, [httpRequestHandler, section, userContext, navigate]);
+	}, [httpRequestHandler, section, userContext]);
 
 	useEffect(() => {
 		fetchListItems();

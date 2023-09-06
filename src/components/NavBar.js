@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useContext } from 'react';
 import { IconContext } from 'react-icons';
 import {
@@ -19,13 +19,9 @@ import './NavBar.css';
 
 const NavBar = ({ navBarState }) => {
 	const userContext = useContext(UserContext);
-	const navigate = useNavigate();
 	const location = useLocation();
 
-	const logout = () => {
-		userContext.logout(false);
-		navigate('/');
-	};
+	const logout = () => userContext.logout(false);
 
 	const getActiveLink = (path) => {
 		switch (path) {

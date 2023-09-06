@@ -2,9 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { IconContext } from 'react-icons';
-import { MdEdit, MdOutlineCheck, MdOutlineClose, MdShare } from 'react-icons/md';
+import { MdDeleteForever, MdEdit, MdOutlineCheck, MdOutlineClose } from 'react-icons/md';
 import { CgUnavailable } from 'react-icons/cg';
-import { MdDeleteForever } from 'react-icons/md';
 import { IoMdClose } from 'react-icons/io';
 import { RiRotateLockFill } from 'react-icons/ri';
 import UserContext from '../context/UserContext';
@@ -14,6 +13,7 @@ import './OptionsButtons.css';
 
 import CommentContext from '../context/CommentContext';
 import useHttpConnection from '../hooks/useHttpConnection';
+import { FaLink } from 'react-icons/fa';
 
 const OptionsButtons = ({ type, data, callbackFn }) => {
 	const [selectedData, setSelectedData] = useState({ id: data._id, button: '' });
@@ -307,7 +307,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 		try {
 			setSelectedData({ id: data._id, button: buttonId });
 			let consult = await httpRequestHandler(
-				`${process.env.REACT_APP_API_URL}/api/${type === 'user' ? 'user' : 'item'}/modify`,
+				`${type === 'user' ? 'user' : 'item'}/modify`,
 				'POST',
 				JSON.stringify({ type, itemId, status, comment: commentContext.comment }),
 				{
@@ -315,12 +315,9 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 					'Content-type': 'application/json',
 				},
 			);
-			console.log(consult);
 			setSelectedData({ id: data._id, button: '' });
-			if (consult.error === 'Token expired') {
-				userContext.logout(true);
-				navigate('/');
-				return;
+			if (consult.error === 'Not authorized') {
+				return userContext.logout(true);
 			}
 			if (consult.newAccessToken) {
 				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
@@ -336,7 +333,8 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 	const shareHandler = async () => {
 		try {
 			await navigator.clipboard.writeText(
-				`https://guardias911.pages.dev/shared/${type}/${data._id}`,
+				// `https://guardias911.pages.dev/shared/${type}/${data._id}`,
+				`http://localhost:3000/shared/${type}/${data._id}`,
 			);
 			toast('Enlace copiado', { type: 'info' });
 		} catch (error) {
@@ -355,7 +353,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 				{type !== 'request' && type !== 'user' && (
 					<div className="option-container">
 						<div className="option-button" onClick={shareHandler}>
-							{<MdShare size={24} />}
+							{<FaLink size={22} />}
 						</div>
 					</div>
 				)}

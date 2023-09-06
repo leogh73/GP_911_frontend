@@ -9,8 +9,8 @@
 
 .spinner-container-change,
 .loading-error-change {
-	padding-bottom: 60px;
-	min-height: 71vh;
+	margin-bottom: 20px;
+	min-height: 67vh;
 }
 
 .spinner-container-affected,
@@ -41,7 +41,7 @@
 	outline: 0;
 	min-width: 97vmin;
 	width: 80em;
-	min-height: 83.7vh;
+	min-height: 83.47vh;
 	animation: bgFadeIn 0.6s ease;
 }
 

@@ -75,7 +75,7 @@
 	bottom: -263px;
 	/* right: -50px; */
 	/* height: 240px; */
-	width: 14.6em;
+	/* width: 14.6em; */
 	/* max-height: 264px; */
 	/* padding-left: 20px; */
 	/* display: flex; */
@@ -107,6 +107,22 @@
 	pointer-events: all;
 	z-index: 2;
 	animation: growDown 0.3s ease-in forwards;
+	width: 14.6em;
+}
+
+.react-calendar.search {
+	max-width: 416px;
+}
+
+.calendar-component.active-search {
+	opacity: 1;
+	pointer-events: all;
+	z-index: 2;
+	animation: growDown 0.3s ease-in forwards;
+}
+
+.react-calendar {
+	width: 100%;
 }
 
 @keyframes growDown {

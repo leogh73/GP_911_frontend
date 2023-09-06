@@ -40,7 +40,7 @@ const ScheduleTable = ({ splitted, data }) => {
 
 	return (
 		<>
-			<table>
+			<table className="table-schedule">
 				<thead>
 					<tr>
 						{data.headersList.map((h) => (

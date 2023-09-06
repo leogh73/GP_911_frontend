@@ -153,9 +153,8 @@ const useTableData = (dataList, rowType) => {
 						return listData.sort((a, b) => a.bookPage - b.bookPage);
 					}
 					default:
-						break;
+						return listData;
 				}
-				break;
 			case 'user':
 				switch (sortBy) {
 					case 'Apellido': {

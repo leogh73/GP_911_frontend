@@ -1,12 +1,10 @@
 import { useEffect, useContext, useReducer, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import UserContext from '../context/UserContext';
 import useHttpConnection from './useHttpConnection';
 
 const useAffectedLoad = (sendResult) => {
 	const userContext = useContext(UserContext);
-	const navigate = useNavigate();
 	const { httpRequestHandler } = useHttpConnection();
 
 	function reducer(state, action) {
@@ -120,20 +118,12 @@ const useAffectedLoad = (sendResult) => {
 	const sendNewChange = async () => {
 		try {
 			dispatch({ type: 'loading', payload: { status: true } });
-			let consult = await httpRequestHandler(
-				`${process.env.REACT_APP_API_URL}/api/item/new`,
-				'POST',
-				JSON.stringify(state.data),
-				{
-					authorization: `Bearer ${userContext.token}`,
-					'Content-type': 'application/json',
-				},
-			);
-			dispatch({ type: 'loading', payload: { status: false } });
-			if (consult.error === 'Token expired') {
-				userContext.logout(true);
-				navigate('/');
-				return;
+			let consult = await httpRequestHandler('item/new', 'POST', JSON.stringify(state.data), {
+				authorization: `Bearer ${userContext.token}`,
+				'Content-type': 'application/json',
+			});
+			if (consult.error === 'Not authorized') {
+				return userContext.logout(true);
 			}
 			if (consult.newAccessToken) {
 				const newUserData = { ...userContext.userData, token: consult.newAccessToken };
@@ -143,6 +133,8 @@ const useAffectedLoad = (sendResult) => {
 		} catch (error) {
 			toast('Ocurrió un error. Reintente más tarde.', { type: 'error' });
 			console.log(error);
+		} finally {
+			dispatch({ type: 'loading', payload: { status: false } });
 		}
 	};
 

@@ -134,7 +134,6 @@ const useRoutes = (userData) => {
 					</Route>
 				</>
 			)}
-			<Route path="shared/:type/:id" element={<Shared />} />
 			<Route path="*" element={<NotFound />} />
 		</Routes>
 	) : (
