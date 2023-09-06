@@ -9,7 +9,7 @@ const useHttpConnection = () => {
 				const abortConnection = new AbortController();
 				activeHttpConnections.current.push(abortConnection);
 
-				const response = await fetch(`${process.env.REACT_APP_API_URL}${endpoint}`, {
+				const response = await fetch(`${process.env.REACT_APP_API_URL}/api/${endpoint}`, {
 					method,
 					body,
 					headers,

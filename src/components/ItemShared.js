@@ -10,7 +10,7 @@ import {
 	FaUserAlt,
 	FaLink,
 } from 'react-icons/fa';
-import { BiComment, BiCommentDetail, BiInfoCircle } from 'react-icons/bi';
+import { BiComment, BiInfoCircle } from 'react-icons/bi';
 import { IoMdTime } from 'react-icons/io';
 import { BsCalendarDate } from 'react-icons/bs';
 import { MdHistory, MdSupervisorAccount } from 'react-icons/md';
