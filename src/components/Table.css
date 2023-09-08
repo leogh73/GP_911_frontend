@@ -255,7 +255,7 @@ Max width before this PARTICULAR table gets nasty
 This query will take effect for any screen smaller than 760px
 and also iPads specifically.
 */
-@media only screen and (max-width: 1027px),
+@media only screen and (max-width: 1024px),
 	(min-device-width: 768px) and (max-device-width: 1024px) {
 	table {
 		width: 100%;
@@ -350,14 +350,16 @@ and also iPads specifically.
 
 	.table-change > thead > tr > th:nth-child(7),
 	.table-change > thead > tr > th:nth-child(8),
-	.table-requested > thead > tr > th:nth-child(6),
+	.table-request > thead > tr > th:nth-child(6),
 	.table-affected > thead > tr > th:nth-child(8),
 	.table-affected > thead > tr > th:nth-child(8),
 	.table-user > thead > tr > th:nth-child(6),
 	.table-user > thead > tr > th:nth-child(7) {
-		text-align: start;
-		padding-left: 15px;
-		height: 50px;
+		display: none;
+		/* display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		padding-left: 13px; */
 	}
 }
 
@@ -382,4 +384,8 @@ tr td.row-data.work-user {
 
 tr td.row-data.work-user {
 	background-color: var(--disabled-button);
+}
+
+.table-change > thead > tr {
+	white-space: nowrap;
 }
