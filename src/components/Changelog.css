@@ -48,6 +48,7 @@
 
 .icon-container {
 	padding-right: 15px;
+	min-width: 36px;
 }
 
 .icon-container.time {
