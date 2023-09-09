@@ -25,6 +25,10 @@
 	min-height: calc(100vh - 126px);
 }
 
+.spinner-container-shared {
+	margin-bottom: 3.9em;
+}
+
 .changes-list {
 	/* z-index: 1; */
 	/* position: relative;

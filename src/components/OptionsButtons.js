@@ -333,8 +333,7 @@ const OptionsButtons = ({ type, data, callbackFn }) => {
 	const shareHandler = async () => {
 		try {
 			await navigator.clipboard.writeText(
-				// `https://guardias911.pages.dev/shared/${type}/${data._id}`,
-				`http://localhost:3000/shared/${type}/${data._id}`,
+				`https://guardias911.pages.dev/shared/${type}/${data._id}`,
 			);
 			toast('Enlace copiado', { type: 'info' });
 		} catch (error) {

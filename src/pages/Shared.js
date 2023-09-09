@@ -48,7 +48,7 @@ const Shared = () => {
 					/>
 				</div>
 			) : loading ? (
-				<div className="spinner-container-change" style={{ marginTop: '3.9em' }}>
+				<div className="spinner-container-shared" style={{ marginTop: '3.9em' }}>
 					<Loading type={'closed'} />
 				</div>
 			) : (

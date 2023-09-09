@@ -57,8 +57,13 @@
 }
 
 .modal-body {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	font-size: 18px;
 	text-align: center;
+
+	min-height: 57px;
 }
 
 .modal-body-padding {

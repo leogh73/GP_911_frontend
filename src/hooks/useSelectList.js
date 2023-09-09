@@ -99,6 +99,8 @@ const useSelectList = (name, type, sendSelectedItem, startData) => {
 		let result =
 			type === 'users'
 				? state.totalList.filter((user) => {
+						if (user === sendNewContext.coverUser || user === sendNewContext.returnUser)
+							return null;
 						let formattedUser = user.split(' ').map((w) => w.toLowerCase());
 						let containsValue = false;
 						formattedUser.forEach((name) => {
