@@ -14,7 +14,6 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	height: 50px;
 }
 
 .option-container {
@@ -24,16 +23,32 @@
 	justify-content: center;
 }
 
-@media only screen and (max-width: 1025px),
-	(min-device-width: 768px) and (max-device-width: 1025px) {
-	.option-buttons,
-	.option-container {
-		justify-content: start;
-		padding-left: 0px;
-		padding-right: 10px;
-	}
-}
-
 .option-button:hover {
 	background-color: var(--hover-button);
+}
+
+/* @media only screen and (max-width: 1100px),
+	(min-device-width: 8710px) and (max-device-width: 1100px) {
+	.option-buttons {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.option-container {
+		padding-top: 5px;
+		padding-bottom: 5px;
+	}
+} */
+
+@media only screen and (max-width: 877px) {
+	.option-buttons,
+	.option-container {
+		display: flex;
+		flex-direction: row;
+		height: 54px;
+		justify-content: flex-start;
+		padding-left: 0px;
+		padding-right: 10px;
+		align-items: center;
+	}
 }
