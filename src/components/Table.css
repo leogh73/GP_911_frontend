@@ -194,7 +194,7 @@ th .schedule {
 }
 
 .table-change > tbody > tr:hover,
-.table-requested > tbody > tr:hover,
+.table-request > tbody > tr:hover,
 .table-affected > tbody > tr:hover,
 .table-user > tbody > tr:hover {
 	background-color: #b1dffa;

@@ -21,7 +21,7 @@ const Button = ({ text, width, height, onClick, disabled, loading, icon }) => {
 							<Loading type={'opened-button'} />
 						) : (
 							<>
-								<div style={{ marginRight: `${height ? '0px' : '10px'}` }}>{icon}</div>
+								{icon}
 								<div className="bt-text">{text}</div>
 							</>
 						)}
